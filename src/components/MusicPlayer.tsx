@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Play, Pause } from "lucide-react";
-import { Average } from "color.js";
+import { average } from "color.js";
 
 interface Track {
   name: string;
@@ -22,7 +22,7 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     const extractColor = async () => {
       if (imageRef.current) {
         try {
-          const color = await Average.fromImage(imageRef.current);
+          const color = await average(imageRef.current);
           setBackgroundColor(`rgb(${color.r}, ${color.g}, ${color.b})`);
         } catch (error) {
           console.error("Error extracting color:", error);
