@@ -1,15 +1,13 @@
-const SPOTIFY_ARTIST_ID = '1cK40hLuV86SgatMzjMeTA';
-const SPOTIFY_BASE_URL = 'https://api.spotify.com/v1';
 const CLIENT_ID = '13085f73bf14486bb13c6d60cea896ed';
+const ARTIST_ID = '1cK40hLuV86SgatMzjMeTA'; // Nathan Garcia's Spotify ID
 
 async function getAccessToken() {
+  console.log('Getting access token...');
   try {
-    console.log('Getting access token...');
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        // Using Basic auth with client ID only since we don't have a client secret
         'Authorization': `Basic ${btoa(CLIENT_ID + ':')}`
       },
       body: 'grant_type=client_credentials',
@@ -22,7 +20,6 @@ async function getAccessToken() {
     }
 
     const data = await response.json();
-    console.log('Successfully obtained access token');
     return data.access_token;
   } catch (error) {
     console.error('Error getting access token:', error);
@@ -30,22 +27,12 @@ async function getAccessToken() {
   }
 }
 
-interface SpotifyTrack {
-  id: string;
-  name: string;
-  album: {
-    images: { url: string }[];
-  };
-  artists: { name: string }[];
-}
-
-export const fetchArtistTopTracks = async (): Promise<SpotifyTrack[]> => {
+export async function fetchArtistTopTracks() {
+  console.log('Fetching tracks from Spotify API...');
   try {
-    console.log('Fetching tracks from Spotify API...');
     const accessToken = await getAccessToken();
-    
     const response = await fetch(
-      `${SPOTIFY_BASE_URL}/artists/${SPOTIFY_ARTIST_ID}/top-tracks?market=US`,
+      `https://api.spotify.com/v1/artists/${ARTIST_ID}/top-tracks?market=US`,
       {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -54,16 +41,14 @@ export const fetchArtistTopTracks = async (): Promise<SpotifyTrack[]> => {
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Spotify API error:', errorData);
-      throw new Error(`Spotify API error: ${errorData.error?.message || 'Unknown error'}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('Fetched tracks successfully:', data.tracks);
-    return data.tracks || [];
+    console.log('Loaded tracks:', data.tracks);
+    return data.tracks;
   } catch (error) {
     console.error('Error fetching tracks:', error);
-    return [];
+    throw error;
   }
-};
+}

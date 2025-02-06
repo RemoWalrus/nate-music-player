@@ -17,29 +17,43 @@ interface SpotifyTrack {
 const Index = () => {
   const { toast } = useToast();
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<Track>({
+    id: '',
+    name: '',
+    artist: '',
+    albumUrl: '',
+    isPlaying: false
+  });
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
 
   useEffect(() => {
     const loadTracks = async () => {
-      const fetchedTracks = await fetchArtistTopTracks();
-      console.log('Loaded tracks:', fetchedTracks);
-      setTracks(fetchedTracks);
-      
-      if (fetchedTracks && fetchedTracks.length > 0) {
-        const firstTrack = fetchedTracks[0];
-        setCurrentTrack({
-          id: firstTrack.id,
-          name: firstTrack.name,
-          artist: firstTrack.artists[0].name,
-          albumUrl: firstTrack.album.images[0]?.url,
-          isPlaying: false,
+      try {
+        const fetchedTracks = await fetchArtistTopTracks();
+        setTracks(fetchedTracks);
+        
+        if (fetchedTracks && fetchedTracks.length > 0) {
+          const firstTrack = fetchedTracks[0];
+          setCurrentTrack({
+            id: firstTrack.id,
+            name: firstTrack.name,
+            artist: firstTrack.artists[0].name,
+            albumUrl: firstTrack.album.images[0]?.url,
+            isPlaying: false,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading tracks:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load tracks. Please try again later.",
+          variant: "destructive",
         });
       }
     };
 
     loadTracks();
-  }, []);
+  }, [toast]);
 
   const handleTrackSelect = (track: SpotifyTrack) => {
     setCurrentTrack({
