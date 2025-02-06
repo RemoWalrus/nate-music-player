@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
 import { fetchArtistTopTracks } from "../utils/spotify";
-import { useToast } from "../components/ui/use-toast";
+import { useToast } from "../hooks/use-toast";
+import type { Track } from "../components/MusicPlayer";
 
-interface Track {
+interface SpotifyTrack {
   id: string;
   name: string;
   album: {
@@ -15,21 +16,24 @@ interface Track {
 
 const Index = () => {
   const { toast } = useToast();
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
 
   useEffect(() => {
     const loadTracks = async () => {
       const fetchedTracks = await fetchArtistTopTracks();
+      console.log('Loaded tracks:', fetchedTracks);
       setTracks(fetchedTracks);
-      if (fetchedTracks.length > 0) {
+      
+      if (fetchedTracks && fetchedTracks.length > 0) {
+        const firstTrack = fetchedTracks[0];
         setCurrentTrack({
-          name: fetchedTracks[0].name,
-          artist: fetchedTracks[0].artists[0].name,
-          albumUrl: fetchedTracks[0].album.images[0]?.url,
+          id: firstTrack.id,
+          name: firstTrack.name,
+          artist: firstTrack.artists[0].name,
+          albumUrl: firstTrack.album.images[0]?.url,
           isPlaying: false,
-          id: fetchedTracks[0].id,
         });
       }
     };
@@ -37,13 +41,13 @@ const Index = () => {
     loadTracks();
   }, []);
 
-  const handleTrackSelect = (track: Track) => {
+  const handleTrackSelect = (track: SpotifyTrack) => {
     setCurrentTrack({
+      id: track.id,
       name: track.name,
       artist: track.artists[0].name,
       albumUrl: track.album.images[0]?.url,
       isPlaying: true,
-      id: track.id,
     });
 
     toast({

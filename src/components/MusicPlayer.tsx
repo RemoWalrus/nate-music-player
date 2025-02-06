@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import { Play, Pause } from "lucide-react";
 import { average } from "color.js";
 
-interface Track {
+export interface Track {
+  id: string;
   name: string;
   artist: string;
   albumUrl: string;
@@ -29,13 +30,11 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
           }
         } catch (error) {
           console.error("Error extracting color:", error);
-          // Fallback to a default color
           setBackgroundColor("rgb(30, 30, 30)");
         }
       }
     };
 
-    // Only attempt to extract color when albumUrl is available
     if (track.albumUrl) {
       extractColor();
     }
@@ -58,7 +57,7 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
             className="w-full h-full object-cover rounded-2xl shadow-2xl"
             onError={(e) => {
               console.error("Image failed to load");
-              e.currentTarget.src = "/placeholder.svg"; // Fallback to placeholder
+              e.currentTarget.src = "/placeholder.svg";
             }}
           />
         </div>
