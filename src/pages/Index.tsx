@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
+import SpotifyCredentialsForm from "../components/SpotifyCredentialsForm";
 import { fetchArtistTopTracks } from "../utils/spotify";
 import { useToast } from "../hooks/use-toast";
 import type { Track } from "../components/MusicPlayer";
@@ -17,13 +18,19 @@ interface SpotifyTrack {
 const Index = () => {
   const { toast } = useToast();
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<Track>({
+    id: '',
+    name: '',
+    artist: '',
+    albumUrl: '',
+    isPlaying: false
+  });
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
+  const [credentialsSet, setCredentialsSet] = useState(false);
 
-  useEffect(() => {
-    const loadTracks = async () => {
+  const loadTracks = async () => {
+    try {
       const fetchedTracks = await fetchArtistTopTracks();
-      console.log('Loaded tracks:', fetchedTracks);
       setTracks(fetchedTracks);
       
       if (fetchedTracks && fetchedTracks.length > 0) {
@@ -36,10 +43,21 @@ const Index = () => {
           isPlaying: false,
         });
       }
-    };
+    } catch (error) {
+      console.error('Error loading tracks:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load tracks. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  };
 
-    loadTracks();
-  }, []);
+  useEffect(() => {
+    if (credentialsSet) {
+      loadTracks();
+    }
+  }, [credentialsSet, toast]);
 
   const handleTrackSelect = (track: SpotifyTrack) => {
     setCurrentTrack({
@@ -55,6 +73,16 @@ const Index = () => {
       description: `${track.name} by ${track.artists[0].name}`,
     });
   };
+
+  if (!credentialsSet) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4"
+           style={{ backgroundColor }}>
+        <h1 className="text-2xl font-bold text-white mb-6">Welcome to the Music Player</h1>
+        <SpotifyCredentialsForm onCredentialsSet={() => setCredentialsSet(true)} />
+      </div>
+    );
+  }
 
   return (
     <div 
