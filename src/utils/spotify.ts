@@ -9,11 +9,15 @@ async function getAccessToken() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
+        // Using Basic auth with client ID only since we don't have a client secret
+        'Authorization': `Basic ${btoa(CLIENT_ID + ':')}`
       },
-      body: `grant_type=client_credentials&client_id=${CLIENT_ID}`,
+      body: 'grant_type=client_credentials',
     });
 
     if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Token request failed:', errorData);
       throw new Error('Failed to get access token');
     }
 
