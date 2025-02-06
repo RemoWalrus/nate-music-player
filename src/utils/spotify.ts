@@ -1,14 +1,28 @@
-const CLIENT_ID = '13085f73bf14486bb13c6d60cea896ed';
 const ARTIST_ID = '1cK40hLuV86SgatMzjMeTA'; // Nathan Garcia's Spotify ID
+
+interface SpotifyCredentials {
+  clientId: string;
+  clientSecret: string;
+}
+
+let credentials: SpotifyCredentials | null = null;
+
+export const setSpotifyCredentials = (clientId: string, clientSecret: string) => {
+  credentials = { clientId, clientSecret };
+};
 
 async function getAccessToken() {
   console.log('Getting access token...');
   try {
+    if (!credentials) {
+      throw new Error('Spotify credentials not set');
+    }
+
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${btoa(CLIENT_ID + ':')}`
+        'Authorization': `Basic ${btoa(`${credentials.clientId}:${credentials.clientSecret}`)}`
       },
       body: 'grant_type=client_credentials',
     });
