@@ -22,16 +22,24 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     const extractColor = async () => {
       if (imageRef.current) {
         try {
-          const color = await average(imageRef.current);
-          setBackgroundColor(`rgb(${color.r}, ${color.g}, ${color.b})`);
+          const colors = await average(imageRef.current.src);
+          if (Array.isArray(colors)) {
+            const [r, g, b] = colors;
+            setBackgroundColor(`rgb(${r}, ${g}, ${b})`);
+          }
         } catch (error) {
           console.error("Error extracting color:", error);
+          // Fallback to a default color
+          setBackgroundColor("rgb(30, 30, 30)");
         }
       }
     };
 
-    extractColor();
-  }, [track.albumUrl]);
+    // Only attempt to extract color when albumUrl is available
+    if (track.albumUrl) {
+      extractColor();
+    }
+  }, [track.albumUrl, setBackgroundColor]);
 
   const togglePlayback = () => {
     setTrack({ ...track, isPlaying: !track.isPlaying });
@@ -48,6 +56,10 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
             src={track.albumUrl}
             alt={`${track.name} album art`}
             className="w-full h-full object-cover rounded-2xl shadow-2xl"
+            onError={(e) => {
+              console.error("Image failed to load");
+              e.currentTarget.src = "/placeholder.svg"; // Fallback to placeholder
+            }}
           />
         </div>
         
