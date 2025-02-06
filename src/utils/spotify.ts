@@ -1,8 +1,30 @@
 const SPOTIFY_ARTIST_ID = '1cK40hLuV86SgatMzjMeTA';
 const SPOTIFY_BASE_URL = 'https://api.spotify.com/v1';
+const CLIENT_ID = '13085f73bf14486bb13c6d60cea896ed';
 
-// Using a temporary access token - in production, this should be handled properly with OAuth
-const ACCESS_TOKEN = 'BQBUXwV_7JfXQXhR9FuJE9_6QgPHFWvxXhHBGBWxgFAQEEQwJLZWtWQELvBWEtYQEEQwJLZWtWQELvBWEtYQEEQwJLZWtWQELvBWEtY';
+async function getAccessToken() {
+  try {
+    console.log('Getting access token...');
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `grant_type=client_credentials&client_id=${CLIENT_ID}`,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to get access token');
+    }
+
+    const data = await response.json();
+    console.log('Successfully obtained access token');
+    return data.access_token;
+  } catch (error) {
+    console.error('Error getting access token:', error);
+    throw error;
+  }
+}
 
 interface SpotifyTrack {
   id: string;
@@ -16,11 +38,13 @@ interface SpotifyTrack {
 export const fetchArtistTopTracks = async (): Promise<SpotifyTrack[]> => {
   try {
     console.log('Fetching tracks from Spotify API...');
+    const accessToken = await getAccessToken();
+    
     const response = await fetch(
       `${SPOTIFY_BASE_URL}/artists/${SPOTIFY_ARTIST_ID}/top-tracks?market=US`,
       {
         headers: {
-          'Authorization': `Bearer ${ACCESS_TOKEN}`,
+          'Authorization': `Bearer ${accessToken}`,
         },
       }
     );
