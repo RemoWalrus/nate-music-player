@@ -127,18 +127,6 @@ export function useTracks() {
     setIsLoading(false);
   };
 
-  const refreshTracks = async () => {
-    toast({
-      title: "Refreshing",
-      description: "Reloading tracks with updated URLs...",
-    });
-    await loadTracks();
-    toast({
-      title: "Refreshed",
-      description: "Track URLs have been updated.",
-    });
-  };
-
   const handleTrackSelect = (track: SpotifyTrack) => {
     const newIndex = tracks.findIndex(t => t.id === track.id);
     if (newIndex !== -1) {
@@ -186,7 +174,6 @@ export function useTracks() {
     handleTrackSelect,
     handlePrevTrack,
     handleNextTrack,
-    loadTracks,
-    refreshTracks
+    loadTracks
   };
 }
