@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Menu, User, Music, Newspaper, Share2 } from "lucide-react";
+import { Menu, User, Music, Newspaper, Share2, Mail } from "lucide-react";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { useToast } from "@/hooks/use-toast";
 
@@ -73,6 +73,17 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
                     Latest single "Todo con todo" now available on all platforms.
                   </p>
                 </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-gray-700">
+              <Mail className="h-5 w-5 shrink-0" />
+              <div className="space-y-2">
+                <a 
+                  href="mailto:info@nathangarciamusic.com"
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                >
+                  Write us an email
+                </a>
               </div>
             </div>
             <div className="flex items-center gap-3 text-gray-700">

@@ -1,12 +1,11 @@
-
 import { useState } from "react";
-import { ChevronLeft, User, Newspaper, Music, Share2 } from "lucide-react";
+import { ChevronLeft, User, Newspaper, Music, Share2, Mail } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarGroupContent,
 } from "@/components/ui/sidebar";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { useToast } from "@/hooks/use-toast";
@@ -66,7 +65,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
               className={isCollapsed ? "h-8 w-8" : "h-24 w-32"}
             />
             {!isCollapsed && (
-              <span className="text-[#ED2024] font-medium text-lg">Nathan Music</span>
+              <span className="text-[#ED2024] font-medium text-lg">About Nathan Garcia</span>
             )}
           </div>
         </div>
@@ -135,6 +134,31 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
                         Latest single "Todo con todo" now available on all platforms.
                       </p>
                     </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel
+            className={`text-gray-500 ${isCollapsed ? "sr-only" : ""}`}
+          >
+            Contact
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <div className="px-4 py-3">
+              <div className="flex items-center gap-3 text-gray-700">
+                <Mail className="h-5 w-5 shrink-0" />
+                {!isCollapsed && (
+                  <div className="space-y-2">
+                    <a 
+                      href="mailto:info@nathangarciamusic.com"
+                      className="text-sm text-gray-500 hover:text-gray-700"
+                    >
+                      Write us an email
+                    </a>
                   </div>
                 )}
               </div>
