@@ -20,9 +20,11 @@ interface MusicPlayerProps {
   track: Track;
   setTrack: (track: Track) => void;
   setBackgroundColor: (color: string) => void;
+  onPrevTrack: () => void;
+  onNextTrack: () => void;
 }
 
-const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) => {
+const MusicPlayer = ({ track, setTrack, setBackgroundColor, onPrevTrack, onNextTrack }: MusicPlayerProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioInitialized, setAudioInitialized] = useState(false);
@@ -50,12 +52,12 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     }
   }, [track.albumUrl, setBackgroundColor]);
 
-  // Initialize audio on mount
   useEffect(() => {
     if (!audioInitialized) {
       audioRef.current = new Audio();
       audioRef.current.onended = () => {
         setTrack({ ...track, isPlaying: false });
+        onNextTrack(); // Auto-play next track when current track ends
       };
       audioRef.current.ontimeupdate = () => {
         if (audioRef.current) {
@@ -69,20 +71,17 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
       };
       setAudioInitialized(true);
     }
-  }, [audioInitialized, setTrack, track]);
+  }, [audioInitialized, setTrack, track, onNextTrack]);
 
-  // Handle audio source changes
   useEffect(() => {
     const audioSource = track.mp3Url || track.previewUrl;
     console.log('Audio source:', audioSource);
     console.log('Track state:', track);
     
     if (audioRef.current && audioSource) {
-      // Stop any current playback before changing source
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       
-      // Update the source
       audioRef.current.src = audioSource;
       
       if (track.isPlaying) {
@@ -106,7 +105,6 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     }
   }, [track, setTrack]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -128,6 +126,19 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!audioRef.current || !duration) return;
+    
+    const progressBar = e.currentTarget;
+    const rect = progressBar.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = offsetX / rect.width;
+    const newTime = percentage * duration;
+    
+    audioRef.current.currentTime = newTime;
+    setProgress(newTime);
   };
 
   return (
@@ -183,10 +194,15 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
             <span className="text-white/60 text-sm w-12 text-right">
               {formatTime(progress)}
             </span>
-            <Progress 
-              value={(progress / duration) * 100} 
-              className="flex-1 h-1.5"
-            />
+            <div 
+              className="flex-1 cursor-pointer"
+              onClick={handleProgressClick}
+            >
+              <Progress 
+                value={(progress / duration) * 100} 
+                className="h-1.5"
+              />
+            </div>
             <span className="text-white/60 text-sm w-12">
               {formatTime(duration)}
             </span>
@@ -194,7 +210,7 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
 
           <div className="flex items-center justify-center gap-4">
             <button
-              onClick={() => console.log('Previous track')}
+              onClick={onPrevTrack}
               className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
             >
               <SkipBack className="w-6 h-6 text-white" />
@@ -217,7 +233,7 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
             </button>
 
             <button
-              onClick={() => console.log('Next track')}
+              onClick={onNextTrack}
               className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
             >
               <SkipForward className="w-6 h-6 text-white" />
@@ -245,4 +261,3 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
 };
 
 export default MusicPlayer;
-

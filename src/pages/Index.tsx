@@ -31,6 +31,7 @@ const Index = () => {
   const { toast } = useToast();
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [trackUrls, setTrackUrls] = useState<Record<string, TrackUrls>>({});
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [currentTrack, setCurrentTrack] = useState<Track>({
     id: '',
     name: '',
@@ -153,6 +154,11 @@ const Index = () => {
   }, []);
 
   const handleTrackSelect = (track: SpotifyTrack) => {
+    const newIndex = tracks.findIndex(t => t.id === track.id);
+    if (newIndex !== -1) {
+      setCurrentTrackIndex(newIndex);
+    }
+    
     const trackUrlData = trackUrls[track.id];
     console.log('Selected track URLs:', trackUrlData);
     
@@ -172,6 +178,18 @@ const Index = () => {
       title: "Now Playing",
       description: `${track.name} by ${track.artists[0].name}`,
     });
+  };
+
+  const handlePrevTrack = () => {
+    const newIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+    setCurrentTrackIndex(newIndex);
+    handleTrackSelect(tracks[newIndex]);
+  };
+
+  const handleNextTrack = () => {
+    const newIndex = (currentTrackIndex + 1) % tracks.length;
+    setCurrentTrackIndex(newIndex);
+    handleTrackSelect(tracks[newIndex]);
   };
 
   if (isLoading) {
@@ -195,6 +213,8 @@ const Index = () => {
             track={currentTrack}
             setTrack={setCurrentTrack}
             setBackgroundColor={setBackgroundColor}
+            onPrevTrack={handlePrevTrack}
+            onNextTrack={handleNextTrack}
           />
         )}
         <Playlist 
