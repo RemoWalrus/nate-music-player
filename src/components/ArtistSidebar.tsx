@@ -66,7 +66,7 @@ export const ArtistSidebar = () => {
             <div className="space-y-2">
               <h4 className="text-sm font-medium">Music Platforms</h4>
               <div className="flex flex-col gap-2">
-                <a href="https://music.youtube.com/channel/UCcpVtsUqVFcx55u-3IlhYbw" 
+                <a href="https://music.youtube.com/channel/UCrGiV8amcSjOyJevavJERLA?si=msVygIJUpgpBfD6I" 
                    target="_blank" 
                    rel="noopener noreferrer"
                    className="text-gray-500 hover:text-gray-700">
@@ -78,7 +78,7 @@ export const ArtistSidebar = () => {
                    className="text-gray-500 hover:text-gray-700">
                   Spotify
                 </a>
-                <a href="https://music.apple.com/us/artist/nathan-garcia/1458353883" 
+                <a href="https://music.apple.com/us/artist/nathan-garcia/1778355814" 
                    target="_blank" 
                    rel="noopener noreferrer"
                    className="text-gray-500 hover:text-gray-700">
@@ -176,7 +176,7 @@ export const ArtistSidebar = () => {
                 <div className="space-y-2">
                   <h4 className="text-sm font-medium">Listen on</h4>
                   <div className="flex flex-col gap-2">
-                    <a href="https://music.youtube.com/channel/UCcpVtsUqVFcx55u-3IlhYbw" 
+                    <a href="https://music.youtube.com/channel/UCrGiV8amcSjOyJevavJERLA?si=msVygIJUpgpBfD6I" 
                        target="_blank" 
                        rel="noopener noreferrer"
                        className="text-gray-500 hover:text-gray-700">
@@ -188,7 +188,7 @@ export const ArtistSidebar = () => {
                        className="text-gray-500 hover:text-gray-700">
                       Spotify
                     </a>
-                    <a href="https://music.apple.com/us/artist/nathan-garcia/1458353883" 
+                    <a href="https://music.apple.com/us/artist/nathan-garcia/1778355814" 
                        target="_blank" 
                        rel="noopener noreferrer"
                        className="text-gray-500 hover:text-gray-700">
