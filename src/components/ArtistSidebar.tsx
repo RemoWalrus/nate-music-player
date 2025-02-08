@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { ChevronLeft, User, Newspaper, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -90,27 +91,29 @@ export const ArtistSidebar = () => {
       }`}
     >
       <div className="p-4 border-b border-gray-100/20">
-        <div className="flex items-center justify-between">
-          <div className={`${isCollapsed ? "w-full" : "h-32 w-full"} flex flex-col items-center justify-center gap-3`}>
+        <div className="flex flex-col">
+          <div className="flex justify-end">
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <ChevronLeft
+                className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${
+                  isCollapsed ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+          </div>
+          <div className={`${isCollapsed ? "mt-2" : "h-32"} w-full flex flex-col items-center justify-center gap-3`}>
             <img 
               src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
               alt="Nathan Garcia Logo" 
-              className={isCollapsed ? "h-10 w-14" : "h-20 w-28"}
+              className={isCollapsed ? "h-5 w-5" : "h-20 w-28"}
             />
             {!isCollapsed && (
               <span className="text-[#ED2024] font-medium text-lg">Nathan Music</span>
             )}
           </div>
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <ChevronLeft
-              className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${
-                isCollapsed ? "rotate-180" : ""
-              }`}
-            />
-          </button>
         </div>
       </div>
 
