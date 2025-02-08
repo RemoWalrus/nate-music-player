@@ -43,7 +43,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
   return (
     <Sidebar
       className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
-        isCollapsed ? "w-20" : "w-80"
+        isCollapsed ? "w-40" : "w-80"
       }`}
     >
       <div className="p-4 border-b border-gray-100/20">
@@ -196,3 +196,4 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
     </Sidebar>
   );
 };
+
