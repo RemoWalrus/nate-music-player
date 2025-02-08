@@ -41,14 +41,11 @@ export const ArtistSidebar = () => {
   const MobileHeader = () => (
     <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-2">
-          <img 
-            src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
-            alt="Nathan Garcia Logo" 
-            className="h-8 w-8"
-          />
-          <div className="text-gray-700 font-medium">Nathan Garcia</div>
-        </div>
+        <img 
+          src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
+          alt="Nathan Garcia Logo" 
+          className="h-8 w-8"
+        />
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
