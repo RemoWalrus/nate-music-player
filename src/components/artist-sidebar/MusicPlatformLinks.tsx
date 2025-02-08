@@ -8,7 +8,7 @@ interface MusicPlatformLinksProps {
 export const MusicPlatformLinks = ({ className }: MusicPlatformLinksProps) => {
   return (
     <div className={cn(className)}>
-      <a href="https://music.youtube.com/channel/UCrGiV8amcSjOyJevavJERLA?si=msVygIJUpgpBfD6I" 
+      <a href="https://music.youtube.com/channel/UCeGUEXkAj1CCSC1N3SQ3DrA" 
          target="_blank" 
          rel="noopener noreferrer"
          className="text-gray-500 hover:text-gray-700">
@@ -29,3 +29,4 @@ export const MusicPlatformLinks = ({ className }: MusicPlatformLinksProps) => {
     </div>
   );
 };
+
