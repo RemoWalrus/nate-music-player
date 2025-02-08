@@ -40,6 +40,8 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
     }
   };
 
+  const iconProps = isCollapsed ? { color: "#ea384c" } : { className: "text-gray-500" };
+
   return (
     <Sidebar
       className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
@@ -83,7 +85,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           <SidebarGroupContent>
             <div className="px-4 py-3">
               <div className="flex items-center gap-3 text-gray-700">
-                <User className="h-5 w-5 shrink-0" />
+                <User {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
                   <div className="space-y-1">
                     <h3 className="font-medium">Nathan Garcia</h3>
@@ -106,7 +108,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           <SidebarGroupContent>
             <div className="px-4 py-3">
               <div className="flex items-center gap-3 text-gray-700">
-                <Music className="h-5 w-5 shrink-0" />
+                <Music {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
                   <div className="space-y-2">
                     <h4 className="text-sm font-medium">Listen on</h4>
@@ -127,7 +129,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           <SidebarGroupContent>
             <div className="px-4 py-3">
               <div className="flex items-center gap-3 text-gray-700">
-                <Newspaper className="h-5 w-5 shrink-0" />
+                <Newspaper {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
                   <div className="space-y-2">
                     <div className="space-y-1">
@@ -152,7 +154,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           <SidebarGroupContent>
             <div className="px-4 py-3">
               <div className="flex items-center gap-3 text-gray-700">
-                <Mail className="h-5 w-5 shrink-0" />
+                <Mail {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
                   <div className="space-y-2">
                     <a 
@@ -177,7 +179,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           <SidebarGroupContent>
             <div className="px-4 py-3">
               <div className="flex items-center gap-3 text-gray-700">
-                <Share2 className="h-5 w-5 shrink-0" />
+                <Share2 {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
                   <div className="space-y-2">
                     <button 
@@ -196,3 +198,4 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
     </Sidebar>
   );
 };
+
