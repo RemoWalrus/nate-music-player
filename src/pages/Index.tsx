@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
+import { ArtistSidebar } from "../components/ArtistSidebar";
 import { fetchArtistTopTracks, loadSpotifyCredentials } from "../utils/spotify";
 import { useToast } from "../hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -151,22 +152,25 @@ const Index = () => {
   }
 
   return (
-    <div 
-      className="min-h-screen flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8"
-      style={{ backgroundColor }}
-    >
-      {currentTrack && (
-        <MusicPlayer 
-          track={currentTrack}
-          setTrack={setCurrentTrack}
-          setBackgroundColor={setBackgroundColor}
+    <div className="flex min-h-screen w-full">
+      <ArtistSidebar />
+      <div 
+        className="flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8"
+        style={{ backgroundColor }}
+      >
+        {currentTrack && (
+          <MusicPlayer 
+            track={currentTrack}
+            setTrack={setCurrentTrack}
+            setBackgroundColor={setBackgroundColor}
+          />
+        )}
+        <Playlist 
+          tracks={tracks}
+          onTrackSelect={handleTrackSelect}
+          currentTrackId={currentTrack?.id || ""}
         />
-      )}
-      <Playlist 
-        tracks={tracks}
-        onTrackSelect={handleTrackSelect}
-        currentTrackId={currentTrack?.id || ""}
-      />
+      </div>
     </div>
   );
 };
