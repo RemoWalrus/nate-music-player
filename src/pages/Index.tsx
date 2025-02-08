@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
@@ -6,6 +5,7 @@ import { ArtistSidebar } from "../components/ArtistSidebar";
 import { fetchArtistTopTracks, loadSpotifyCredentials } from "../utils/spotify";
 import { useToast } from "../hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { Track } from "../components/MusicPlayer";
 
 interface SpotifyTrack {
@@ -45,12 +45,12 @@ const Index = () => {
   });
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [isLoading, setIsLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   const fetchTrackUrls = async (trackIds: string[]) => {
     try {
       console.log('Fetching track URLs for:', trackIds);
       
-      // Fetch track URLs from database
       const { data: urlsData, error: urlsError } = await supabase
         .from('track_urls')
         .select('*')
@@ -63,11 +63,9 @@ const Index = () => {
 
       console.log('Received track URLs data:', urlsData);
 
-      // Create a map of track URLs
       const urlsMap: Record<string, TrackUrls> = {};
       
       for (const track of urlsData || []) {
-        // If the track has an mp3_url, get the public URL from storage
         let mp3Url = null;
         if (track.mp3_url) {
           const { data: publicUrl } = supabase.storage
@@ -109,10 +107,8 @@ const Index = () => {
       const fetchedTracks = await fetchArtistTopTracks();
       console.log('Fetched tracks:', fetchedTracks);
       
-      // Fetch track URLs from our database
       await fetchTrackUrls(fetchedTracks.map(track => track.id));
       
-      // Enhance tracks with additional URLs
       const enhancedTracks = fetchedTracks.map(track => ({
         ...track,
         youtubeUrl: trackUrls[track.id]?.youtube_music_url || null,
@@ -205,7 +201,9 @@ const Index = () => {
     <div className="group/sidebar-wrapper flex min-h-svh w-full">
       <ArtistSidebar />
       <div 
-        className="flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8"
+        className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 ${
+          isMobile ? "mt-16" : ""
+        }`}
         style={{ backgroundColor }}
       >
         {currentTrack && (
