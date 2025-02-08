@@ -10,6 +10,22 @@ interface MobileHeaderProps {
 export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Nathan Garcia Music',
+          text: 'Check out Nathan Garcia\'s music!',
+          url: window.location.href
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+      }
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
+  };
+
   return (
     <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
       <div className="flex items-center justify-between p-4">
@@ -57,10 +73,10 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
               <Share2 className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
                 <button 
-                  onClick={() => navigator.clipboard.writeText(window.location.href)}
+                  onClick={handleShare}
                   className="text-sm text-gray-500 hover:text-gray-700"
                 >
-                  Copy link to profile
+                  Share with your friends
                 </button>
               </div>
             </div>
@@ -70,4 +86,3 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
     </div>
   );
 };
-

@@ -17,6 +17,22 @@ interface DesktopSidebarProps {
 export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Nathan Garcia Music',
+          text: 'Check out Nathan Garcia\'s music!',
+          url: window.location.href
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+      }
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
+  };
+
   return (
     <Sidebar
       className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
@@ -133,10 +149,10 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
                 {!isCollapsed && (
                   <div className="space-y-2">
                     <button 
-                      onClick={() => navigator.clipboard.writeText(window.location.href)}
+                      onClick={handleShare}
                       className="text-sm text-gray-500 hover:text-gray-700"
                     >
-                      Copy link to profile
+                      Share with your friends
                     </button>
                   </div>
                 )}
@@ -148,4 +164,3 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
     </Sidebar>
   );
 };
-
