@@ -60,6 +60,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
                 <p className="text-sm text-gray-500">{artistBio}</p>
               </div>
             </div>
+            <div className="border-t border-gray-100" />
             <div className="flex items-center gap-3 text-gray-700">
               <Music {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
@@ -67,6 +68,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
                 <MusicPlatformLinks className="flex flex-col gap-2" />
               </div>
             </div>
+            <div className="border-t border-gray-100" />
             <div className="flex items-center gap-3 text-gray-700">
               <Newspaper {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
@@ -78,6 +80,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
                 </div>
               </div>
             </div>
+            <div className="border-t border-gray-100" />
             <div className="flex items-center gap-3 text-gray-700">
               <Mail {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
@@ -89,6 +92,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
                 </a>
               </div>
             </div>
+            <div className="border-t border-gray-100" />
             <div className="flex items-center gap-3 text-gray-700">
               <Share2 {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
