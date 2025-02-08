@@ -33,6 +33,8 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
     }
   };
 
+  const iconProps = { color: "#ea384c" };
+
   return (
     <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
       <div className="flex items-center justify-between p-4">
@@ -45,28 +47,28 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
-          <Menu className="h-5 w-5 text-gray-500" />
+          <Menu {...iconProps} className="h-5 w-5" />
         </button>
       </div>
       {isMobileMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-white shadow-lg">
           <div className="p-4 space-y-4">
             <div className="flex items-center gap-3 text-gray-700">
-              <User className="h-5 w-5 shrink-0" />
+              <User {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-1">
                 <h3 className="font-medium">Nathan Garcia</h3>
                 <p className="text-sm text-gray-500">{artistBio}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 text-gray-700">
-              <Music className="h-5 w-5 shrink-0" />
+              <Music {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
                 <h4 className="text-sm font-medium">Music Platforms</h4>
                 <MusicPlatformLinks className="flex flex-col gap-2" />
               </div>
             </div>
             <div className="flex items-center gap-3 text-gray-700">
-              <Newspaper className="h-5 w-5 shrink-0" />
+              <Newspaper {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
                 <div className="space-y-1">
                   <h4 className="text-sm font-medium">New Single Release</h4>
@@ -77,7 +79,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
               </div>
             </div>
             <div className="flex items-center gap-3 text-gray-700">
-              <Mail className="h-5 w-5 shrink-0" />
+              <Mail {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
                 <a 
                   href="mailto:info@nathangarciamusic.com"
@@ -88,7 +90,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
               </div>
             </div>
             <div className="flex items-center gap-3 text-gray-700">
-              <Share2 className="h-5 w-5 shrink-0" />
+              <Share2 {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
                 <button 
                   onClick={handleShare}
