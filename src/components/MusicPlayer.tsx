@@ -1,6 +1,5 @@
-
 import { useEffect, useRef, useState } from "react";
-import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward, Music2 } from "lucide-react";
 import { average } from "color.js";
 import { Progress } from "./ui/progress";
 import type { Track } from "../types/music";
@@ -173,6 +172,16 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
                 className="text-white/80 hover:text-white flex items-center gap-1"
               >
                 Spotify <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+            {track.appleMusicUrl && (
+              <a
+                href={track.appleMusicUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/80 hover:text-white flex items-center gap-1"
+              >
+                Apple Music <Music2 className="w-4 h-4" />
               </a>
             )}
           </div>

@@ -1,5 +1,6 @@
 
 import { Play, ExternalLink } from "lucide-react";
+import { Music2 } from "lucide-react";
 
 interface SpotifyTrack {
   id: string;
@@ -10,6 +11,7 @@ interface SpotifyTrack {
   artists: { name: string }[];
   youtubeUrl?: string;
   spotifyUrl?: string;
+  appleMusicUrl?: string;
 }
 
 interface PlaylistProps {
@@ -71,6 +73,17 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                       onClick={(e) => e.stopPropagation()}
                     >
                       Spotify <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                  {track.appleMusicUrl && (
+                    <a
+                      href={track.appleMusicUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Apple Music <Music2 className="w-3 h-3" />
                     </a>
                   )}
                 </div>

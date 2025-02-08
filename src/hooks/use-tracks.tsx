@@ -19,7 +19,8 @@ export function useTracks() {
     previewUrl: null,
     mp3Url: null,
     youtubeUrl: null,
-    spotifyUrl: null
+    spotifyUrl: null,
+    appleMusicUrl: null
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -101,14 +102,16 @@ export function useTracks() {
           previewUrl: firstTrack.preview_url,
           mp3Url: firstTrackUrls?.mp3_url || null,
           youtubeUrl: firstTrackUrls?.youtube_music_url || null,
-          spotifyUrl: firstTrack.external_urls?.spotify || null
+          spotifyUrl: firstTrack.external_urls?.spotify || null,
+          appleMusicUrl: firstTrackUrls?.apple_music_url || null
         });
       }
       
       const enhancedTracks = fetchedTracks.map(track => ({
         ...track,
         youtubeUrl: urlsMap?.[track.id]?.youtube_music_url || null,
-        spotifyUrl: track.external_urls?.spotify || null
+        spotifyUrl: track.external_urls?.spotify || null,
+        appleMusicUrl: urlsMap?.[track.id]?.apple_music_url || null
       }));
       
       setTracks(enhancedTracks);
@@ -141,7 +144,8 @@ export function useTracks() {
       previewUrl: track.preview_url,
       mp3Url: trackUrlData?.mp3_url || null,
       youtubeUrl: trackUrlData?.youtube_music_url || null,
-      spotifyUrl: track.external_urls?.spotify || null
+      spotifyUrl: track.external_urls?.spotify || null,
+      appleMusicUrl: trackUrlData?.apple_music_url || null
     });
 
     toast({
