@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ExternalLink } from "lucide-react";
 import { average } from "color.js";
 
@@ -23,7 +23,8 @@ interface MusicPlayerProps {
 
 const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [audioInitialized, setAudioInitialized] = useState(false);
   
   useEffect(() => {
     const extractColor = async () => {
@@ -47,10 +48,20 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
   }, [track.albumUrl, setBackgroundColor]);
 
   useEffect(() => {
+    // Initialize audio element
+    if (!audioInitialized) {
+      audioRef.current = new Audio();
+      setAudioInitialized(true);
+    }
+
     if (audioRef.current) {
       const audioSource = track.mp3Url || track.previewUrl;
       console.log('Audio source:', audioSource);
       
+      if (audioSource) {
+        audioRef.current.src = audioSource;
+      }
+
       if (track.isPlaying) {
         console.log('Attempting to play audio...');
         audioRef.current.play().catch(error => {
@@ -62,25 +73,17 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
         audioRef.current.pause();
       }
     }
-  }, [track.isPlaying, track.mp3Url, track.previewUrl]);
+  }, [track.isPlaying, track.mp3Url, track.previewUrl, audioInitialized]);
 
-  // Update audio source when track changes
   useEffect(() => {
-    if (audioRef.current) {
-      const audioSource = track.mp3Url || track.previewUrl;
-      console.log('Setting new audio source:', audioSource);
-      if (audioSource) {
-        audioRef.current.src = audioSource;
-        // If track was playing, continue playing the new source
-        if (track.isPlaying) {
-          audioRef.current.play().catch(error => {
-            console.error("Error playing new audio source:", error);
-            setTrack({ ...track, isPlaying: false });
-          });
-        }
+    return () => {
+      // Cleanup audio on component unmount
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
       }
-    }
-  }, [track.id, track.mp3Url, track.previewUrl]);
+    };
+  }, []);
 
   const togglePlayback = () => {
     if (!track.mp3Url && !track.previewUrl) {
@@ -167,18 +170,9 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
             </div>
           )}
         </div>
-
-        {(track.mp3Url || track.previewUrl) && (
-          <audio
-            ref={audioRef}
-            src={track.mp3Url || track.previewUrl}
-            onEnded={() => setTrack({ ...track, isPlaying: false })}
-          />
-        )}
       </div>
     </div>
   );
 };
 
 export default MusicPlayer;
-
