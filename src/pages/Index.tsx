@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
@@ -86,8 +87,10 @@ const Index = () => {
 
       console.log('Final track URLs map:', urlsMap);
       setTrackUrls(urlsMap);
+      return urlsMap;
     } catch (error) {
       console.error('Error in fetchTrackUrls:', error);
+      return null;
     }
   };
 
@@ -107,19 +110,11 @@ const Index = () => {
       const fetchedTracks = await fetchArtistTopTracks();
       console.log('Fetched tracks:', fetchedTracks);
       
-      await fetchTrackUrls(fetchedTracks.map(track => track.id));
+      const urlsMap = await fetchTrackUrls(fetchedTracks.map(track => track.id));
       
-      const enhancedTracks = fetchedTracks.map(track => ({
-        ...track,
-        youtubeUrl: trackUrls[track.id]?.youtube_music_url || null,
-        spotifyUrl: track.external_urls?.spotify || null
-      }));
-      
-      setTracks(enhancedTracks);
-      
-      if (enhancedTracks && enhancedTracks.length > 0) {
-        const firstTrack = enhancedTracks[0];
-        const firstTrackUrls = trackUrls[firstTrack.id];
+      if (urlsMap && fetchedTracks.length > 0) {
+        const firstTrack = fetchedTracks[0];
+        const firstTrackUrls = urlsMap[firstTrack.id];
         console.log('Setting initial track with URLs:', firstTrackUrls);
         
         setCurrentTrack({
@@ -134,6 +129,14 @@ const Index = () => {
           spotifyUrl: firstTrack.external_urls?.spotify || null
         });
       }
+      
+      const enhancedTracks = fetchedTracks.map(track => ({
+        ...track,
+        youtubeUrl: urlsMap?.[track.id]?.youtube_music_url || null,
+        spotifyUrl: track.external_urls?.spotify || null
+      }));
+      
+      setTracks(enhancedTracks);
     } catch (error) {
       console.error('Error loading tracks:', error);
       toast({
@@ -226,3 +229,4 @@ const Index = () => {
 };
 
 export default Index;
+
