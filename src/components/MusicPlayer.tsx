@@ -52,16 +52,17 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     if (!audioInitialized) {
       audioRef.current = new Audio();
       audioRef.current.onended = () => {
-        setTrack(prev => ({ ...prev, isPlaying: false }));
+        setTrack({ ...track, isPlaying: false });
       };
       setAudioInitialized(true);
     }
-  }, [audioInitialized, setTrack]);
+  }, [audioInitialized, setTrack, track]);
 
   // Handle audio source changes
   useEffect(() => {
     const audioSource = track.mp3Url || track.previewUrl;
     console.log('Audio source:', audioSource);
+    console.log('Track state:', track);
     
     if (audioRef.current && audioSource) {
       audioRef.current.src = audioSource;
@@ -81,7 +82,6 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
         audioRef.current.pause();
       }
     } else if (track.isPlaying && !audioSource) {
-      // If trying to play but no audio source is available
       console.log('No audio source available, cannot play');
       setTrack({ ...track, isPlaying: false });
     }
