@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Menu, User, Music, Newspaper, Share2, Mail } from "lucide-react";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
@@ -82,7 +83,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
                   href="mailto:info@nathangarciamusic.com"
                   className="text-sm text-gray-500 hover:text-gray-700"
                 >
-                  Write us an email
+                  Email us!
                 </a>
               </div>
             </div>
