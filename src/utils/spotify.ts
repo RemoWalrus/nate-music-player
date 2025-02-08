@@ -1,3 +1,6 @@
+
+import { supabase } from "@/integrations/supabase/client";
+
 const ARTIST_ID = '1cK40hLuV86SgatMzjMeTA'; // Nathan Garcia's Spotify ID
 
 interface SpotifyCredentials {
@@ -7,8 +10,29 @@ interface SpotifyCredentials {
 
 let credentials: SpotifyCredentials | null = null;
 
-export const setSpotifyCredentials = (clientId: string, clientSecret: string) => {
-  credentials = { clientId, clientSecret };
+export const loadSpotifyCredentials = async () => {
+  try {
+    const { data: clientId } = await supabase.functions.invoke('read-secret', {
+      body: { secretName: 'SPOTIFY_CLIENT_ID' }
+    });
+    const { data: clientSecret } = await supabase.functions.invoke('read-secret', {
+      body: { secretName: 'SPOTIFY_CLIENT_SECRET' }
+    });
+
+    if (!clientId || !clientSecret) {
+      throw new Error('Spotify credentials not found in Supabase');
+    }
+
+    credentials = {
+      clientId,
+      clientSecret
+    };
+
+    return true;
+  } catch (error) {
+    console.error('Error loading Spotify credentials:', error);
+    return false;
+  }
 };
 
 async function getAccessToken() {

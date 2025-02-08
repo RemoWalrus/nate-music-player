@@ -1,8 +1,8 @@
+
 import { useState, useEffect } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
-import SpotifyCredentialsForm from "../components/SpotifyCredentialsForm";
-import { fetchArtistTopTracks } from "../utils/spotify";
+import { fetchArtistTopTracks, loadSpotifyCredentials } from "../utils/spotify";
 import { useToast } from "../hooks/use-toast";
 import type { Track } from "../components/MusicPlayer";
 
@@ -26,10 +26,21 @@ const Index = () => {
     isPlaying: false
   });
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
-  const [credentialsSet, setCredentialsSet] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadTracks = async () => {
     try {
+      const credentialsLoaded = await loadSpotifyCredentials();
+      if (!credentialsLoaded) {
+        toast({
+          title: "Error",
+          description: "Failed to load Spotify credentials. Please check your Supabase secrets.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const fetchedTracks = await fetchArtistTopTracks();
       setTracks(fetchedTracks);
       
@@ -51,13 +62,12 @@ const Index = () => {
         variant: "destructive",
       });
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    if (credentialsSet) {
-      loadTracks();
-    }
-  }, [credentialsSet, toast]);
+    loadTracks();
+  }, [toast]);
 
   const handleTrackSelect = (track: SpotifyTrack) => {
     setCurrentTrack({
@@ -74,12 +84,11 @@ const Index = () => {
     });
   };
 
-  if (!credentialsSet) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4"
+      <div className="min-h-screen flex items-center justify-center"
            style={{ backgroundColor }}>
-        <h1 className="text-2xl font-bold text-white mb-6">Welcome to the Music Player</h1>
-        <SpotifyCredentialsForm onCredentialsSet={() => setCredentialsSet(true)} />
+        <div className="text-white">Loading...</div>
       </div>
     );
   }
