@@ -1,6 +1,5 @@
 
 import { Play, ExternalLink } from "lucide-react";
-import { Music2 } from "lucide-react";
 
 interface SpotifyTrack {
   id: string;
@@ -83,7 +82,7 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                       className="text-white/60 hover:text-white text-xs flex items-center gap-1"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Apple Music <Music2 className="w-3 h-3" />
+                      Apple Music <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
                 </div>
