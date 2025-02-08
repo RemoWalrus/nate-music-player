@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Menu, User, Music, Newspaper } from "lucide-react";
+import { Menu, User, Music, Newspaper, Share2 } from "lucide-react";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 
 interface MobileHeaderProps {
@@ -53,9 +53,21 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
                 </div>
               </div>
             </div>
+            <div className="flex items-center gap-3 text-gray-700">
+              <Share2 className="h-5 w-5 shrink-0" />
+              <div className="space-y-2">
+                <button 
+                  onClick={() => navigator.clipboard.writeText(window.location.href)}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                >
+                  Copy link to profile
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 };
+

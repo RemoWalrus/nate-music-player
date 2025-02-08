@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ChevronLeft, User, Newspaper, Music } from "lucide-react";
+import { ChevronLeft, User, Newspaper, Music, Share2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -41,7 +41,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
             <img 
               src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
               alt="Nathan Garcia Logo" 
-              className={isCollapsed ? "h-5 w-5" : "h-24 w-32"}
+              className={isCollapsed ? "h-8 w-8" : "h-24 w-32"}
             />
             {!isCollapsed && (
               <span className="text-[#ED2024] font-medium text-lg">Nathan Music</span>
@@ -119,7 +119,33 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel
+            className={`text-gray-500 ${isCollapsed ? "sr-only" : ""}`}
+          >
+            Share
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <div className="px-4 py-3">
+              <div className="flex items-center gap-3 text-gray-700">
+                <Share2 className="h-5 w-5 shrink-0" />
+                {!isCollapsed && (
+                  <div className="space-y-2">
+                    <button 
+                      onClick={() => navigator.clipboard.writeText(window.location.href)}
+                      className="text-sm text-gray-500 hover:text-gray-700"
+                    >
+                      Copy link to profile
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
 };
+
