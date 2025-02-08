@@ -1,19 +1,9 @@
+
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
 import { Progress } from "./ui/progress";
-
-export interface Track {
-  id: string;
-  name: string;
-  artist: string;
-  albumUrl: string;
-  isPlaying: boolean;
-  previewUrl?: string | null;
-  mp3Url?: string | null;
-  youtubeUrl?: string | null;
-  spotifyUrl?: string | null;
-}
+import type { Track } from "../types/music";
 
 interface MusicPlayerProps {
   track: Track;
@@ -28,6 +18,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
   const [audioInitialized, setAudioInitialized] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(track.isPlaying);
   
   useEffect(() => {
     const extractColor = async () => {
@@ -54,7 +45,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
     if (!audioInitialized) {
       audioRef.current = new Audio();
       audioRef.current.onended = () => {
-        setTrack({ ...track, isPlaying: false });
+        setIsPlaying(false);
         onNextTrack(); // Auto-play next track when current track ends
       };
       audioRef.current.ontimeupdate = () => {
@@ -69,7 +60,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       };
       setAudioInitialized(true);
     }
-  }, [audioInitialized, setTrack, track, onNextTrack]);
+  }, [audioInitialized, onNextTrack]);
 
   useEffect(() => {
     const audioSource = track.mp3Url || track.previewUrl;
@@ -82,7 +73,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       
       audioRef.current.src = audioSource;
       
-      if (track.isPlaying) {
+      if (isPlaying) {
         console.log('Attempting to play audio...');
         const playPromise = audioRef.current.play();
         
@@ -93,15 +84,15 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
             })
             .catch(error => {
               console.error("Error playing audio:", error);
-              setTrack({ ...track, isPlaying: false });
+              setIsPlaying(false);
             });
         }
       }
-    } else if (track.isPlaying && !audioSource) {
+    } else if (isPlaying && !audioSource) {
       console.log('No audio source available, cannot play');
-      setTrack({ ...track, isPlaying: false });
+      setIsPlaying(false);
     }
-  }, [track, setTrack]);
+  }, [track, isPlaying]);
 
   useEffect(() => {
     return () => {
@@ -117,7 +108,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       console.log("No audio URL available for this track");
       return;
     }
-    setTrack({ ...track, isPlaying: !track.isPlaying });
+    setIsPlaying(!isPlaying);
   };
 
   const formatTime = (time: number) => {
@@ -223,7 +214,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
                   : 'bg-white/5 cursor-not-allowed'
               }`}
             >
-              {track.isPlaying ? (
+              {isPlaying ? (
                 <Pause className="w-8 h-8 text-white" />
               ) : (
                 <Play className="w-8 h-8 text-white ml-1" />
