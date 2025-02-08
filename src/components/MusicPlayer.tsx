@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
@@ -18,13 +17,12 @@ export interface Track {
 
 interface MusicPlayerProps {
   track: Track;
-  setTrack: (track: Track) => void;
   setBackgroundColor: (color: string) => void;
   onPrevTrack: () => void;
   onNextTrack: () => void;
 }
 
-const MusicPlayer = ({ track, setTrack, setBackgroundColor, onPrevTrack, onNextTrack }: MusicPlayerProps) => {
+const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: MusicPlayerProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioInitialized, setAudioInitialized] = useState(false);

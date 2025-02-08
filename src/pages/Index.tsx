@@ -44,7 +44,6 @@ const Index = () => {
         {currentTrack && (
           <MusicPlayer 
             track={currentTrack}
-            setTrack={setCurrentTrack}
             setBackgroundColor={setBackgroundColor}
             onPrevTrack={handlePrevTrack}
             onNextTrack={handleNextTrack}
