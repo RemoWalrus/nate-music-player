@@ -93,12 +93,13 @@ export const ArtistSidebar = () => {
       <div className="p-4 border-b border-gray-100/20">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
-            <div className="h-16 w-full flex items-center justify-center">
+            <div className="h-24 w-full flex flex-col items-center justify-center gap-2">
               <img 
                 src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
                 alt="Nathan Garcia Logo" 
-                className="h-12 w-12"
+                className="h-16 w-24"
               />
+              <span className="text-[#9b87f5] font-medium">Nathan Music</span>
             </div>
           )}
           <button
