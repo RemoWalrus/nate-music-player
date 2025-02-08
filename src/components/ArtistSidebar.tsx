@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, User, Newspaper, Menu, Music4, Youtube, Apple, Spotify } from "lucide-react";
+import { ChevronLeft, User, Newspaper, Menu, Music4, Youtube, Apple } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sidebar,
@@ -78,7 +78,7 @@ export const ArtistSidebar = () => {
                      target="_blank" 
                      rel="noopener noreferrer"
                      className="text-gray-500 hover:text-gray-700">
-                    <Spotify className="h-5 w-5" />
+                    <Music4 className="h-5 w-5" />
                   </a>
                   <a href="https://music.apple.com/us/artist/nathan-garcia/1458353883" 
                      target="_blank" 
@@ -191,7 +191,7 @@ export const ArtistSidebar = () => {
                          target="_blank" 
                          rel="noopener noreferrer"
                          className="text-gray-500 hover:text-gray-700">
-                        <Spotify className="h-5 w-5" />
+                        <Music4 className="h-5 w-5" />
                       </a>
                       <a href="https://music.apple.com/us/artist/nathan-garcia/1458353883" 
                          target="_blank" 
