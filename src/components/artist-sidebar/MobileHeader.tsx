@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Menu, User, Music, Newspaper, Share2, Mail } from "lucide-react";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
@@ -14,14 +13,15 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
 
   const handleShare = async () => {
     try {
+      const shareUrl = `${window.location.origin}?og=true`;
       if (navigator.share) {
         await navigator.share({
           title: 'Nathan Garcia Music',
           text: 'Check out Nathan Garcia\'s music!',
-          url: window.location.href
+          url: shareUrl
         });
       } else {
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(shareUrl);
         toast({
           description: "Link copied to clipboard",
           duration: 2000,

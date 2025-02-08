@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronLeft, User, Newspaper, Music, Share2, Mail } from "lucide-react";
 import {
@@ -20,14 +21,15 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
 
   const handleShare = async () => {
     try {
+      const shareUrl = `${window.location.origin}?og=true`;
       if (navigator.share) {
         await navigator.share({
           title: 'Nathan Garcia Music',
           text: 'Check out Nathan Garcia\'s music!',
-          url: window.location.href
+          url: shareUrl
         });
       } else {
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(shareUrl);
         toast({
           description: "Link copied to clipboard",
           duration: 2000,
