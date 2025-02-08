@@ -1,5 +1,6 @@
+
 import { useEffect, useRef } from "react";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { average } from "color.js";
 
 export interface Track {
@@ -8,6 +9,7 @@ export interface Track {
   artist: string;
   albumUrl: string;
   isPlaying: boolean;
+  previewUrl?: string | null;
 }
 
 interface MusicPlayerProps {
@@ -18,7 +20,8 @@ interface MusicPlayerProps {
 
 const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
-
+  const audioRef = useRef<HTMLAudioElement>(null);
+  
   useEffect(() => {
     const extractColor = async () => {
       if (imageRef.current) {
@@ -40,9 +43,25 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     }
   }, [track.albumUrl, setBackgroundColor]);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      if (track.isPlaying) {
+        audioRef.current.play().catch(error => {
+          console.error("Error playing audio:", error);
+          setTrack({ ...track, isPlaying: false });
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [track.isPlaying]);
+
   const togglePlayback = () => {
+    if (!track.previewUrl) {
+      console.log("No preview URL available for this track");
+      return;
+    }
     setTrack({ ...track, isPlaying: !track.isPlaying });
-    console.log("Toggled playback:", !track.isPlaying);
   };
 
   return (
@@ -71,16 +90,43 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
           </p>
         </div>
 
-        <button
-          onClick={togglePlayback}
-          className="w-16 h-16 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200"
-        >
-          {track.isPlaying ? (
-            <Pause className="w-8 h-8 text-white" />
-          ) : (
-            <Play className="w-8 h-8 text-white ml-1" />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={togglePlayback}
+            disabled={!track.previewUrl}
+            className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
+              track.previewUrl 
+                ? 'bg-white/10 hover:bg-white/20' 
+                : 'bg-white/5 cursor-not-allowed'
+            }`}
+          >
+            {track.isPlaying ? (
+              <Pause className="w-8 h-8 text-white" />
+            ) : (
+              <Play className="w-8 h-8 text-white ml-1" />
+            )}
+          </button>
+          {!track.previewUrl && (
+            <div className="flex items-center gap-2 text-white/60">
+              <VolumeX className="w-5 h-5" />
+              <span className="text-sm">Preview unavailable</span>
+            </div>
           )}
-        </button>
+          {track.previewUrl && (
+            <div className="flex items-center gap-2 text-white/60">
+              <Volume2 className="w-5 h-5" />
+              <span className="text-sm">Preview available</span>
+            </div>
+          )}
+        </div>
+
+        {track.previewUrl && (
+          <audio
+            ref={audioRef}
+            src={track.previewUrl}
+            onEnded={() => setTrack({ ...track, isPlaying: false })}
+          />
+        )}
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ interface SpotifyTrack {
     images: { url: string }[];
   };
   artists: { name: string }[];
+  preview_url: string | null;
 }
 
 const Index = () => {
@@ -23,7 +24,8 @@ const Index = () => {
     name: '',
     artist: '',
     albumUrl: '',
-    isPlaying: false
+    isPlaying: false,
+    previewUrl: null
   });
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [isLoading, setIsLoading] = useState(true);
@@ -52,6 +54,7 @@ const Index = () => {
           artist: firstTrack.artists[0].name,
           albumUrl: firstTrack.album.images[0]?.url,
           isPlaying: false,
+          previewUrl: firstTrack.preview_url
         });
       }
     } catch (error) {
@@ -76,6 +79,7 @@ const Index = () => {
       artist: track.artists[0].name,
       albumUrl: track.album.images[0]?.url,
       isPlaying: true,
+      previewUrl: track.preview_url
     });
 
     toast({
