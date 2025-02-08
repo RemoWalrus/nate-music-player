@@ -47,20 +47,39 @@ const Index = () => {
 
   const fetchTrackUrls = async (trackIds: string[]) => {
     try {
-      const { data, error } = await supabase
+      // Fetch track URLs from database
+      const { data: urlsData, error: urlsError } = await supabase
         .from('track_urls')
         .select('*')
         .in('spotify_track_id', trackIds);
 
-      if (error) {
-        console.error('Error fetching track URLs:', error);
+      if (urlsError) {
+        console.error('Error fetching track URLs:', urlsError);
         return;
       }
 
+      // Create a map of track URLs
       const urlsMap: Record<string, TrackUrls> = {};
-      data.forEach((track) => {
-        urlsMap[track.spotify_track_id] = track;
-      });
+      
+      for (const track of urlsData || []) {
+        // If the track has an mp3_url, get the public URL from storage
+        let mp3Url = track.mp3_url;
+        if (mp3Url) {
+          const { data: publicUrl } = supabase.storage
+            .from('audio')
+            .getPublicUrl(mp3Url);
+          
+          if (publicUrl) {
+            mp3Url = publicUrl.publicUrl;
+          }
+        }
+
+        urlsMap[track.spotify_track_id] = {
+          ...track,
+          mp3_url: mp3Url
+        };
+      }
+
       setTrackUrls(urlsMap);
     } catch (error) {
       console.error('Error in fetchTrackUrls:', error);
@@ -176,4 +195,3 @@ const Index = () => {
 };
 
 export default Index;
-
