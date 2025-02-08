@@ -47,6 +47,8 @@ const Index = () => {
 
   const fetchTrackUrls = async (trackIds: string[]) => {
     try {
+      console.log('Fetching track URLs for:', trackIds);
+      
       // Fetch track URLs from database
       const { data: urlsData, error: urlsError } = await supabase
         .from('track_urls')
@@ -57,6 +59,8 @@ const Index = () => {
         console.error('Error fetching track URLs:', urlsError);
         return;
       }
+
+      console.log('Received track URLs data:', urlsData);
 
       // Create a map of track URLs
       const urlsMap: Record<string, TrackUrls> = {};
@@ -71,6 +75,7 @@ const Index = () => {
           
           if (publicUrl) {
             mp3Url = publicUrl.publicUrl;
+            console.log('Generated public URL for', track.spotify_track_id, ':', mp3Url);
           }
         }
 
@@ -80,6 +85,7 @@ const Index = () => {
         };
       }
 
+      console.log('Final track URLs map:', urlsMap);
       setTrackUrls(urlsMap);
     } catch (error) {
       console.error('Error in fetchTrackUrls:', error);
@@ -100,6 +106,7 @@ const Index = () => {
       }
 
       const fetchedTracks = await fetchArtistTopTracks();
+      console.log('Fetched tracks:', fetchedTracks);
       
       // Fetch track URLs from our database
       await fetchTrackUrls(fetchedTracks.map(track => track.id));
@@ -115,6 +122,9 @@ const Index = () => {
       
       if (enhancedTracks && enhancedTracks.length > 0) {
         const firstTrack = enhancedTracks[0];
+        const firstTrackUrls = trackUrls[firstTrack.id];
+        console.log('Setting initial track with URLs:', firstTrackUrls);
+        
         setCurrentTrack({
           id: firstTrack.id,
           name: firstTrack.name,
@@ -122,8 +132,8 @@ const Index = () => {
           albumUrl: firstTrack.album.images[0]?.url,
           isPlaying: false,
           previewUrl: firstTrack.preview_url,
-          mp3Url: trackUrls[firstTrack.id]?.mp3_url || null,
-          youtubeUrl: trackUrls[firstTrack.id]?.youtube_music_url || null,
+          mp3Url: firstTrackUrls?.mp3_url || null,
+          youtubeUrl: firstTrackUrls?.youtube_music_url || null,
           spotifyUrl: firstTrack.external_urls?.spotify || null
         });
       }
@@ -140,9 +150,12 @@ const Index = () => {
 
   useEffect(() => {
     loadTracks();
-  }, [toast]);
+  }, []);
 
   const handleTrackSelect = (track: SpotifyTrack) => {
+    const trackUrlData = trackUrls[track.id];
+    console.log('Selected track URLs:', trackUrlData);
+    
     setCurrentTrack({
       id: track.id,
       name: track.name,
@@ -150,8 +163,8 @@ const Index = () => {
       albumUrl: track.album.images[0]?.url,
       isPlaying: true,
       previewUrl: track.preview_url,
-      mp3Url: trackUrls[track.id]?.mp3_url || null,
-      youtubeUrl: trackUrls[track.id]?.youtube_music_url || null,
+      mp3Url: trackUrlData?.mp3_url || null,
+      youtubeUrl: trackUrlData?.youtube_music_url || null,
       spotifyUrl: track.external_urls?.spotify || null
     });
 
