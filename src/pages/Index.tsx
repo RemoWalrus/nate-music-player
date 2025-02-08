@@ -5,6 +5,8 @@ import Playlist from "../components/Playlist";
 import { ArtistSidebar } from "../components/ArtistSidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTracks } from "@/hooks/use-tracks";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
 
 const Index = () => {
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
@@ -17,7 +19,8 @@ const Index = () => {
     handleTrackSelect,
     handlePrevTrack,
     handleNextTrack,
-    loadTracks
+    loadTracks,
+    refreshTracks
   } = useTracks();
 
   useEffect(() => {
@@ -65,6 +68,16 @@ const Index = () => {
             background: `linear-gradient(to bottom, ${backgroundColor}, ${backgroundColor}ee, ${backgroundColor}dd)`
           }}
         >
+          <div className="w-full max-w-2xl flex justify-end px-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={refreshTracks}
+              className="text-white hover:bg-white/20"
+            >
+              <RefreshCw className="h-5 w-5" />
+            </Button>
+          </div>
           {currentTrack && (
             <MusicPlayer 
               track={currentTrack}
