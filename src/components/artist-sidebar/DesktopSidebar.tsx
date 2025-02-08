@@ -99,7 +99,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-100/20" />
+        <div className="border-t border-gray-200/30" />
 
         <SidebarGroup>
           <SidebarGroupLabel
@@ -122,7 +122,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-100/20" />
+        <div className="border-t border-gray-200/30" />
 
         <SidebarGroup>
           <SidebarGroupLabel
@@ -149,7 +149,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-100/20" />
+        <div className="border-t border-gray-200/30" />
 
         <SidebarGroup>
           <SidebarGroupLabel
@@ -176,7 +176,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-100/20" />
+        <div className="border-t border-gray-200/30" />
 
         <SidebarGroup>
           <SidebarGroupLabel
