@@ -52,11 +52,11 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     if (!audioInitialized) {
       audioRef.current = new Audio();
       audioRef.current.onended = () => {
-        setTrack({ ...track, isPlaying: false });
+        setTrack(prevTrack => ({ ...prevTrack, isPlaying: false }));
       };
       setAudioInitialized(true);
     }
-  }, [audioInitialized, setTrack, track]);
+  }, [audioInitialized, setTrack]);
 
   // Handle audio source changes
   useEffect(() => {
@@ -65,6 +65,11 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     console.log('Track state:', track);
     
     if (audioRef.current && audioSource) {
+      // Stop any current playback before changing source
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      
+      // Update the source
       audioRef.current.src = audioSource;
       
       if (track.isPlaying) {
@@ -72,18 +77,19 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
         const playPromise = audioRef.current.play();
         
         if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.error("Error playing audio:", error);
-            setTrack({ ...track, isPlaying: false });
-          });
+          playPromise
+            .then(() => {
+              console.log('Audio playing successfully');
+            })
+            .catch(error => {
+              console.error("Error playing audio:", error);
+              setTrack(prevTrack => ({ ...prevTrack, isPlaying: false }));
+            });
         }
-      } else {
-        console.log('Pausing audio...');
-        audioRef.current.pause();
       }
     } else if (track.isPlaying && !audioSource) {
       console.log('No audio source available, cannot play');
-      setTrack({ ...track, isPlaying: false });
+      setTrack(prevTrack => ({ ...prevTrack, isPlaying: false }));
     }
   }, [track, setTrack]);
 
@@ -102,7 +108,7 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
       console.log("No audio URL available for this track");
       return;
     }
-    setTrack({ ...track, isPlaying: !track.isPlaying });
+    setTrack(prevTrack => ({ ...prevTrack, isPlaying: !prevTrack.isPlaying }));
   };
 
   return (
