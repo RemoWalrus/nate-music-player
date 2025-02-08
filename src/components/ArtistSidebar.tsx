@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, User, Newspaper } from "lucide-react";
 import {
   Sidebar,
@@ -8,9 +8,32 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
+import { supabase } from "@/integrations/supabase/client";
 
 export const ArtistSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [artistBio, setArtistBio] = useState("");
+
+  useEffect(() => {
+    const fetchArtistBio = async () => {
+      const { data, error } = await supabase
+        .from('artists')
+        .select('bio')
+        .eq('name', 'Nathan Garcia')
+        .single();
+      
+      if (error) {
+        console.error('Error fetching artist bio:', error);
+        return;
+      }
+
+      if (data) {
+        setArtistBio(data.bio || '');
+      }
+    };
+
+    fetchArtistBio();
+  }, []);
 
   return (
     <Sidebar
@@ -54,7 +77,7 @@ export const ArtistSidebar = () => {
                   <div className="space-y-1">
                     <h3 className="font-medium">Nathan Garcia</h3>
                     <p className="text-sm text-gray-500">
-                      Mexican singer-songwriter blending traditional and contemporary styles.
+                      {artistBio}
                     </p>
                   </div>
                 )}
