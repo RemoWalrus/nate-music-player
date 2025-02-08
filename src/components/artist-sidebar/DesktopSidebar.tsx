@@ -9,6 +9,7 @@ import {
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
+import { useToast } from "@/hooks/use-toast";
 
 interface DesktopSidebarProps {
   artistBio: string;
@@ -16,6 +17,7 @@ interface DesktopSidebarProps {
 
 export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { toast } = useToast();
 
   const handleShare = async () => {
     try {
@@ -27,6 +29,10 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
         });
       } else {
         await navigator.clipboard.writeText(window.location.href);
+        toast({
+          description: "Link copied to clipboard",
+          duration: 2000,
+        });
       }
     } catch (error) {
       console.log('Error sharing:', error);

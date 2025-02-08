@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Menu, User, Music, Newspaper, Share2 } from "lucide-react";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
+import { useToast } from "@/hooks/use-toast";
 
 interface MobileHeaderProps {
   artistBio: string;
@@ -9,6 +10,7 @@ interface MobileHeaderProps {
 
 export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { toast } = useToast();
 
   const handleShare = async () => {
     try {
@@ -20,6 +22,10 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
         });
       } else {
         await navigator.clipboard.writeText(window.location.href);
+        toast({
+          description: "Link copied to clipboard",
+          duration: 2000,
+        });
       }
     } catch (error) {
       console.log('Error sharing:', error);
