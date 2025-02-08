@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { ChevronLeft, User, Newspaper, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -92,16 +91,16 @@ export const ArtistSidebar = () => {
     >
       <div className="p-4 border-b border-gray-100/20">
         <div className="flex items-center justify-between">
-          {!isCollapsed && (
-            <div className="h-32 w-full flex flex-col items-center justify-center gap-3">
-              <img 
-                src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
-                alt="Nathan Garcia Logo" 
-                className="h-20 w-28"
-              />
+          <div className={`${isCollapsed ? "w-full" : "h-32 w-full"} flex flex-col items-center justify-center gap-3`}>
+            <img 
+              src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
+              alt="Nathan Garcia Logo" 
+              className={isCollapsed ? "h-10 w-14" : "h-20 w-28"}
+            />
+            {!isCollapsed && (
               <span className="text-[#ED2024] font-medium text-lg">Nathan Music</span>
-            </div>
-          )}
+            )}
+          </div>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -167,4 +166,3 @@ export const ArtistSidebar = () => {
     </Sidebar>
   );
 };
-
