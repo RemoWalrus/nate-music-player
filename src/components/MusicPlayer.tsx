@@ -1,7 +1,8 @@
 
 import { useEffect, useRef, useState } from "react";
-import { Play, Pause, Volume2, VolumeX, ExternalLink } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
+import { Progress } from "./ui/progress";
 
 export interface Track {
   id: string;
@@ -25,6 +26,8 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
   const imageRef = useRef<HTMLImageElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioInitialized, setAudioInitialized] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
   
   useEffect(() => {
     const extractColor = async () => {
@@ -53,6 +56,16 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
       audioRef.current = new Audio();
       audioRef.current.onended = () => {
         setTrack({ ...track, isPlaying: false });
+      };
+      audioRef.current.ontimeupdate = () => {
+        if (audioRef.current) {
+          setProgress(audioRef.current.currentTime);
+        }
+      };
+      audioRef.current.onloadedmetadata = () => {
+        if (audioRef.current) {
+          setDuration(audioRef.current.duration);
+        }
       };
       setAudioInitialized(true);
     }
@@ -111,6 +124,12 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     setTrack({ ...track, isPlaying: !track.isPlaying });
   };
 
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className="relative group">
       <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-3xl -z-10" />
@@ -159,34 +178,66 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={togglePlayback}
-            disabled={!track.mp3Url && !track.previewUrl}
-            className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
-              (track.mp3Url || track.previewUrl)
-                ? 'bg-white/10 hover:bg-white/20' 
-                : 'bg-white/5 cursor-not-allowed'
-            }`}
-          >
-            {track.isPlaying ? (
-              <Pause className="w-8 h-8 text-white" />
-            ) : (
-              <Play className="w-8 h-8 text-white ml-1" />
+        <div className="w-full space-y-4">
+          <div className="w-full flex items-center gap-2">
+            <span className="text-white/60 text-sm w-12 text-right">
+              {formatTime(progress)}
+            </span>
+            <Progress 
+              value={(progress / duration) * 100} 
+              className="flex-1 h-1.5"
+            />
+            <span className="text-white/60 text-sm w-12">
+              {formatTime(duration)}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={() => console.log('Previous track')}
+              className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
+            >
+              <SkipBack className="w-6 h-6 text-white" />
+            </button>
+
+            <button
+              onClick={togglePlayback}
+              disabled={!track.mp3Url && !track.previewUrl}
+              className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
+                (track.mp3Url || track.previewUrl)
+                  ? 'bg-white/10 hover:bg-white/20' 
+                  : 'bg-white/5 cursor-not-allowed'
+              }`}
+            >
+              {track.isPlaying ? (
+                <Pause className="w-8 h-8 text-white" />
+              ) : (
+                <Play className="w-8 h-8 text-white ml-1" />
+              )}
+            </button>
+
+            <button
+              onClick={() => console.log('Next track')}
+              className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
+            >
+              <SkipForward className="w-6 h-6 text-white" />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-center gap-2">
+            {!track.mp3Url && !track.previewUrl && (
+              <div className="flex items-center gap-2 text-white/60">
+                <VolumeX className="w-5 h-5" />
+                <span className="text-sm">Audio unavailable</span>
+              </div>
             )}
-          </button>
-          {!track.mp3Url && !track.previewUrl && (
-            <div className="flex items-center gap-2 text-white/60">
-              <VolumeX className="w-5 h-5" />
-              <span className="text-sm">Audio unavailable</span>
-            </div>
-          )}
-          {(track.mp3Url || track.previewUrl) && (
-            <div className="flex items-center gap-2 text-white/60">
-              <Volume2 className="w-5 h-5" />
-              <span className="text-sm">Audio available</span>
-            </div>
-          )}
+            {(track.mp3Url || track.previewUrl) && (
+              <div className="flex items-center gap-2 text-white/60">
+                <Volume2 className="w-5 h-5" />
+                <span className="text-sm">Audio available</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -194,3 +245,4 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
 };
 
 export default MusicPlayer;
+
