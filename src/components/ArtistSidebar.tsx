@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, User, Newspaper, Menu } from "lucide-react";
+import { ChevronLeft, User, Newspaper, Menu, Music } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sidebar,
@@ -63,27 +63,30 @@ export const ArtistSidebar = () => {
                 <p className="text-sm text-gray-500">{artistBio}</p>
               </div>
             </div>
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Music Platforms</h4>
-              <div className="flex flex-col gap-2">
-                <a href="https://music.youtube.com/channel/UCrGiV8amcSjOyJevavJERLA?si=msVygIJUpgpBfD6I" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   className="text-gray-500 hover:text-gray-700">
-                  YouTube Music
-                </a>
-                <a href="https://open.spotify.com/artist/1cK40hLuV86SgatMzjMeTA" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   className="text-gray-500 hover:text-gray-700">
-                  Spotify
-                </a>
-                <a href="https://music.apple.com/us/artist/nathan-garcia/1778355814" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   className="text-gray-500 hover:text-gray-700">
-                  Apple Music
-                </a>
+            <div className="flex items-center gap-3 text-gray-700">
+              <Music className="h-5 w-5 shrink-0" />
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Music Platforms</h4>
+                <div className="flex flex-col gap-2">
+                  <a href="https://music.youtube.com/channel/UCrGiV8amcSjOyJevavJERLA?si=msVygIJUpgpBfD6I" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-gray-500 hover:text-gray-700">
+                    YouTube Music
+                  </a>
+                  <a href="https://open.spotify.com/artist/1cK40hLuV86SgatMzjMeTA" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-gray-500 hover:text-gray-700">
+                    Spotify
+                  </a>
+                  <a href="https://music.apple.com/us/artist/nathan-garcia/1778355814" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-gray-500 hover:text-gray-700">
+                    Apple Music
+                  </a>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-3 text-gray-700">
@@ -172,31 +175,34 @@ export const ArtistSidebar = () => {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <div className="px-4 py-3">
-              {!isCollapsed && (
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium">Listen on</h4>
-                  <div className="flex flex-col gap-2">
-                    <a href="https://music.youtube.com/channel/UCrGiV8amcSjOyJevavJERLA?si=msVygIJUpgpBfD6I" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="text-gray-500 hover:text-gray-700">
-                      YouTube Music
-                    </a>
-                    <a href="https://open.spotify.com/artist/1cK40hLuV86SgatMzjMeTA" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="text-gray-500 hover:text-gray-700">
-                      Spotify
-                    </a>
-                    <a href="https://music.apple.com/us/artist/nathan-garcia/1778355814" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="text-gray-500 hover:text-gray-700">
-                      Apple Music
-                    </a>
+              <div className="flex items-center gap-3 text-gray-700">
+                <Music className="h-5 w-5 shrink-0" />
+                {!isCollapsed && (
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium">Listen on</h4>
+                    <div className="flex flex-col gap-2">
+                      <a href="https://music.youtube.com/channel/UCrGiV8amcSjOyJevavJERLA?si=msVygIJUpgpBfD6I" 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-gray-500 hover:text-gray-700">
+                        YouTube Music
+                      </a>
+                      <a href="https://open.spotify.com/artist/1cK40hLuV86SgatMzjMeTA" 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-gray-500 hover:text-gray-700">
+                        Spotify
+                      </a>
+                      <a href="https://music.apple.com/us/artist/nathan-garcia/1778355814" 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-gray-500 hover:text-gray-700">
+                        Apple Music
+                      </a>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </SidebarGroupContent>
         </SidebarGroup>
