@@ -1,6 +1,6 @@
 
 import { useEffect, useRef } from "react";
-import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, ExternalLink } from "lucide-react";
 import { average } from "color.js";
 
 export interface Track {
@@ -10,6 +10,9 @@ export interface Track {
   albumUrl: string;
   isPlaying: boolean;
   previewUrl?: string | null;
+  mp3Url?: string | null;
+  youtubeUrl?: string | null;
+  spotifyUrl?: string | null;
 }
 
 interface MusicPlayerProps {
@@ -57,8 +60,8 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
   }, [track.isPlaying]);
 
   const togglePlayback = () => {
-    if (!track.previewUrl) {
-      console.log("No preview URL available for this track");
+    if (!track.mp3Url && !track.previewUrl) {
+      console.log("No audio URL available for this track");
       return;
     }
     setTrack({ ...track, isPlaying: !track.isPlaying });
@@ -88,14 +91,36 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
           <p className="text-white/80 text-lg">
             {track.artist}
           </p>
+          <div className="flex items-center justify-center gap-4 mt-2">
+            {track.youtubeUrl && (
+              <a
+                href={track.youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/80 hover:text-white flex items-center gap-1"
+              >
+                YouTube Music <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+            {track.spotifyUrl && (
+              <a
+                href={track.spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/80 hover:text-white flex items-center gap-1"
+              >
+                Spotify <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={togglePlayback}
-            disabled={!track.previewUrl}
+            disabled={!track.mp3Url && !track.previewUrl}
             className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
-              track.previewUrl 
+              (track.mp3Url || track.previewUrl)
                 ? 'bg-white/10 hover:bg-white/20' 
                 : 'bg-white/5 cursor-not-allowed'
             }`}
@@ -106,24 +131,24 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
               <Play className="w-8 h-8 text-white ml-1" />
             )}
           </button>
-          {!track.previewUrl && (
+          {!track.mp3Url && !track.previewUrl && (
             <div className="flex items-center gap-2 text-white/60">
               <VolumeX className="w-5 h-5" />
-              <span className="text-sm">Preview unavailable</span>
+              <span className="text-sm">Audio unavailable</span>
             </div>
           )}
-          {track.previewUrl && (
+          {(track.mp3Url || track.previewUrl) && (
             <div className="flex items-center gap-2 text-white/60">
               <Volume2 className="w-5 h-5" />
-              <span className="text-sm">Preview available</span>
+              <span className="text-sm">Audio available</span>
             </div>
           )}
         </div>
 
-        {track.previewUrl && (
+        {(track.mp3Url || track.previewUrl) && (
           <audio
             ref={audioRef}
-            src={track.previewUrl}
+            src={track.mp3Url || track.previewUrl}
             onEnded={() => setTrack({ ...track, isPlaying: false })}
           />
         )}

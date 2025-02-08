@@ -1,4 +1,5 @@
-import { Play } from "lucide-react";
+
+import { Play, ExternalLink } from "lucide-react";
 
 interface SpotifyTrack {
   id: string;
@@ -7,6 +8,8 @@ interface SpotifyTrack {
     images: { url: string }[];
   };
   artists: { name: string }[];
+  youtubeUrl?: string;
+  spotifyUrl?: string;
 }
 
 interface PlaylistProps {
@@ -47,6 +50,30 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                 <p className="text-white/70 text-sm">
                   {track.artists.map((artist) => artist.name).join(", ")}
                 </p>
+                <div className="flex gap-4 mt-1">
+                  {track.youtubeUrl && (
+                    <a
+                      href={track.youtubeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      YouTube <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                  {track.spotifyUrl && (
+                    <a
+                      href={track.spotifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Spotify <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
             <button

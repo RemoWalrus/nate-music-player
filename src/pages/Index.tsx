@@ -14,7 +14,20 @@ interface SpotifyTrack {
   };
   artists: { name: string }[];
   preview_url: string | null;
+  external_urls?: {
+    spotify?: string;
+  };
 }
+
+// Add hosted MP3 URLs and YouTube Music URLs for each track
+const TRACK_URLS = {
+  // Example structure - replace with actual URLs:
+  'track_id_1': {
+    mp3: 'https://example.com/track1.mp3',
+    youtube: 'https://music.youtube.com/watch?v=...'
+  },
+  // Add more tracks as needed
+};
 
 const Index = () => {
   const { toast } = useToast();
@@ -25,7 +38,10 @@ const Index = () => {
     artist: '',
     albumUrl: '',
     isPlaying: false,
-    previewUrl: null
+    previewUrl: null,
+    mp3Url: null,
+    youtubeUrl: null,
+    spotifyUrl: null
   });
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [isLoading, setIsLoading] = useState(true);
@@ -44,17 +60,28 @@ const Index = () => {
       }
 
       const fetchedTracks = await fetchArtistTopTracks();
-      setTracks(fetchedTracks);
       
-      if (fetchedTracks && fetchedTracks.length > 0) {
-        const firstTrack = fetchedTracks[0];
+      // Enhance tracks with additional URLs
+      const enhancedTracks = fetchedTracks.map(track => ({
+        ...track,
+        youtubeUrl: TRACK_URLS[track.id]?.youtube || null,
+        spotifyUrl: track.external_urls?.spotify || null
+      }));
+      
+      setTracks(enhancedTracks);
+      
+      if (enhancedTracks && enhancedTracks.length > 0) {
+        const firstTrack = enhancedTracks[0];
         setCurrentTrack({
           id: firstTrack.id,
           name: firstTrack.name,
           artist: firstTrack.artists[0].name,
           albumUrl: firstTrack.album.images[0]?.url,
           isPlaying: false,
-          previewUrl: firstTrack.preview_url
+          previewUrl: firstTrack.preview_url,
+          mp3Url: TRACK_URLS[firstTrack.id]?.mp3 || null,
+          youtubeUrl: TRACK_URLS[firstTrack.id]?.youtube || null,
+          spotifyUrl: firstTrack.external_urls?.spotify || null
         });
       }
     } catch (error) {
@@ -79,7 +106,10 @@ const Index = () => {
       artist: track.artists[0].name,
       albumUrl: track.album.images[0]?.url,
       isPlaying: true,
-      previewUrl: track.preview_url
+      previewUrl: track.preview_url,
+      mp3Url: TRACK_URLS[track.id]?.mp3 || null,
+      youtubeUrl: TRACK_URLS[track.id]?.youtube || null,
+      spotifyUrl: track.external_urls?.spotify || null
     });
 
     toast({
