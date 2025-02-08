@@ -152,7 +152,7 @@ const Index = () => {
   }
 
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="group/sidebar-wrapper flex min-h-svh w-full">
       <ArtistSidebar />
       <div 
         className="flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8"
@@ -176,3 +176,4 @@ const Index = () => {
 };
 
 export default Index;
+
