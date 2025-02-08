@@ -67,11 +67,11 @@ const Index = () => {
       
       for (const track of urlsData || []) {
         // If the track has an mp3_url, get the public URL from storage
-        let mp3Url = track.mp3_url;
-        if (mp3Url) {
+        let mp3Url = null;
+        if (track.mp3_url) {
           const { data: publicUrl } = supabase.storage
             .from('audio')
-            .getPublicUrl(mp3Url);
+            .getPublicUrl(track.mp3_url);
           
           if (publicUrl) {
             mp3Url = publicUrl.publicUrl;
