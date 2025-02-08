@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, User, Newspaper, Menu } from "lucide-react";
+import { ChevronLeft, User, Newspaper, Menu, Music4, Youtube, Apple } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sidebar,
@@ -61,6 +61,32 @@ export const ArtistSidebar = () => {
               <div className="space-y-1">
                 <h3 className="font-medium">Nathan Garcia</h3>
                 <p className="text-sm text-gray-500">{artistBio}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-gray-700">
+              <Music4 className="h-5 w-5 shrink-0" />
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Music Platforms</h4>
+                <div className="flex gap-4">
+                  <a href="https://music.youtube.com/channel/UCcpVtsUqVFcx55u-3IlhYbw" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-gray-500 hover:text-gray-700">
+                    <Youtube className="h-5 w-5" />
+                  </a>
+                  <a href="https://open.spotify.com/artist/1cK40hLuV86SgatMzjMeTA" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-gray-500 hover:text-gray-700">
+                    <Music4 className="h-5 w-5" />
+                  </a>
+                  <a href="https://music.apple.com/us/artist/nathan-garcia/1458353883" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-gray-500 hover:text-gray-700">
+                    <Apple className="h-5 w-5" />
+                  </a>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-3 text-gray-700">
@@ -145,6 +171,46 @@ export const ArtistSidebar = () => {
           <SidebarGroupLabel
             className={`text-gray-500 ${isCollapsed ? "sr-only" : ""}`}
           >
+            Music
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <div className="px-4 py-3">
+              <div className="flex items-center gap-3 text-gray-700">
+                <Music4 className="h-5 w-5 shrink-0" />
+                {!isCollapsed && (
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium">Listen on</h4>
+                    <div className="flex gap-4">
+                      <a href="https://music.youtube.com/channel/UCcpVtsUqVFcx55u-3IlhYbw" 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-gray-500 hover:text-gray-700">
+                        <Youtube className="h-5 w-5" />
+                      </a>
+                      <a href="https://open.spotify.com/artist/1cK40hLuV86SgatMzjMeTA" 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-gray-500 hover:text-gray-700">
+                        <Music4 className="h-5 w-5" />
+                      </a>
+                      <a href="https://music.apple.com/us/artist/nathan-garcia/1458353883" 
+                         target="_blank" 
+                         rel="noopener noreferrer"
+                         className="text-gray-500 hover:text-gray-700">
+                        <Apple className="h-5 w-5" />
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel
+            className={`text-gray-500 ${isCollapsed ? "sr-only" : ""}`}
+          >
             Latest News
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -169,3 +235,4 @@ export const ArtistSidebar = () => {
     </Sidebar>
   );
 };
+
