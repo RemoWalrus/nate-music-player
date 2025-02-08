@@ -60,7 +60,10 @@ const Index = () => {
           className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 relative ${
             isMobile ? "mt-16" : ""
           }`}
-          style={{ backgroundColor }}
+          style={{ 
+            backgroundColor,
+            background: `linear-gradient(to bottom, ${backgroundColor}, ${backgroundColor}ee, ${backgroundColor}dd)`
+          }}
         >
           {currentTrack && (
             <MusicPlayer 
