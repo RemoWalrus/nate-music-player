@@ -47,37 +47,49 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
     }
   }, [track.albumUrl, setBackgroundColor]);
 
+  // Initialize audio on mount
   useEffect(() => {
-    // Initialize audio element
     if (!audioInitialized) {
       audioRef.current = new Audio();
+      audioRef.current.onended = () => {
+        setTrack(prev => ({ ...prev, isPlaying: false }));
+      };
       setAudioInitialized(true);
     }
+  }, [audioInitialized, setTrack]);
 
-    if (audioRef.current) {
-      const audioSource = track.mp3Url || track.previewUrl;
-      console.log('Audio source:', audioSource);
+  // Handle audio source changes
+  useEffect(() => {
+    const audioSource = track.mp3Url || track.previewUrl;
+    console.log('Audio source:', audioSource);
+    
+    if (audioRef.current && audioSource) {
+      audioRef.current.src = audioSource;
       
-      if (audioSource) {
-        audioRef.current.src = audioSource;
-      }
-
       if (track.isPlaying) {
         console.log('Attempting to play audio...');
-        audioRef.current.play().catch(error => {
-          console.error("Error playing audio:", error);
-          setTrack({ ...track, isPlaying: false });
-        });
+        const playPromise = audioRef.current.play();
+        
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error("Error playing audio:", error);
+            setTrack({ ...track, isPlaying: false });
+          });
+        }
       } else {
         console.log('Pausing audio...');
         audioRef.current.pause();
       }
+    } else if (track.isPlaying && !audioSource) {
+      // If trying to play but no audio source is available
+      console.log('No audio source available, cannot play');
+      setTrack({ ...track, isPlaying: false });
     }
-  }, [track.isPlaying, track.mp3Url, track.previewUrl, audioInitialized]);
+  }, [track, setTrack]);
 
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      // Cleanup audio on component unmount
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
