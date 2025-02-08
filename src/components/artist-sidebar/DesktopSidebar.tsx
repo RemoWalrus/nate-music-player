@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ChevronLeft, User, Newspaper, Music, Share2, Mail } from "lucide-react";
 import {
@@ -48,7 +47,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
         isCollapsed ? "w-20" : "w-80"
       }`}
     >
-      <div className="p-4 border-b border-gray-100/20">
+      <div className="p-4 border-b border-gray-300/50">
         <div className="flex flex-col">
           <div className="flex justify-end">
             <button
@@ -99,7 +98,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-200/30" />
+        <div className="border-t border-gray-300/50" />
 
         <SidebarGroup>
           <SidebarGroupLabel
@@ -122,7 +121,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-200/30" />
+        <div className="border-t border-gray-300/50" />
 
         <SidebarGroup>
           <SidebarGroupLabel
@@ -149,7 +148,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-200/30" />
+        <div className="border-t border-gray-300/50" />
 
         <SidebarGroup>
           <SidebarGroupLabel
@@ -176,7 +175,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <div className="border-t border-gray-200/30" />
+        <div className="border-t border-gray-300/50" />
 
         <SidebarGroup>
           <SidebarGroupLabel
