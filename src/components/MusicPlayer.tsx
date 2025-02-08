@@ -48,16 +48,39 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
 
   useEffect(() => {
     if (audioRef.current) {
+      const audioSource = track.mp3Url || track.previewUrl;
+      console.log('Audio source:', audioSource);
+      
       if (track.isPlaying) {
+        console.log('Attempting to play audio...');
         audioRef.current.play().catch(error => {
           console.error("Error playing audio:", error);
           setTrack({ ...track, isPlaying: false });
         });
       } else {
+        console.log('Pausing audio...');
         audioRef.current.pause();
       }
     }
-  }, [track.isPlaying]);
+  }, [track.isPlaying, track.mp3Url, track.previewUrl]);
+
+  // Update audio source when track changes
+  useEffect(() => {
+    if (audioRef.current) {
+      const audioSource = track.mp3Url || track.previewUrl;
+      console.log('Setting new audio source:', audioSource);
+      if (audioSource) {
+        audioRef.current.src = audioSource;
+        // If track was playing, continue playing the new source
+        if (track.isPlaying) {
+          audioRef.current.play().catch(error => {
+            console.error("Error playing new audio source:", error);
+            setTrack({ ...track, isPlaying: false });
+          });
+        }
+      }
+    }
+  }, [track.id, track.mp3Url, track.previewUrl]);
 
   const togglePlayback = () => {
     if (!track.mp3Url && !track.previewUrl) {
@@ -158,3 +181,4 @@ const MusicPlayer = ({ track, setTrack, setBackgroundColor }: MusicPlayerProps) 
 };
 
 export default MusicPlayer;
+
