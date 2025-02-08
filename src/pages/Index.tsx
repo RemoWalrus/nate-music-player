@@ -33,27 +33,32 @@ const Index = () => {
   }
 
   return (
-    <div className="group/sidebar-wrapper flex min-h-svh w-full">
-      <ArtistSidebar />
-      <div 
-        className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 ${
-          isMobile ? "mt-16" : ""
-        }`}
-        style={{ backgroundColor }}
-      >
-        {currentTrack && (
-          <MusicPlayer 
-            track={currentTrack}
-            setBackgroundColor={setBackgroundColor}
-            onPrevTrack={handlePrevTrack}
-            onNextTrack={handleNextTrack}
+    <div className="flex flex-col min-h-svh w-full">
+      <div className="flex flex-1">
+        <ArtistSidebar />
+        <div 
+          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 relative ${
+            isMobile ? "mt-16" : ""
+          }`}
+          style={{ backgroundColor }}
+        >
+          {currentTrack && (
+            <MusicPlayer 
+              track={currentTrack}
+              setBackgroundColor={setBackgroundColor}
+              onPrevTrack={handlePrevTrack}
+              onNextTrack={handleNextTrack}
+            />
+          )}
+          <Playlist 
+            tracks={tracks}
+            onTrackSelect={handleTrackSelect}
+            currentTrackId={currentTrack?.id || ""}
           />
-        )}
-        <Playlist 
-          tracks={tracks}
-          onTrackSelect={handleTrackSelect}
-          currentTrackId={currentTrack?.id || ""}
-        />
+          <footer className="w-full text-center py-4 text-white/60 text-sm font-light mt-auto">
+            © {new Date().getFullYear()} Nathan Garcia. All rights reserved.
+          </footer>
+        </div>
       </div>
     </div>
   );
