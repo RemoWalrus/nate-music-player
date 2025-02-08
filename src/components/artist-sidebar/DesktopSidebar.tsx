@@ -40,7 +40,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
     }
   };
 
-  const iconProps = isCollapsed ? { color: "#ea384c" } : { className: "text-gray-500" };
+  const iconProps = { color: "#ea384c" };
 
   return (
     <Sidebar
