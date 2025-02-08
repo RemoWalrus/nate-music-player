@@ -4,6 +4,7 @@ import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
 import { fetchArtistTopTracks, loadSpotifyCredentials } from "../utils/spotify";
 import { useToast } from "../hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import type { Track } from "../components/MusicPlayer";
 
 interface SpotifyTrack {
@@ -19,19 +20,16 @@ interface SpotifyTrack {
   };
 }
 
-// Add hosted MP3 URLs and YouTube Music URLs for each track
-const TRACK_URLS = {
-  // Example structure - replace with actual URLs:
-  'track_id_1': {
-    mp3: 'https://example.com/track1.mp3',
-    youtube: 'https://music.youtube.com/watch?v=...'
-  },
-  // Add more tracks as needed
-};
+interface TrackUrls {
+  spotify_track_id: string;
+  mp3_url: string | null;
+  youtube_music_url: string | null;
+}
 
 const Index = () => {
   const { toast } = useToast();
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
+  const [trackUrls, setTrackUrls] = useState<Record<string, TrackUrls>>({});
   const [currentTrack, setCurrentTrack] = useState<Track>({
     id: '',
     name: '',
@@ -45,6 +43,28 @@ const Index = () => {
   });
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [isLoading, setIsLoading] = useState(true);
+
+  const fetchTrackUrls = async (trackIds: string[]) => {
+    try {
+      const { data, error } = await supabase
+        .from('track_urls')
+        .select('*')
+        .in('spotify_track_id', trackIds);
+
+      if (error) {
+        console.error('Error fetching track URLs:', error);
+        return;
+      }
+
+      const urlsMap: Record<string, TrackUrls> = {};
+      data.forEach((track) => {
+        urlsMap[track.spotify_track_id] = track;
+      });
+      setTrackUrls(urlsMap);
+    } catch (error) {
+      console.error('Error in fetchTrackUrls:', error);
+    }
+  };
 
   const loadTracks = async () => {
     try {
@@ -61,10 +81,13 @@ const Index = () => {
 
       const fetchedTracks = await fetchArtistTopTracks();
       
+      // Fetch track URLs from our database
+      await fetchTrackUrls(fetchedTracks.map(track => track.id));
+      
       // Enhance tracks with additional URLs
       const enhancedTracks = fetchedTracks.map(track => ({
         ...track,
-        youtubeUrl: TRACK_URLS[track.id]?.youtube || null,
+        youtubeUrl: trackUrls[track.id]?.youtube_music_url || null,
         spotifyUrl: track.external_urls?.spotify || null
       }));
       
@@ -79,8 +102,8 @@ const Index = () => {
           albumUrl: firstTrack.album.images[0]?.url,
           isPlaying: false,
           previewUrl: firstTrack.preview_url,
-          mp3Url: TRACK_URLS[firstTrack.id]?.mp3 || null,
-          youtubeUrl: TRACK_URLS[firstTrack.id]?.youtube || null,
+          mp3Url: trackUrls[firstTrack.id]?.mp3_url || null,
+          youtubeUrl: trackUrls[firstTrack.id]?.youtube_music_url || null,
           spotifyUrl: firstTrack.external_urls?.spotify || null
         });
       }
@@ -107,8 +130,8 @@ const Index = () => {
       albumUrl: track.album.images[0]?.url,
       isPlaying: true,
       previewUrl: track.preview_url,
-      mp3Url: TRACK_URLS[track.id]?.mp3 || null,
-      youtubeUrl: TRACK_URLS[track.id]?.youtube || null,
+      mp3Url: trackUrls[track.id]?.mp3_url || null,
+      youtubeUrl: trackUrls[track.id]?.youtube_music_url || null,
       spotifyUrl: track.external_urls?.spotify || null
     });
 

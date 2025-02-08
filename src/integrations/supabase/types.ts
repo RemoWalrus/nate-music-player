@@ -45,6 +45,33 @@ export type Database = {
         }
         Relationships: []
       }
+      track_urls: {
+        Row: {
+          created_at: string | null
+          id: string
+          mp3_url: string | null
+          spotify_track_id: string
+          updated_at: string | null
+          youtube_music_url: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          mp3_url?: string | null
+          spotify_track_id: string
+          updated_at?: string | null
+          youtube_music_url?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          mp3_url?: string | null
+          spotify_track_id?: string
+          updated_at?: string | null
+          youtube_music_url?: string | null
+        }
+        Relationships: []
+      }
       tracks: {
         Row: {
           artist_id: number | null
