@@ -138,7 +138,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
                     <div className="space-y-1">
                       <h4 className="text-sm font-medium">New Single Release</h4>
                       <p className="text-sm text-gray-500">
-                        Latest single "Todo con todo" now available on all platforms.
+                        Latest single "Thankful daddy" now available on all platforms.
                       </p>
                     </div>
                   </div>
