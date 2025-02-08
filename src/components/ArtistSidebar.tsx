@@ -108,7 +108,7 @@ export const ArtistSidebar = () => {
             <img 
               src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
               alt="Nathan Garcia Logo" 
-              className={isCollapsed ? "h-5 w-5" : "h-20 w-28"}
+              className={isCollapsed ? "h-5 w-5" : "h-24 w-32"}
             />
             {!isCollapsed && (
               <span className="text-[#ED2024] font-medium text-lg">Nathan Music</span>
