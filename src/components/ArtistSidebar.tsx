@@ -82,20 +82,20 @@ export const ArtistSidebar = () => {
 
   return (
     <Sidebar
-      className={`hidden md:block bg-white transition-all duration-300 ease-in-out ${
+      className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
         isCollapsed ? "w-20" : "w-80"
       }`}
     >
-      <div className="p-4 border-b border-gray-100">
+      <div className="p-4 border-b border-gray-100/20">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="h-16 w-full flex items-center justify-center">
-              <div className="text-gray-400 text-sm">Logo Space</div>
+              <div className="text-gray-500 text-sm">Logo Space</div>
             </div>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
           >
             <ChevronLeft
               className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${
@@ -158,4 +158,3 @@ export const ArtistSidebar = () => {
     </Sidebar>
   );
 };
-
