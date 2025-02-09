@@ -25,7 +25,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
     >
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-      <SidebarContent>
+      <SidebarContent className="space-y-1">
         <SidebarSection label="Artist" icon={User} isCollapsed={isCollapsed}>
           <div className="space-y-1">
             <h3 className="font-medium">Nathan Garcia</h3>
@@ -36,16 +36,16 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
         <div className="border-t border-gray-300/50" />
 
         <SidebarSection label="Music" icon={Music} isCollapsed={isCollapsed}>
-          <div className="space-y-2">
+          <div className="space-y-1">
             <h4 className="text-sm font-medium">Listen on</h4>
-            <MusicPlatformLinks className="flex flex-col gap-2" />
+            <MusicPlatformLinks className="flex flex-col gap-1" />
           </div>
         </SidebarSection>
 
         <div className="border-t border-gray-300/50" />
 
         <SidebarSection label="Latest News" icon={Newspaper} isCollapsed={isCollapsed}>
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div className="space-y-1">
               <h4 className="text-sm font-medium">New Single Release</h4>
               <p className="text-sm text-gray-500">
@@ -58,7 +58,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
         <div className="border-t border-gray-300/50" />
 
         <SidebarSection label="Contact" icon={Mail} isCollapsed={isCollapsed}>
-          <div className="space-y-2">
+          <div className="space-y-1">
             <a 
               href="mailto:info@nathangarciamusic.com"
               className="text-sm text-gray-500 hover:text-gray-700"
@@ -71,7 +71,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
         <div className="border-t border-gray-300/50" />
 
         <SidebarSection label="Share" icon={Share2} isCollapsed={isCollapsed}>
-          <div className="space-y-2">
+          <div className="space-y-1">
             <button 
               onClick={handleShare}
               className="text-sm text-gray-500 hover:text-gray-700"
