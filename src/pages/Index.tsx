@@ -5,7 +5,6 @@ import Playlist from "../components/Playlist";
 import { ArtistSidebar } from "../components/ArtistSidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTracks } from "@/hooks/use-tracks";
-import WaveformVisualizer from "@/components/WaveformVisualizer";
 
 const Index = () => {
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
@@ -18,8 +17,7 @@ const Index = () => {
     handleTrackSelect,
     handlePrevTrack,
     handleNextTrack,
-    loadTracks,
-    audioRef
+    loadTracks
   } = useTracks();
 
   useEffect(() => {
@@ -67,16 +65,6 @@ const Index = () => {
             background: `linear-gradient(to bottom, ${backgroundColor}, ${backgroundColor}ee, ${backgroundColor}dd)`
           }}
         >
-          {/* Dynamic Waveform Background */}
-          <div className="absolute inset-0 opacity-10 pointer-events-none">
-            {currentTrack && audioRef.current && (
-              <WaveformVisualizer 
-                audioRef={audioRef}
-                color={textColor}
-              />
-            )}
-          </div>
-          
           {currentTrack && (
             <MusicPlayer 
               track={currentTrack}
