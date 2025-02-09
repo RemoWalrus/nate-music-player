@@ -60,7 +60,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
         <SidebarSection label="Contact" icon={Mail} isCollapsed={isCollapsed}>
           <div className="space-y-1">
             <a 
-              href="mailto:remo@romergarcia.com"
+              href="mailto:remo@romergarcia.com?subject=Nathan%20Garcia%20Music&body=Hi%2C%20I%27m%20reaching%20Nathan%20Garcia%27s%20team"
               className="text-sm text-gray-500 hover:text-gray-700"
             >
               Email us!
