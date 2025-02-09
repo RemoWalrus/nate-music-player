@@ -54,15 +54,15 @@ const Index = () => {
 
   return (
     <div className="flex flex-col min-h-svh w-full">
-      <div className="flex flex-1">
+      <div className="flex flex-1 w-full">
         <ArtistSidebar />
         <div 
-          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 relative ${
+          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 relative w-full ${
             isMobile ? "mt-16" : ""
           }`}
           style={{ 
             backgroundColor,
-            background: backgroundColor // Remove the gradient, just use solid color
+            background: backgroundColor
           }}
         >
           {currentTrack && (
