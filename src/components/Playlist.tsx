@@ -22,14 +22,14 @@ interface PlaylistProps {
 const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
   if (!tracks || tracks.length === 0) {
     return (
-      <div className="mt-8 w-full max-w-2xl mx-auto bg-white/10 backdrop-blur-xl rounded-xl p-4">
+      <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
         <p className="text-white text-center">Loading tracks...</p>
       </div>
     );
   }
 
   return (
-    <div className="mt-8 w-full max-w-2xl mx-auto bg-white/10 backdrop-blur-xl rounded-xl p-4">
+    <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
       <div className="space-y-2">
         {tracks.map((track) => (
           <div
@@ -102,3 +102,4 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
 };
 
 export default Playlist;
+
