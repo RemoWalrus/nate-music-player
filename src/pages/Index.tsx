@@ -65,6 +65,16 @@ const Index = () => {
             background: `linear-gradient(to bottom, ${backgroundColor}, ${backgroundColor}ee, ${backgroundColor}dd)`
           }}
         >
+          {/* Waveform Background */}
+          <div 
+            className="absolute inset-0 opacity-5 pointer-events-none"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 Q 25 30, 50 50 T 100 50 T 150 50 T 200 50' stroke='%23333333' fill='none' stroke-width='1' stroke-linecap='round' vector-effect='non-scaling-stroke' /%3E%3C/svg%3E")`,
+              backgroundRepeat: 'repeat-x',
+              backgroundPosition: 'center',
+              backgroundSize: '200px 100px'
+            }}
+          />
           {currentTrack && (
             <MusicPlayer 
               track={currentTrack}
