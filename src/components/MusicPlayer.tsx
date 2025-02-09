@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
@@ -46,7 +45,9 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       audioRef.current = new Audio();
       audioRef.current.onended = () => {
         setIsPlaying(false);
-        onNextTrack(); // Auto-play next track when current track ends
+        if (track.isPlaying) { // Only auto-play next if the track was playing when it ended
+          onNextTrack();
+        }
       };
       audioRef.current.ontimeupdate = () => {
         if (audioRef.current) {
@@ -60,7 +61,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       };
       setAudioInitialized(true);
     }
-  }, [audioInitialized, onNextTrack]);
+  }, [audioInitialized, onNextTrack, track.isPlaying]);
 
   useEffect(() => {
     const audioSource = track.mp3Url || track.previewUrl;

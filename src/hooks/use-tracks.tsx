@@ -141,7 +141,7 @@ export function useTracks() {
       name: track.name,
       artist: track.artists[0].name,
       albumUrl: track.album.images[0]?.url,
-      isPlaying: true,
+      isPlaying: true, // Always start playing when selecting a track
       previewUrl: track.preview_url,
       mp3Url: trackUrlData?.mp3_url || null,
       youtubeUrl: trackUrlData?.youtube_music_url || null,
