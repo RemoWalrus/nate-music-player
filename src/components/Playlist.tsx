@@ -36,24 +36,31 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
 
   const handleTrackSelect = (track: SpotifyTrack) => {
     // Track play event
-    window.dataLayer?.push({
+    const playEvent = {
       event: 'track_play',
       track_name: track.name,
       track_artist: track.artists[0].name,
-    });
+    };
+    console.log('Sending play event to GA:', playEvent);
+    window.dataLayer?.push(playEvent);
     onTrackSelect(track);
   };
 
   const handleExternalLinkClick = (platform: string, trackName: string, artistName: string) => {
     // Track external link click event
-    window.dataLayer?.push({
+    const clickEvent = {
       event: 'external_link_click',
       platform: platform,
       track_name: trackName,
       track_artist: artistName,
-    });
+    };
+    console.log('Sending external link click event to GA:', clickEvent);
+    window.dataLayer?.push(clickEvent);
   };
 
+  // Verify GTM is loaded
+  console.log('GTM status:', window.dataLayer ? 'Loaded' : 'Not loaded');
+  
   return (
     <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
       <div className="space-y-2">
