@@ -90,21 +90,24 @@ export function useTracks() {
       const urlsMap = await fetchTrackUrls(fetchedTracks.map(track => track.id));
       
       if (urlsMap && fetchedTracks.length > 0) {
-        const firstTrack = fetchedTracks[0];
-        const firstTrackUrls = urlsMap[firstTrack.id];
-        console.log('Setting initial track with URLs:', firstTrackUrls);
+        // Select a random track index
+        const randomIndex = Math.floor(Math.random() * fetchedTracks.length);
+        const randomTrack = fetchedTracks[randomIndex];
+        const randomTrackUrls = urlsMap[randomTrack.id];
+        console.log('Setting initial random track with URLs:', randomTrackUrls);
         
+        setCurrentTrackIndex(randomIndex);
         setCurrentTrack({
-          id: firstTrack.id,
-          name: firstTrack.name,
-          artist: firstTrack.artists[0].name,
-          albumUrl: firstTrack.album.images[0]?.url,
+          id: randomTrack.id,
+          name: randomTrack.name,
+          artist: randomTrack.artists[0].name,
+          albumUrl: randomTrack.album.images[0]?.url,
           isPlaying: false,
-          previewUrl: firstTrack.preview_url,
-          mp3Url: firstTrackUrls?.mp3_url || null,
-          youtubeUrl: firstTrackUrls?.youtube_music_url || null,
-          spotifyUrl: firstTrack.external_urls?.spotify || null,
-          appleMusicUrl: firstTrackUrls?.apple_music_url || null
+          previewUrl: randomTrack.preview_url,
+          mp3Url: randomTrackUrls?.mp3_url || null,
+          youtubeUrl: randomTrackUrls?.youtube_music_url || null,
+          spotifyUrl: randomTrack.external_urls?.spotify || null,
+          appleMusicUrl: randomTrackUrls?.apple_music_url || null
         });
       }
       
