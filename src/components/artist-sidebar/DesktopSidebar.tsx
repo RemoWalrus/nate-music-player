@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ChevronLeft, User, Newspaper, Music, Share2, Mail } from "lucide-react";
 import {
@@ -82,7 +83,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
             Artist
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="px-4 py-3">
+            <div className="px-4 py-2">
               <div className="flex items-center gap-3 text-gray-700">
                 <User {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
@@ -107,7 +108,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
             Music
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="px-4 py-3">
+            <div className="px-4 py-2">
               <div className="flex items-center gap-3 text-gray-700">
                 <Music {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
@@ -130,7 +131,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
             Latest News
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="px-4 py-3">
+            <div className="px-4 py-2">
               <div className="flex items-center gap-3 text-gray-700">
                 <Newspaper {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
@@ -157,7 +158,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
             Contact
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="px-4 py-3">
+            <div className="px-4 py-2">
               <div className="flex items-center gap-3 text-gray-700">
                 <Mail {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
@@ -184,7 +185,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
             Share
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="px-4 py-3">
+            <div className="px-4 py-2">
               <div className="flex items-center gap-3 text-gray-700">
                 <Share2 {...iconProps} className="h-5 w-5 shrink-0" />
                 {!isCollapsed && (
