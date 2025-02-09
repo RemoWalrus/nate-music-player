@@ -36,7 +36,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
   const iconProps = { color: "#ea384c" };
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 bg-white/10 backdrop-blur-xl z-50 shadow-sm">
+    <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
       <div className="flex items-center justify-between p-4">
         <img 
           src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
@@ -45,13 +45,13 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
         />
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 hover:bg-gray-100/10 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <Menu {...iconProps} className="h-5 w-5" />
         </button>
       </div>
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white/10 backdrop-blur-xl shadow-lg">
+        <div className="absolute top-full left-0 right-0 bg-white shadow-lg">
           <div className="p-4 space-y-4">
             <div className="flex items-center gap-3 text-gray-700">
               <User {...iconProps} className="h-5 w-5 shrink-0" />
