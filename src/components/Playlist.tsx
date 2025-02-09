@@ -19,6 +19,12 @@ interface PlaylistProps {
   currentTrackId: string;
 }
 
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
+
 const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
   if (!tracks || tracks.length === 0) {
     return (
@@ -27,6 +33,26 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
       </div>
     );
   }
+
+  const handleTrackSelect = (track: SpotifyTrack) => {
+    // Track play event
+    window.dataLayer?.push({
+      event: 'track_play',
+      track_name: track.name,
+      track_artist: track.artists[0].name,
+    });
+    onTrackSelect(track);
+  };
+
+  const handleExternalLinkClick = (platform: string, trackName: string, artistName: string) => {
+    // Track external link click event
+    window.dataLayer?.push({
+      event: 'external_link_click',
+      platform: platform,
+      track_name: trackName,
+      track_artist: artistName,
+    });
+  };
 
   return (
     <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
@@ -58,7 +84,10 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleExternalLinkClick('youtube', track.name, track.artists[0].name);
+                      }}
                     >
                       YouTube <ExternalLink className="w-3 h-3" />
                     </a>
@@ -69,7 +98,10 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleExternalLinkClick('spotify', track.name, track.artists[0].name);
+                      }}
                     >
                       Spotify <ExternalLink className="w-3 h-3" />
                     </a>
@@ -80,7 +112,10 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleExternalLinkClick('apple_music', track.name, track.artists[0].name);
+                      }}
                     >
                       Apple Music <ExternalLink className="w-3 h-3" />
                     </a>
@@ -89,7 +124,7 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
               </div>
             </div>
             <button
-              onClick={() => onTrackSelect(track)}
+              onClick={() => handleTrackSelect(track)}
               className="p-2 rounded-full hover:bg-white/20 transition-colors"
             >
               <Play className="w-5 h-5 text-white" />
@@ -102,4 +137,3 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
 };
 
 export default Playlist;
-
