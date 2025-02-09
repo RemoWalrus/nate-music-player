@@ -1,3 +1,4 @@
+
 # Welcome to your Lovable project
 
 ## Project info
@@ -35,6 +36,34 @@ npm i
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
+
+## Updating the Sidebar
+
+The sidebar is organized into several components for better maintainability:
+
+- `DesktopSidebar.tsx`: The main sidebar component for desktop views
+- `MobileHeader.tsx`: The mobile version of the sidebar
+- Components in `artist-sidebar/components/`:
+  - `SidebarHeader.tsx`: Contains the logo and collapse button
+  - `SidebarSection.tsx`: A reusable component for each section
+  - `ShareButton.tsx`: Handles the share functionality
+
+To add a new section to the sidebar:
+
+1. Open `DesktopSidebar.tsx`
+2. Add a new `SidebarSection` component with your desired content:
+```tsx
+<SidebarSection label="Your Label" icon={YourIcon} isCollapsed={isCollapsed}>
+  <div className="space-y-1">
+    {/* Your content here */}
+  </div>
+</SidebarSection>
+```
+3. Remember to add a border separator:
+```tsx
+<div className="border-t border-gray-300/50" />
+```
+4. Update `MobileHeader.tsx` with the same content to maintain consistency across devices
 
 **Edit a file directly in GitHub**
 
