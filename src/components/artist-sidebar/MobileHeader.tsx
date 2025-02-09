@@ -85,7 +85,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
               <Mail {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-2">
                 <a 
-                  href="mailto:info@nathangarciamusic.com"
+                  href="mailto:remo@romergarcia.com"
                   className="text-sm text-gray-500 hover:text-gray-700"
                 >
                   Email us!
