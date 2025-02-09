@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
@@ -43,20 +42,16 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
 
   useEffect(() => {
     if (!audioInitialized) {
-      audioRef.current = new Audio();
-      audioRef.current.onended = () => {
+      const audio = new Audio();
+      audio.onended = () => {
         setIsPlaying(false);
         onNextTrack(); // Auto-play next track when current track ends
       };
-      audioRef.current.ontimeupdate = () => {
-        if (audioRef.current) {
-          setProgress(audioRef.current.currentTime);
-        }
+      audio.ontimeupdate = () => {
+        setProgress(audio.currentTime);
       };
-      audioRef.current.onloadedmetadata = () => {
-        if (audioRef.current) {
-          setDuration(audioRef.current.duration);
-        }
+      audio.onloadedmetadata = () => {
+        setDuration(audio.duration);
       };
       setAudioInitialized(true);
     }
@@ -67,15 +62,16 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
     console.log('Audio source:', audioSource);
     console.log('Track state:', track);
     
-    if (audioRef.current && audioSource) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+    const audio = new Audio();
+    if (audioSource) {
+      audio.pause();
+      audio.currentTime = 0;
       
-      audioRef.current.src = audioSource;
+      audio.src = audioSource;
       
       if (isPlaying) {
         console.log('Attempting to play audio...');
-        const playPromise = audioRef.current.play();
+        const playPromise = audio.play();
         
         if (playPromise !== undefined) {
           playPromise

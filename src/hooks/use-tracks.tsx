@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./use-toast";
 import { fetchArtistTopTracks, loadSpotifyCredentials } from "../utils/spotify";
@@ -23,6 +22,7 @@ export function useTracks() {
     appleMusicUrl: null
   });
   const [isLoading, setIsLoading] = useState(true);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const fetchTrackUrls = async (trackIds: string[]) => {
     try {
@@ -174,6 +174,7 @@ export function useTracks() {
     handleTrackSelect,
     handlePrevTrack,
     handleNextTrack,
-    loadTracks
+    loadTracks,
+    audioRef
   };
 }
