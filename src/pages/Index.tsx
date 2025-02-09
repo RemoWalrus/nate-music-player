@@ -62,7 +62,7 @@ const Index = () => {
           }`}
           style={{ 
             backgroundColor,
-            background: `linear-gradient(to bottom, ${backgroundColor}, ${backgroundColor}ee, ${backgroundColor}dd)`
+            background: backgroundColor // Remove the gradient, just use solid color
           }}
         >
           {currentTrack && (
