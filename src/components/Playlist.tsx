@@ -35,7 +35,7 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
   }
 
   const handleTrackSelect = (track: SpotifyTrack) => {
-    // Track play event
+    // Track play event - push variables directly to dataLayer
     const playEvent = {
       event: 'track_play',
       track_name: track.name,
@@ -47,7 +47,7 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
   };
 
   const handleExternalLinkClick = (platform: string, trackName: string, artistName: string) => {
-    // Track external link click event
+    // Track external link click event - push variables directly to dataLayer
     const clickEvent = {
       event: 'external_link_click',
       platform: platform,
