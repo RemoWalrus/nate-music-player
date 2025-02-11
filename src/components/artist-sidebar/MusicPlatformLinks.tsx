@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { ExternalLink, Youtube, Music2, Spotify } from "lucide-react";
+import { ExternalLink, Youtube, Music2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface PlatformLink {
@@ -50,7 +50,7 @@ export const MusicPlatformLinks = ({ className }: MusicPlatformLinksProps) => {
       case 'youtube music':
         return <Youtube className="w-4 h-4" />;
       case 'spotify':
-        return <Spotify className="w-4 h-4" />;
+        return <Music2 className="w-4 h-4" />;
       case 'apple music':
       case 'amazon music':
         return <Music2 className="w-4 h-4" />;
