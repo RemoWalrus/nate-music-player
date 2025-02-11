@@ -9,42 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      artists: {
-        Row: {
-          bio: string | null
-          created_at: string
-          followers: number | null
-          id: number
-          image_url: string | null
-          monthly_listeners: number | null
-          name: string
-          spotify_id: string
-          updated_at: string
-        }
-        Insert: {
-          bio?: string | null
-          created_at?: string
-          followers?: number | null
-          id?: number
-          image_url?: string | null
-          monthly_listeners?: number | null
-          name: string
-          spotify_id: string
-          updated_at?: string
-        }
-        Update: {
-          bio?: string | null
-          created_at?: string
-          followers?: number | null
-          id?: number
-          image_url?: string | null
-          monthly_listeners?: number | null
-          name?: string
-          spotify_id?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       track_urls: {
         Row: {
           apple_music_url: string | null
@@ -74,53 +38,6 @@ export type Database = {
           youtube_music_url?: string | null
         }
         Relationships: []
-      }
-      tracks: {
-        Row: {
-          artist_id: number | null
-          cover_url: string | null
-          created_at: string
-          duration_ms: number
-          id: number
-          preview_url: string | null
-          spotify_id: string
-          spotify_url: string | null
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          artist_id?: number | null
-          cover_url?: string | null
-          created_at?: string
-          duration_ms: number
-          id?: number
-          preview_url?: string | null
-          spotify_id: string
-          spotify_url?: string | null
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          artist_id?: number | null
-          cover_url?: string | null
-          created_at?: string
-          duration_ms?: number
-          id?: number
-          preview_url?: string | null
-          spotify_id?: string
-          spotify_url?: string | null
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tracks_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {

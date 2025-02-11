@@ -5,6 +5,53 @@
 
 **URL**: https://lovable.dev/projects/9b6a2bef-cf2f-43e6-995d-06322e272a45
 
+## How to Update and Maintain the Site
+
+### Adding New Tracks
+
+To add new tracks to the player:
+
+1. Get the Spotify track ID from the track's Spotify URL (e.g., for https://open.spotify.com/track/123456, the ID is "123456")
+2. Insert a new record in the `track_urls` table with:
+   - `spotify_track_id`: The Spotify track ID
+   - `youtube_music_url`: Link to the track on YouTube Music (optional)
+   - `apple_music_url`: Link to the track on Apple Music (optional)
+   - `mp3_url`: The filename of the MP3 in the storage bucket (optional)
+
+Example SQL:
+```sql
+INSERT INTO track_urls (spotify_track_id, youtube_music_url, apple_music_url)
+VALUES (
+  '123456',
+  'https://music.youtube.com/watch?v=...',
+  'https://music.apple.com/us/album/...'
+);
+```
+
+### Adding MP3 Files
+
+If you want to add MP3 files:
+
+1. Make sure the file is in MP3 format
+2. The file should be high quality (at least 192kbps)
+3. File name should be clear and use only lowercase letters, numbers, and hyphens (e.g., "track-name.mp3")
+4. Upload the file to the 'audio' storage bucket in Supabase
+5. Update the track_urls record with the filename in the mp3_url column
+
+### Analytics
+
+The site tracks two types of events in Google Analytics 4:
+
+1. Track Plays: When users play a track
+   - Event name: "track_play"
+   - Properties: track_name, track_artist
+
+2. External Clicks: When users click platform links
+   - Event name: "external_link_click"
+   - Properties: platform, track_name, track_artist
+
+View these in GA4 under Reports > Engagement > Events
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
@@ -37,57 +84,17 @@ npm i
 npm run dev
 ```
 
-## Updating the Sidebar
-
-The sidebar is organized into several components for better maintainability:
-
-- `DesktopSidebar.tsx`: The main sidebar component for desktop views
-- `MobileHeader.tsx`: The mobile version of the sidebar
-- Components in `artist-sidebar/components/`:
-  - `SidebarHeader.tsx`: Contains the logo and collapse button
-  - `SidebarSection.tsx`: A reusable component for each section
-  - `ShareButton.tsx`: Handles the share functionality
-
-To add a new section to the sidebar:
-
-1. Open `DesktopSidebar.tsx`
-2. Add a new `SidebarSection` component with your desired content:
-```tsx
-<SidebarSection label="Your Label" icon={YourIcon} isCollapsed={isCollapsed}>
-  <div className="space-y-1">
-    {/* Your content here */}
-  </div>
-</SidebarSection>
-```
-3. Remember to add a border separator:
-```tsx
-<div className="border-t border-gray-300/50" />
-```
-4. Update `MobileHeader.tsx` with the same content to maintain consistency across devices
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (for data storage and file hosting)
+- Google Analytics 4 (for usage tracking)
 
 ## How can I deploy this project?
 
