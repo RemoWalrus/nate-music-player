@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { ExternalLink, Youtube, Music2 } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface PlatformLink {
@@ -45,20 +45,6 @@ export const MusicPlatformLinks = ({ className }: MusicPlatformLinksProps) => {
     fetchPlatformLinks();
   }, [toast]);
 
-  const getPlatformIcon = (platform: string) => {
-    switch (platform.toLowerCase()) {
-      case 'youtube music':
-        return <Youtube className="w-4 h-4" />;
-      case 'spotify':
-        return <Music2 className="w-4 h-4" />;
-      case 'apple music':
-      case 'amazon music':
-        return <Music2 className="w-4 h-4" />;
-      default:
-        return <ExternalLink className="w-4 h-4" />;
-    }
-  };
-
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       {platformLinks.map((link) => (
@@ -67,10 +53,10 @@ export const MusicPlatformLinks = ({ className }: MusicPlatformLinksProps) => {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
+          className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors"
         >
-          {getPlatformIcon(link.platform)}
           <span>{link.platform}</span>
+          <ExternalLink className="w-3.5 h-3.5" />
         </a>
       ))}
     </div>
