@@ -155,15 +155,15 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
           <p className="text-white/80 text-lg">
             {track.artist}
           </p>
-          <div className="flex items-center justify-center gap-4 mt-2">
+          <div className="flex items-center justify-center gap-2 mt-2 text-xs">
             {track.youtubeUrl && (
               <a
                 href={track.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/80 hover:text-white flex items-center gap-1"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
               >
-                YouTube Music <ExternalLink className="w-4 h-4" />
+                YouTube <ExternalLink className="w-3 h-3" />
               </a>
             )}
             {track.spotifyUrl && (
@@ -171,9 +171,9 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
                 href={track.spotifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/80 hover:text-white flex items-center gap-1"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
               >
-                Spotify <ExternalLink className="w-4 h-4" />
+                Spotify <ExternalLink className="w-3 h-3" />
               </a>
             )}
             {track.appleMusicUrl && (
@@ -181,9 +181,19 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
                 href={track.appleMusicUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/80 hover:text-white flex items-center gap-1"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
               >
-                Apple Music <ExternalLink className="w-4 h-4" />
+                Apple <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+            {track.amazonMusicUrl && (
+              <a
+                href={track.amazonMusicUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
+              >
+                Amazon <ExternalLink className="w-3 h-3" />
               </a>
             )}
           </div>
