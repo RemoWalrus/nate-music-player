@@ -33,6 +33,39 @@ export type Database = {
         }
         Relationships: []
       }
+      sidebar_sections: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          icon: string
+          id: string
+          is_active: boolean | null
+          label: string
+          order_index: number
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          icon: string
+          id?: string
+          is_active?: boolean | null
+          label: string
+          order_index: number
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          icon?: string
+          id?: string
+          is_active?: boolean | null
+          label?: string
+          order_index?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       track_urls: {
         Row: {
           amazon_music_url: string | null

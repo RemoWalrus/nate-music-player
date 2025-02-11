@@ -1,21 +1,72 @@
 
 import { useState } from "react";
-import { User, Newspaper, Music, Share2, Mail } from "lucide-react";
+import { User, Music, Newspaper, Share2, Mail } from "lucide-react";
 import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { SidebarHeader } from "./components/SidebarHeader";
 import { SidebarSection } from "./components/SidebarSection";
 import { useShareButton } from "./components/ShareButton";
+import { SidebarSection as SidebarSectionType } from "../types/sidebar";
 
 interface DesktopSidebarProps {
   artistBio: string;
+  sidebarSections: SidebarSectionType[];
 }
 
-export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
+const iconMap: { [key: string]: typeof User } = {
+  User,
+  Music,
+  Newspaper,
+  Mail,
+  Share2,
+};
+
+export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { handleShare } = useShareButton();
 
-  const iconProps = { color: "#ea384c" };
+  const getSectionContent = (section: SidebarSectionType) => {
+    switch (section.label) {
+      case "Artist":
+        return (
+          <div className="space-y-1">
+            <h3 className="font-medium">Nathan Garcia</h3>
+            <p className="text-sm text-gray-500 whitespace-pre-line">{artistBio}</p>
+          </div>
+        );
+      case "Music":
+        return (
+          <div className="space-y-1">
+            <h4 className="text-sm font-medium">Listen on</h4>
+            <MusicPlatformLinks className="flex flex-col gap-1" />
+          </div>
+        );
+      case "Contact":
+        return (
+          <a 
+            href="mailto:remo@romergarcia.com?subject=Nathan%20Garcia%20Music&body=Hi%2C%20I%27m%20reaching%20Nathan%20Garcia%27s%20team"
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Email us!
+          </a>
+        );
+      case "Share":
+        return (
+          <button 
+            onClick={handleShare}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Share with your friends
+          </button>
+        );
+      default:
+        return (
+          <div className="space-y-1">
+            <p className="text-sm text-gray-500">{section.content}</p>
+          </div>
+        );
+    }
+  };
 
   return (
     <Sidebar
@@ -26,62 +77,19 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
       <SidebarContent className="space-y-1">
-        <SidebarSection label="Artist" icon={User} isCollapsed={isCollapsed}>
-          <div className="space-y-1">
-            <h3 className="font-medium">Nathan Garcia</h3>
-            <p className="text-sm text-gray-500 whitespace-pre-line">{artistBio}</p>
-          </div>
-        </SidebarSection>
-
-        <div className="border-t border-gray-300/50" />
-
-        <SidebarSection label="Music" icon={Music} isCollapsed={isCollapsed}>
-          <div className="space-y-1">
-            <h4 className="text-sm font-medium">Listen on</h4>
-            <MusicPlatformLinks className="flex flex-col gap-1" />
-          </div>
-        </SidebarSection>
-
-        <div className="border-t border-gray-300/50" />
-
-        <SidebarSection label="Latest News" icon={Newspaper} isCollapsed={isCollapsed}>
-          <div className="space-y-1">
-            <div className="space-y-1">
-              <h4 className="text-sm font-medium">New Single Release</h4>
-              <p className="text-sm text-gray-500">
-                Latest single "Thankful daddy" now available on all platforms.
-              </p>
-            </div>
-          </div>
-        </SidebarSection>
-
-        <div className="border-t border-gray-300/50" />
-
-        <SidebarSection label="Contact" icon={Mail} isCollapsed={isCollapsed}>
-          <div className="space-y-1">
-            <a 
-              href="mailto:remo@romergarcia.com?subject=Nathan%20Garcia%20Music&body=Hi%2C%20I%27m%20reaching%20Nathan%20Garcia%27s%20team"
-              className="text-sm text-gray-500 hover:text-gray-700"
+        {sidebarSections.map((section, index) => (
+          <React.Fragment key={section.id}>
+            {index > 0 && <div className="border-t border-gray-300/50" />}
+            <SidebarSection 
+              label={section.label} 
+              icon={iconMap[section.icon]} 
+              isCollapsed={isCollapsed}
             >
-              Email us!
-            </a>
-          </div>
-        </SidebarSection>
-
-        <div className="border-t border-gray-300/50" />
-
-        <SidebarSection label="Share" icon={Share2} isCollapsed={isCollapsed}>
-          <div className="space-y-1">
-            <button 
-              onClick={handleShare}
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              Share with your friends
-            </button>
-          </div>
-        </SidebarSection>
+              {getSectionContent(section)}
+            </SidebarSection>
+          </React.Fragment>
+        ))}
       </SidebarContent>
     </Sidebar>
   );
 };
-
