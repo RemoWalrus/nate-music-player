@@ -4,6 +4,7 @@ import { Menu, User, Music, Newspaper, Share2, Mail } from "lucide-react";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { useToast } from "@/hooks/use-toast";
 import { SidebarSection } from "../types/sidebar";
+import { useTracks } from "@/hooks/use-tracks";
 
 interface MobileHeaderProps {
   artistBio: string;
@@ -21,6 +22,7 @@ const iconMap: { [key: string]: typeof User } = {
 export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { toast } = useToast();
+  const { currentTrack } = useTracks();
 
   const handleShare = async () => {
     try {
@@ -91,11 +93,18 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
   return (
     <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
       <div className="flex items-center justify-between p-4">
-        <img 
-          src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
-          alt="Nathan Garcia Logo" 
-          className="h-8 w-8"
-        />
+        <div className="flex items-center gap-3">
+          <img 
+            src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
+            alt="Nathan Garcia Logo" 
+            className="h-8 w-8"
+          />
+          {currentTrack && currentTrack.isPlaying && (
+            <span className="text-sm font-medium text-gray-700">
+              Now Playing: {currentTrack.name}
+            </span>
+          )}
+        </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -126,3 +135,4 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
     </div>
   );
 };
+
