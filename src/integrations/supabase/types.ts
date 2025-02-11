@@ -39,6 +39,7 @@ export type Database = {
           created_at: string | null
           id: string
           mp3_url: string | null
+          permalink: string | null
           spotify_track_id: string
           updated_at: string | null
           youtube_music_url: string | null
@@ -48,6 +49,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           mp3_url?: string | null
+          permalink?: string | null
           spotify_track_id: string
           updated_at?: string | null
           youtube_music_url?: string | null
@@ -57,6 +59,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           mp3_url?: string | null
+          permalink?: string | null
           spotify_track_id?: string
           updated_at?: string | null
           youtube_music_url?: string | null

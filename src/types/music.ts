@@ -11,6 +11,7 @@ export interface SpotifyTrack {
     spotify?: string;
   };
   appleMusicUrl?: string | null;
+  permalink?: string;
 }
 
 export interface TrackUrls {
@@ -18,6 +19,7 @@ export interface TrackUrls {
   mp3_url: string | null;
   youtube_music_url: string | null;
   apple_music_url: string | null;
+  permalink: string;
 }
 
 export interface Track {
@@ -31,4 +33,5 @@ export interface Track {
   youtubeUrl: string | null;
   spotifyUrl: string | null;
   appleMusicUrl: string | null;
+  permalink: string;
 }

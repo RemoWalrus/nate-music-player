@@ -20,7 +20,8 @@ export function useTracks() {
     mp3Url: null,
     youtubeUrl: null,
     spotifyUrl: null,
-    appleMusicUrl: null
+    appleMusicUrl: null,
+    permalink: ''
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -107,7 +108,8 @@ export function useTracks() {
           mp3Url: randomTrackUrls?.mp3_url || null,
           youtubeUrl: randomTrackUrls?.youtube_music_url || null,
           spotifyUrl: randomTrack.external_urls?.spotify || null,
-          appleMusicUrl: randomTrackUrls?.apple_music_url || null
+          appleMusicUrl: randomTrackUrls?.apple_music_url || null,
+          permalink: randomTrackUrls?.permalink || ''
         });
       }
       
@@ -115,7 +117,8 @@ export function useTracks() {
         ...track,
         youtubeUrl: urlsMap?.[track.id]?.youtube_music_url || null,
         spotifyUrl: track.external_urls?.spotify || null,
-        appleMusicUrl: urlsMap?.[track.id]?.apple_music_url || null
+        appleMusicUrl: urlsMap?.[track.id]?.apple_music_url || null,
+        permalink: urlsMap?.[track.id]?.permalink || ''
       }));
       
       setTracks(enhancedTracks);
@@ -149,7 +152,8 @@ export function useTracks() {
       mp3Url: trackUrlData?.mp3_url || null,
       youtubeUrl: trackUrlData?.youtube_music_url || null,
       spotifyUrl: track.external_urls?.spotify || null,
-      appleMusicUrl: trackUrlData?.apple_music_url || null
+      appleMusicUrl: trackUrlData?.apple_music_url || null,
+      permalink: trackUrlData?.permalink || ''
     });
 
     toast({
