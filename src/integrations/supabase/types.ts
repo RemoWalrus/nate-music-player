@@ -35,6 +35,7 @@ export type Database = {
       }
       track_urls: {
         Row: {
+          amazon_music_url: string | null
           apple_music_url: string | null
           created_at: string | null
           id: string
@@ -45,6 +46,7 @@ export type Database = {
           youtube_music_url: string | null
         }
         Insert: {
+          amazon_music_url?: string | null
           apple_music_url?: string | null
           created_at?: string | null
           id?: string
@@ -55,6 +57,7 @@ export type Database = {
           youtube_music_url?: string | null
         }
         Update: {
+          amazon_music_url?: string | null
           apple_music_url?: string | null
           created_at?: string | null
           id?: string

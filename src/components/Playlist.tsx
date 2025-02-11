@@ -11,6 +11,7 @@ interface SpotifyTrack {
   youtubeUrl?: string;
   spotifyUrl?: string;
   appleMusicUrl?: string;
+  amazonMusicUrl?: string;
 }
 
 interface PlaylistProps {
@@ -35,7 +36,6 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
   }
 
   const handleTrackSelect = (track: SpotifyTrack) => {
-    // Track play event - push variables directly to dataLayer
     const playEvent = {
       event: 'track_play',
       track_name: track.name,
@@ -47,7 +47,6 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
   };
 
   const handleExternalLinkClick = (platform: string, trackName: string, artistName: string) => {
-    // Track external link click event - push variables directly to dataLayer
     const clickEvent = {
       event: 'external_link_click',
       platform: platform,
@@ -58,7 +57,6 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
     window.dataLayer?.push(clickEvent);
   };
 
-  // Verify GTM is loaded
   console.log('GTM status:', window.dataLayer ? 'Loaded' : 'Not loaded');
   
   return (
@@ -125,6 +123,20 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                       }}
                     >
                       Apple Music <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                  {track.amazonMusicUrl && (
+                    <a
+                      href={track.amazonMusicUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleExternalLinkClick('amazon_music', track.name, track.artists[0].name);
+                      }}
+                    >
+                      Amazon Music <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
                 </div>

@@ -26,7 +26,12 @@ export const MusicPlatformLinks = ({ className }: MusicPlatformLinksProps) => {
          className="text-gray-500 hover:text-gray-700">
         Apple Music
       </a>
+      <a href="https://music.amazon.com/artists/B0CP6LSJH5" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         className="text-gray-500 hover:text-gray-700">
+        Amazon Music
+      </a>
     </div>
   );
 };
-

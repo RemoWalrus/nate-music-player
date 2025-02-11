@@ -21,6 +21,7 @@ export function useTracks() {
     youtubeUrl: null,
     spotifyUrl: null,
     appleMusicUrl: null,
+    amazonMusicUrl: null,
     permalink: ''
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -91,7 +92,6 @@ export function useTracks() {
       const urlsMap = await fetchTrackUrls(fetchedTracks.map(track => track.id));
       
       if (urlsMap && fetchedTracks.length > 0) {
-        // Select a random track index
         const randomIndex = Math.floor(Math.random() * fetchedTracks.length);
         const randomTrack = fetchedTracks[randomIndex];
         const randomTrackUrls = urlsMap[randomTrack.id];
@@ -109,6 +109,7 @@ export function useTracks() {
           youtubeUrl: randomTrackUrls?.youtube_music_url || null,
           spotifyUrl: randomTrack.external_urls?.spotify || null,
           appleMusicUrl: randomTrackUrls?.apple_music_url || null,
+          amazonMusicUrl: randomTrackUrls?.amazon_music_url || null,
           permalink: randomTrackUrls?.permalink || ''
         });
       }
@@ -118,6 +119,7 @@ export function useTracks() {
         youtubeUrl: urlsMap?.[track.id]?.youtube_music_url || null,
         spotifyUrl: track.external_urls?.spotify || null,
         appleMusicUrl: urlsMap?.[track.id]?.apple_music_url || null,
+        amazonMusicUrl: urlsMap?.[track.id]?.amazon_music_url || null,
         permalink: urlsMap?.[track.id]?.permalink || ''
       }));
       
@@ -147,12 +149,13 @@ export function useTracks() {
       name: track.name,
       artist: track.artists[0].name,
       albumUrl: track.album.images[0]?.url,
-      isPlaying: true, // Always start playing when selecting a track
+      isPlaying: true,
       previewUrl: track.preview_url,
       mp3Url: trackUrlData?.mp3_url || null,
       youtubeUrl: trackUrlData?.youtube_music_url || null,
       spotifyUrl: track.external_urls?.spotify || null,
       appleMusicUrl: trackUrlData?.apple_music_url || null,
+      amazonMusicUrl: trackUrlData?.amazon_music_url || null,
       permalink: trackUrlData?.permalink || ''
     });
 
