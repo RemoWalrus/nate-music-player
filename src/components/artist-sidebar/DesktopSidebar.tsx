@@ -29,7 +29,7 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
         <SidebarSection label="Artist" icon={User} isCollapsed={isCollapsed}>
           <div className="space-y-1">
             <h3 className="font-medium">Nathan Garcia</h3>
-            <p className="text-sm text-gray-500">{artistBio}</p>
+            <p className="text-sm text-gray-500 whitespace-pre-line">{artistBio}</p>
           </div>
         </SidebarSection>
 
@@ -84,3 +84,4 @@ export const DesktopSidebar = ({ artistBio }: DesktopSidebarProps) => {
     </Sidebar>
   );
 };
+

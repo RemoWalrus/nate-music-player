@@ -57,7 +57,7 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
               <User {...iconProps} className="h-5 w-5 shrink-0" />
               <div className="space-y-1">
                 <h3 className="font-medium">Nathan Garcia</h3>
-                <p className="text-sm text-gray-500">{artistBio}</p>
+                <p className="text-sm text-gray-500 whitespace-pre-line">{artistBio}</p>
               </div>
             </div>
             <div className="border-t border-gray-300/50" />
@@ -110,3 +110,4 @@ export const MobileHeader = ({ artistBio }: MobileHeaderProps) => {
     </div>
   );
 };
+
