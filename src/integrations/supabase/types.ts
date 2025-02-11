@@ -33,6 +33,39 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_links: {
+        Row: {
+          created_at: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          order_index: number
+          platform: string
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          order_index: number
+          platform: string
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          order_index?: number
+          platform?: string
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
       sidebar_sections: {
         Row: {
           content: string | null
