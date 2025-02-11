@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Menu, User, Music, Newspaper, Share2, Mail } from "lucide-react";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { useToast } from "@/hooks/use-toast";

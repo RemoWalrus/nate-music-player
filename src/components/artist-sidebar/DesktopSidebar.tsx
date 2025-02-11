@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { User, Music, Newspaper, Share2, Mail } from "lucide-react";
 import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
