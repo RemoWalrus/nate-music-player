@@ -35,17 +35,20 @@ const AlbumArt = ({ albumUrl, setBackgroundColor, audioRef }: AlbumArtProps) => 
 
   return (
     <div className="relative w-64 h-64 sm:w-80 sm:h-80">
-      <img
-        ref={imageRef}
-        src={albumUrl}
-        alt="Album art"
-        className="w-full h-full object-cover rounded-2xl shadow-2xl"
-        onError={(e) => {
-          console.error("Image failed to load");
-          e.currentTarget.src = "/placeholder.svg";
-        }}
-      />
-      <WaveformVisualizer audioRef={audioRef} />
+      <div className="relative w-full h-full">
+        <img
+          ref={imageRef}
+          src={albumUrl}
+          alt="Album art"
+          className="w-full h-full object-cover rounded-2xl shadow-2xl"
+          onError={(e) => {
+            console.error("Image failed to load");
+            e.currentTarget.src = "/placeholder.svg";
+          }}
+        />
+        <div className="absolute inset-0 bg-black/20 rounded-2xl" />
+        <WaveformVisualizer audioRef={audioRef} />
+      </div>
     </div>
   );
 };
