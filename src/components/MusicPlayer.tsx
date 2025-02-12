@@ -1,7 +1,9 @@
+
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
 import { Progress } from "./ui/progress";
+import { decryptFileName } from "../utils/fileEncryption";
 import type { Track } from "../types/music";
 
 interface MusicPlayerProps {
@@ -18,7 +20,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(track.isPlaying);
-  
+
   useEffect(() => {
     const extractColor = async () => {
       if (imageRef.current) {
@@ -45,7 +47,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       audioRef.current = new Audio();
       audioRef.current.onended = () => {
         setIsPlaying(false);
-        if (track.isPlaying) { // Only auto-play next if the track was playing when it ended
+        if (track.isPlaying) {
           onNextTrack();
         }
       };
@@ -72,7 +74,23 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       
-      audioRef.current.src = audioSource;
+      // Decrypt the filename portion of the URL if it's an MP3 URL
+      let finalAudioSource = audioSource;
+      if (track.mp3Url) {
+        try {
+          const url = new URL(audioSource);
+          const pathParts = url.pathname.split('/');
+          const encryptedFileName = pathParts[pathParts.length - 1];
+          const decryptedFileName = decryptFileName(encryptedFileName);
+          pathParts[pathParts.length - 1] = decryptedFileName;
+          url.pathname = pathParts.join('/');
+          finalAudioSource = url.toString();
+        } catch (error) {
+          console.error('Error decrypting audio URL:', error);
+        }
+      }
+      
+      audioRef.current.src = finalAudioSource;
       
       if (isPlaying) {
         console.log('Attempting to play audio...');

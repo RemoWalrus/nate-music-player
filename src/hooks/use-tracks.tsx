@@ -3,6 +3,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./use-toast";
 import { fetchArtistTopTracks, loadSpotifyCredentials } from "../utils/spotify";
+import { encryptFileName } from "../utils/fileEncryption";
 import type { SpotifyTrack, TrackUrls, Track } from "../types/music";
 
 export function useTracks() {
@@ -52,8 +53,15 @@ export function useTracks() {
             .getPublicUrl(track.mp3_url);
           
           if (publicUrl) {
-            mp3Url = publicUrl.publicUrl;
-            console.log('Generated public URL for', track.spotify_track_id, ':', mp3Url);
+            // Add encryption to the filename portion of the URL
+            const url = new URL(publicUrl.publicUrl);
+            const pathParts = url.pathname.split('/');
+            const fileName = pathParts[pathParts.length - 1];
+            const encryptedFileName = encryptFileName(fileName);
+            pathParts[pathParts.length - 1] = encryptedFileName;
+            url.pathname = pathParts.join('/');
+            mp3Url = url.toString();
+            console.log('Generated encrypted URL for', track.spotify_track_id, ':', mp3Url);
           }
         }
 
