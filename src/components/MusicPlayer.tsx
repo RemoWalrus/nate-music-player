@@ -24,6 +24,8 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(track.isPlaying);
   const [playbackError, setPlaybackError] = useState(false);
+  const errorCountRef = useRef(0);
+  const errorTimeoutRef = useRef<NodeJS.Timeout>();
   
   useEffect(() => {
     const extractColor = async () => {
@@ -68,6 +70,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
         if (audioRef.current) {
           setDuration(audioRef.current.duration);
           setPlaybackError(false);
+          errorCountRef.current = 0; // Reset error count on successful load
         }
       };
 
@@ -75,12 +78,35 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
         console.error("Audio playback error:", e);
         setPlaybackError(true);
         setIsPlaying(false);
-        toast({
-          title: "Playback Error",
-          description: "There was an error playing this track. Skipping to next song...",
-          variant: "destructive",
-        });
-        onNextTrack();
+        
+        // Increment error count
+        errorCountRef.current += 1;
+        
+        // Clear any existing timeout
+        if (errorTimeoutRef.current) {
+          clearTimeout(errorTimeoutRef.current);
+        }
+        
+        // Only proceed to next track if we haven't hit too many consecutive errors
+        if (errorCountRef.current < 3) {
+          toast({
+            title: "Playback Error",
+            description: "There was an error playing this track. Trying next song in 2 seconds...",
+            variant: "destructive",
+          });
+          
+          // Add a delay before trying the next track
+          errorTimeoutRef.current = setTimeout(() => {
+            onNextTrack();
+          }, 2000);
+        } else {
+          toast({
+            title: "Playback Error",
+            description: "Multiple playback errors occurred. Please try again later.",
+            variant: "destructive",
+          });
+          errorCountRef.current = 0; // Reset the counter
+        }
       };
       
       setAudioInitialized(true);
@@ -110,12 +136,32 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
           console.error("Error loading/playing audio:", error);
           setPlaybackError(true);
           setIsPlaying(false);
-          toast({
-            title: "Playback Error",
-            description: "Unable to play this track. Trying next song...",
-            variant: "destructive",
-          });
-          onNextTrack();
+          
+          // Increment error count
+          errorCountRef.current += 1;
+          
+          if (errorCountRef.current < 3) {
+            toast({
+              title: "Playback Error",
+              description: "Unable to play this track. Trying next song in 2 seconds...",
+              variant: "destructive",
+            });
+            
+            // Add a delay before trying the next track
+            if (errorTimeoutRef.current) {
+              clearTimeout(errorTimeoutRef.current);
+            }
+            errorTimeoutRef.current = setTimeout(() => {
+              onNextTrack();
+            }, 2000);
+          } else {
+            toast({
+              title: "Playback Error",
+              description: "Multiple playback errors occurred. Please try again later.",
+              variant: "destructive",
+            });
+            errorCountRef.current = 0; // Reset the counter
+          }
         }
       };
       
@@ -129,6 +175,9 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
 
   useEffect(() => {
     return () => {
+      if (errorTimeoutRef.current) {
+        clearTimeout(errorTimeoutRef.current);
+      }
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
