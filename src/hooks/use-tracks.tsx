@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useToast } from "./use-toast";
 import { fetchArtistTopTracks, loadSpotifyCredentials } from "../utils/spotify";
-import type { SpotifyTrack } from "../types/music";
+import type { SpotifyTrack, TrackUrls } from "../types/music";
 import { getTrackUrlsFromSupabase, createTrackFromUrls } from "../utils/tracks";
 import { useTrackSelection } from "./use-track-selection";
 
