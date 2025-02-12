@@ -38,13 +38,26 @@ export const getTrackUrlsFromSupabase = async () => {
         }
       }
 
+      let artworkUrl = track.artwork_url;
+      if (artworkUrl) {
+        const { data: publicUrl } = supabase.storage
+          .from('artwork')
+          .getPublicUrl(artworkUrl);
+        if (publicUrl) {
+          artworkUrl = publicUrl.publicUrl;
+        }
+      }
+
       urlsMap[track.spotify_track_id] = {
         spotify_track_id: track.spotify_track_id,
         mp3_url: mp3Url,
         youtube_music_url: track.youtube_music_url,
         apple_music_url: track.apple_music_url,
         amazon_music_url: track.amazon_music_url,
-        permalink: track.permalink
+        permalink: track.permalink,
+        artwork_url: artworkUrl,
+        track_name: track.track_name,
+        artist_name: track.artist_name
       };
     }
 
@@ -63,7 +76,7 @@ export const createTrackFromSpotify = (
   id: spotifyTrack.id,
   name: spotifyTrack.name,
   artist: spotifyTrack.artists[0].name,
-  albumUrl: spotifyTrack.album.images[0]?.url,
+  albumUrl: trackUrls?.artwork_url || spotifyTrack.album.images[0]?.url,
   isPlaying: false,
   previewUrl: spotifyTrack.preview_url,
   mp3Url: trackUrls?.mp3_url || null,
@@ -76,10 +89,13 @@ export const createTrackFromSpotify = (
 
 export const createTrackFromUrls = (trackUrl: TrackUrls): SpotifyTrack => ({
   id: trackUrl.spotify_track_id,
-  name: '',
-  artists: [{ name: '' }],
-  album: { images: [{ url: 'https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg' }] },
+  name: trackUrl.track_name || '',
+  artists: [{ name: trackUrl.artist_name || '' }],
+  album: { 
+    images: [{ 
+      url: trackUrl.artwork_url || 'https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg'
+    }] 
+  },
   preview_url: null,
   external_urls: { spotify: null }
 });
-

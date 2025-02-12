@@ -104,6 +104,7 @@ export type Database = {
           amazon_music_url: string | null
           apple_music_url: string | null
           artist_name: string | null
+          artwork_url: string | null
           created_at: string | null
           id: string
           mp3_url: string | null
@@ -117,6 +118,7 @@ export type Database = {
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null
+          artwork_url?: string | null
           created_at?: string | null
           id?: string
           mp3_url?: string | null
@@ -130,6 +132,7 @@ export type Database = {
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null
+          artwork_url?: string | null
           created_at?: string | null
           id?: string
           mp3_url?: string | null
