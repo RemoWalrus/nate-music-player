@@ -1,11 +1,8 @@
-
-import { useAudioPlayer } from "@/hooks/use-audio-player";
-import { useBackgroundColor } from "@/hooks/use-background-color";
+import { useEffect, useRef, useState } from "react";
+import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
+import { average } from "color.js";
+import { Progress } from "./ui/progress";
 import type { Track } from "../types/music";
-import PlaybackControls from "./music-player/PlaybackControls";
-import TrackInfo from "./music-player/TrackInfo";
-import ProgressBar from "./music-player/ProgressBar";
-import PlaybackStatus from "./music-player/PlaybackStatus";
 
 interface MusicPlayerProps {
   track: Track;
@@ -15,16 +12,124 @@ interface MusicPlayerProps {
 }
 
 const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: MusicPlayerProps) => {
-  const {
-    progress,
-    duration,
-    isPlaying,
-    playbackError,
-    togglePlayback,
-    handleProgressClick,
-  } = useAudioPlayer(track, onNextTrack);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [audioInitialized, setAudioInitialized] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(track.isPlaying);
+  
+  useEffect(() => {
+    const extractColor = async () => {
+      if (imageRef.current) {
+        try {
+          const colors = await average(imageRef.current.src);
+          if (Array.isArray(colors)) {
+            const [r, g, b] = colors;
+            setBackgroundColor(`rgb(${r}, ${g}, ${b})`);
+          }
+        } catch (error) {
+          console.error("Error extracting color:", error);
+          setBackgroundColor("rgb(30, 30, 30)");
+        }
+      }
+    };
 
-  const imageRef = useBackgroundColor(track.albumUrl, setBackgroundColor);
+    if (track.albumUrl) {
+      extractColor();
+    }
+  }, [track.albumUrl, setBackgroundColor]);
+
+  useEffect(() => {
+    if (!audioInitialized) {
+      audioRef.current = new Audio();
+      audioRef.current.onended = () => {
+        setIsPlaying(false);
+        if (track.isPlaying) { // Only auto-play next if the track was playing when it ended
+          onNextTrack();
+        }
+      };
+      audioRef.current.ontimeupdate = () => {
+        if (audioRef.current) {
+          setProgress(audioRef.current.currentTime);
+        }
+      };
+      audioRef.current.onloadedmetadata = () => {
+        if (audioRef.current) {
+          setDuration(audioRef.current.duration);
+        }
+      };
+      setAudioInitialized(true);
+    }
+  }, [audioInitialized, onNextTrack, track.isPlaying]);
+
+  useEffect(() => {
+    const audioSource = track.mp3Url || track.previewUrl;
+    console.log('Audio source:', audioSource);
+    console.log('Track state:', track);
+    
+    if (audioRef.current && audioSource) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      
+      audioRef.current.src = audioSource;
+      
+      if (isPlaying) {
+        console.log('Attempting to play audio...');
+        const playPromise = audioRef.current.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log('Audio playing successfully');
+            })
+            .catch(error => {
+              console.error("Error playing audio:", error);
+              setIsPlaying(false);
+            });
+        }
+      }
+    } else if (isPlaying && !audioSource) {
+      console.log('No audio source available, cannot play');
+      setIsPlaying(false);
+    }
+  }, [track, isPlaying]);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
+  }, []);
+
+  const togglePlayback = () => {
+    if (!track.mp3Url && !track.previewUrl) {
+      console.log("No audio URL available for this track");
+      return;
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!audioRef.current || !duration) return;
+    
+    const progressBar = e.currentTarget;
+    const rect = progressBar.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = offsetX / rect.width;
+    const newTime = percentage * duration;
+    
+    audioRef.current.currentTime = newTime;
+    setProgress(newTime);
+  };
 
   return (
     <div className="relative group">
@@ -43,35 +148,122 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
           />
         </div>
         
-        <TrackInfo
-          name={track.name}
-          artist={track.artist}
-          youtubeUrl={track.youtubeUrl}
-          spotifyUrl={track.spotifyUrl}
-          appleMusicUrl={track.appleMusicUrl}
-          amazonMusicUrl={track.amazonMusicUrl}
-        />
+        <div className="text-center space-y-2">
+          <h2 className="text-white text-2xl font-semibold tracking-wide">
+            {track.name}
+          </h2>
+          <p className="text-white/80 text-lg">
+            {track.artist}
+          </p>
+          <div className="flex items-center justify-center gap-2 mt-2 text-xs">
+            {track.youtubeUrl && (
+              <a
+                href={track.youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
+              >
+                YouTube <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+            {track.spotifyUrl && (
+              <a
+                href={track.spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
+              >
+                Spotify <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+            {track.appleMusicUrl && (
+              <a
+                href={track.appleMusicUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
+              >
+                Apple <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+            {track.amazonMusicUrl && (
+              <a
+                href={track.amazonMusicUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-white flex items-center gap-0.5"
+              >
+                Amazon <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+          </div>
+        </div>
 
         <div className="w-full space-y-4">
-          <ProgressBar
-            progress={progress}
-            duration={duration}
-            onProgressClick={handleProgressClick}
-          />
+          <div className="w-full flex items-center gap-2">
+            <span className="text-white/60 text-sm w-12 text-right">
+              {formatTime(progress)}
+            </span>
+            <div 
+              className="flex-1 cursor-pointer"
+              onClick={handleProgressClick}
+            >
+              <Progress 
+                value={(progress / duration) * 100} 
+                className="h-1.5"
+              />
+            </div>
+            <span className="text-white/60 text-sm w-12">
+              {formatTime(duration)}
+            </span>
+          </div>
 
-          <PlaybackControls
-            isPlaying={isPlaying}
-            canPlay={!!(track.mp3Url || track.previewUrl)}
-            playbackError={playbackError}
-            onPrevTrack={onPrevTrack}
-            onNextTrack={onNextTrack}
-            onTogglePlayback={togglePlayback}
-          />
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={onPrevTrack}
+              className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
+            >
+              <SkipBack className="w-6 h-6 text-white" />
+            </button>
 
-          <PlaybackStatus
-            playbackError={playbackError}
-            hasAudioSource={!!(track.mp3Url || track.previewUrl)}
-          />
+            <button
+              onClick={togglePlayback}
+              disabled={!track.mp3Url && !track.previewUrl}
+              className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
+                (track.mp3Url || track.previewUrl)
+                  ? 'bg-white/10 hover:bg-white/20' 
+                  : 'bg-white/5 cursor-not-allowed'
+              }`}
+            >
+              {isPlaying ? (
+                <Pause className="w-8 h-8 text-white" />
+              ) : (
+                <Play className="w-8 h-8 text-white ml-1" />
+              )}
+            </button>
+
+            <button
+              onClick={onNextTrack}
+              className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
+            >
+              <SkipForward className="w-6 h-6 text-white" />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-center gap-2">
+            {!track.mp3Url && !track.previewUrl && (
+              <div className="flex items-center gap-2 text-white/60">
+                <VolumeX className="w-5 h-5" />
+                <span className="text-sm">Audio unavailable</span>
+              </div>
+            )}
+            {(track.mp3Url || track.previewUrl) && (
+              <div className="flex items-center gap-2 text-white/60">
+                <Volume2 className="w-5 h-5" />
+                <span className="text-sm">Audio available</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
