@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
 import { Progress } from "./ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import type { Track } from "../types/music";
 
 interface MusicPlayerProps {
@@ -12,12 +13,14 @@ interface MusicPlayerProps {
 }
 
 const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: MusicPlayerProps) => {
+  const { toast } = useToast();
   const imageRef = useRef<HTMLImageElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioInitialized, setAudioInitialized] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(track.isPlaying);
+  const [playbackError, setPlaybackError] = useState(false);
   
   useEffect(() => {
     const extractColor = async () => {
@@ -43,25 +46,43 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
   useEffect(() => {
     if (!audioInitialized) {
       audioRef.current = new Audio();
+      audioRef.current.crossOrigin = "anonymous";
+      
       audioRef.current.onended = () => {
         setIsPlaying(false);
-        if (track.isPlaying) { // Only auto-play next if the track was playing when it ended
+        if (track.isPlaying) {
           onNextTrack();
         }
       };
+      
       audioRef.current.ontimeupdate = () => {
         if (audioRef.current) {
           setProgress(audioRef.current.currentTime);
         }
       };
+      
       audioRef.current.onloadedmetadata = () => {
         if (audioRef.current) {
           setDuration(audioRef.current.duration);
+          setPlaybackError(false);
         }
       };
+
+      audioRef.current.onerror = (e) => {
+        console.error("Audio playback error:", e);
+        setPlaybackError(true);
+        setIsPlaying(false);
+        toast({
+          title: "Playback Error",
+          description: "There was an error playing this track. Skipping to next song...",
+          variant: "destructive",
+        });
+        onNextTrack();
+      };
+      
       setAudioInitialized(true);
     }
-  }, [audioInitialized, onNextTrack, track.isPlaying]);
+  }, [audioInitialized, onNextTrack, track.isPlaying, toast]);
 
   useEffect(() => {
     const audioSource = track.mp3Url || track.previewUrl;
@@ -69,31 +90,39 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
     console.log('Track state:', track);
     
     if (audioRef.current && audioSource) {
+      setPlaybackError(false);
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       
-      audioRef.current.src = audioSource;
-      
-      if (isPlaying) {
-        console.log('Attempting to play audio...');
-        const playPromise = audioRef.current.play();
-        
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              console.log('Audio playing successfully');
-            })
-            .catch(error => {
-              console.error("Error playing audio:", error);
-              setIsPlaying(false);
-            });
+      const loadAndPlay = async () => {
+        try {
+          audioRef.current!.src = audioSource;
+          
+          if (isPlaying) {
+            console.log('Attempting to play audio...');
+            await audioRef.current!.play();
+            console.log('Audio playing successfully');
+          }
+        } catch (error) {
+          console.error("Error loading/playing audio:", error);
+          setPlaybackError(true);
+          setIsPlaying(false);
+          toast({
+            title: "Playback Error",
+            description: "Unable to play this track. Trying next song...",
+            variant: "destructive",
+          });
+          onNextTrack();
         }
-      }
+      };
+      
+      loadAndPlay();
     } else if (isPlaying && !audioSource) {
       console.log('No audio source available, cannot play');
       setIsPlaying(false);
+      setPlaybackError(true);
     }
-  }, [track, isPlaying]);
+  }, [track, isPlaying, onNextTrack, toast]);
 
   useEffect(() => {
     return () => {
@@ -109,6 +138,15 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       console.log("No audio URL available for this track");
       return;
     }
+    
+    if (playbackError) {
+      setPlaybackError(false);
+      const audioSource = track.mp3Url || track.previewUrl;
+      if (audioRef.current && audioSource) {
+        audioRef.current.src = audioSource;
+      }
+    }
+    
     setIsPlaying(!isPlaying);
   };
 
@@ -119,7 +157,7 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
   };
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!audioRef.current || !duration) return;
+    if (!audioRef.current || !duration || playbackError) return;
     
     const progressBar = e.currentTarget;
     const rect = progressBar.getBoundingClientRect();
@@ -228,9 +266,9 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
 
             <button
               onClick={togglePlayback}
-              disabled={!track.mp3Url && !track.previewUrl}
+              disabled={(!track.mp3Url && !track.previewUrl) || playbackError}
               className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
-                (track.mp3Url || track.previewUrl)
+                (track.mp3Url || track.previewUrl) && !playbackError
                   ? 'bg-white/10 hover:bg-white/20' 
                   : 'bg-white/5 cursor-not-allowed'
               }`}
@@ -251,13 +289,17 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
           </div>
 
           <div className="flex items-center justify-center gap-2">
-            {!track.mp3Url && !track.previewUrl && (
+            {playbackError ? (
+              <div className="flex items-center gap-2 text-red-400">
+                <VolumeX className="w-5 h-5" />
+                <span className="text-sm">Playback error</span>
+              </div>
+            ) : !track.mp3Url && !track.previewUrl ? (
               <div className="flex items-center gap-2 text-white/60">
                 <VolumeX className="w-5 h-5" />
                 <span className="text-sm">Audio unavailable</span>
               </div>
-            )}
-            {(track.mp3Url || track.previewUrl) && (
+            ) : (
               <div className="flex items-center gap-2 text-white/60">
                 <Volume2 className="w-5 h-5" />
                 <span className="text-sm">Audio available</span>
