@@ -25,18 +25,23 @@ const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
           }
 
           // Set canvas dimensions to match the loaded image
-          canvas.width = imageRef.current.naturalWidth || imageRef.current.width;
-          canvas.height = imageRef.current.naturalHeight || imageRef.current.height;
+          const imgWidth = imageRef.current.naturalWidth || imageRef.current.width;
+          const imgHeight = imageRef.current.naturalHeight || imageRef.current.height;
+
+          // Ensure we have valid dimensions
+          if (imgWidth <= 0 || imgHeight <= 0) {
+            console.error("Invalid image dimensions:", imgWidth, imgHeight);
+            return;
+          }
+
+          canvas.width = imgWidth;
+          canvas.height = imgHeight;
 
           // Draw the image onto the canvas
           ctx.drawImage(imageRef.current, 0, 0);
 
           // Use color.js to extract the average color
-          const colors = await average(imageRef.current.src, {
-            width: canvas.width,
-            height: canvas.height,
-            format: 'rgb'
-          });
+          const colors = await average(imageRef.current.src, { format: 'rgb' });
 
           if (Array.isArray(colors)) {
             const [r, g, b] = colors;
@@ -79,4 +84,3 @@ const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
 };
 
 export default AlbumArt;
-
