@@ -1,9 +1,12 @@
+
 import { useEffect, useRef, useState } from "react";
-import { Play, Pause, Volume2, VolumeX, ExternalLink, SkipBack, SkipForward } from "lucide-react";
 import { average } from "color.js";
-import { Progress } from "./ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import type { Track } from "../types/music";
+import PlaybackControls from "./music-player/PlaybackControls";
+import TrackInfo from "./music-player/TrackInfo";
+import ProgressBar from "./music-player/ProgressBar";
+import PlaybackStatus from "./music-player/PlaybackStatus";
 
 interface MusicPlayerProps {
   track: Track;
@@ -150,12 +153,6 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
     setIsPlaying(!isPlaying);
   };
 
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!audioRef.current || !duration || playbackError) return;
     
@@ -186,126 +183,35 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
           />
         </div>
         
-        <div className="text-center space-y-2">
-          <h2 className="text-white text-2xl font-semibold tracking-wide">
-            {track.name}
-          </h2>
-          <p className="text-white/80 text-lg">
-            {track.artist}
-          </p>
-          <div className="flex items-center justify-center gap-2 mt-2 text-xs">
-            {track.youtubeUrl && (
-              <a
-                href={track.youtubeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/60 hover:text-white flex items-center gap-0.5"
-              >
-                YouTube <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-            {track.spotifyUrl && (
-              <a
-                href={track.spotifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/60 hover:text-white flex items-center gap-0.5"
-              >
-                Spotify <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-            {track.appleMusicUrl && (
-              <a
-                href={track.appleMusicUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/60 hover:text-white flex items-center gap-0.5"
-              >
-                Apple <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-            {track.amazonMusicUrl && (
-              <a
-                href={track.amazonMusicUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/60 hover:text-white flex items-center gap-0.5"
-              >
-                Amazon <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-          </div>
-        </div>
+        <TrackInfo
+          name={track.name}
+          artist={track.artist}
+          youtubeUrl={track.youtubeUrl}
+          spotifyUrl={track.spotifyUrl}
+          appleMusicUrl={track.appleMusicUrl}
+          amazonMusicUrl={track.amazonMusicUrl}
+        />
 
         <div className="w-full space-y-4">
-          <div className="w-full flex items-center gap-2">
-            <span className="text-white/60 text-sm w-12 text-right">
-              {formatTime(progress)}
-            </span>
-            <div 
-              className="flex-1 cursor-pointer"
-              onClick={handleProgressClick}
-            >
-              <Progress 
-                value={(progress / duration) * 100} 
-                className="h-1.5"
-              />
-            </div>
-            <span className="text-white/60 text-sm w-12">
-              {formatTime(duration)}
-            </span>
-          </div>
+          <ProgressBar
+            progress={progress}
+            duration={duration}
+            onProgressClick={handleProgressClick}
+          />
 
-          <div className="flex items-center justify-center gap-4">
-            <button
-              onClick={onPrevTrack}
-              className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
-            >
-              <SkipBack className="w-6 h-6 text-white" />
-            </button>
+          <PlaybackControls
+            isPlaying={isPlaying}
+            canPlay={!!(track.mp3Url || track.previewUrl)}
+            playbackError={playbackError}
+            onPrevTrack={onPrevTrack}
+            onNextTrack={onNextTrack}
+            onTogglePlayback={togglePlayback}
+          />
 
-            <button
-              onClick={togglePlayback}
-              disabled={(!track.mp3Url && !track.previewUrl) || playbackError}
-              className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
-                (track.mp3Url || track.previewUrl) && !playbackError
-                  ? 'bg-white/10 hover:bg-white/20' 
-                  : 'bg-white/5 cursor-not-allowed'
-              }`}
-            >
-              {isPlaying ? (
-                <Pause className="w-8 h-8 text-white" />
-              ) : (
-                <Play className="w-8 h-8 text-white ml-1" />
-              )}
-            </button>
-
-            <button
-              onClick={onNextTrack}
-              className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
-            >
-              <SkipForward className="w-6 h-6 text-white" />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-center gap-2">
-            {playbackError ? (
-              <div className="flex items-center gap-2 text-red-400">
-                <VolumeX className="w-5 h-5" />
-                <span className="text-sm">Playback error</span>
-              </div>
-            ) : !track.mp3Url && !track.previewUrl ? (
-              <div className="flex items-center gap-2 text-white/60">
-                <VolumeX className="w-5 h-5" />
-                <span className="text-sm">Audio unavailable</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-white/60">
-                <Volume2 className="w-5 h-5" />
-                <span className="text-sm">Audio available</span>
-              </div>
-            )}
-          </div>
+          <PlaybackStatus
+            playbackError={playbackError}
+            hasAudioSource={!!(track.mp3Url || track.previewUrl)}
+          />
         </div>
       </div>
     </div>
