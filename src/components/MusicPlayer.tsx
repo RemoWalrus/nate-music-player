@@ -128,7 +128,6 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
         <AlbumArt 
           albumUrl={track.albumUrl} 
           setBackgroundColor={setBackgroundColor} 
-          audioRef={audioRef}
         />
         
         <TrackInfo

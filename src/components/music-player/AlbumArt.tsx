@@ -1,15 +1,13 @@
 
 import { useEffect, useRef } from "react";
 import { average } from "color.js";
-import WaveformVisualizer from "./WaveformVisualizer";
 
 interface AlbumArtProps {
   albumUrl: string;
   setBackgroundColor: (color: string) => void;
-  audioRef: React.RefObject<HTMLAudioElement>;
 }
 
-const AlbumArt = ({ albumUrl, setBackgroundColor, audioRef }: AlbumArtProps) => {
+const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
@@ -45,7 +43,6 @@ const AlbumArt = ({ albumUrl, setBackgroundColor, audioRef }: AlbumArtProps) => 
           e.currentTarget.src = "/placeholder.svg";
         }}
       />
-      <WaveformVisualizer audioRef={audioRef} />
     </div>
   );
 };
