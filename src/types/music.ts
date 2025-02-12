@@ -22,9 +22,6 @@ export interface TrackUrls {
   apple_music_url: string | null;
   amazon_music_url: string | null;
   permalink: string;
-  artwork_url?: string | null;
-  track_name?: string | null;
-  artist_name?: string | null;
 }
 
 export interface Track {
