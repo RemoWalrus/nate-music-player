@@ -50,14 +50,14 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
       case "Artist":
         return (
           <div className="space-y-1">
-            <h3 className="font-medium">Nathan Garcia</h3>
-            <p className="text-sm text-gray-500 whitespace-pre-line">{artistBio}</p>
+            <h3 className="font-medium text-base">Nathan Garcia</h3>
+            <p className="text-sm text-gray-600 whitespace-pre-line">{artistBio}</p>
           </div>
         );
       case "Music":
         return (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium">Music Platforms</h4>
+            <h4 className="text-sm font-medium text-gray-900">Listen on</h4>
             <MusicPlatformLinks className="flex flex-col gap-2" />
           </div>
         );
@@ -65,23 +65,23 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
         return (
           <a 
             href="mailto:remo@romergarcia.com?subject=Nathan%20Garcia%20Music&body=Hi%2C%20I%27m%20reaching%20Nathan%20Garcia%27s%20team"
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-gray-600 hover:text-gray-900"
           >
-            Email us!
+            Contact us
           </a>
         );
       case "Share":
         return (
           <button 
             onClick={handleShare}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-gray-600 hover:text-gray-900"
           >
-            Share with your friends
+            Share this page
           </button>
         );
       default:
         return (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             {section.content}
           </p>
         );
@@ -100,7 +100,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
             className="h-8 w-8"
           />
           {currentTrack && currentTrack.isPlaying && (
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-gray-900">
               Now Playing: {currentTrack.name}
             </span>
           )}
@@ -119,10 +119,11 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
               const Icon = iconMap[section.icon];
               return (
                 <React.Fragment key={section.id}>
-                  {index > 0 && <div className="border-t border-gray-300/50" />}
-                  <div className="flex items-center gap-3 text-gray-700">
-                    <Icon {...iconProps} className="h-5 w-5 shrink-0" />
-                    <div className="space-y-2">
+                  {index > 0 && <div className="border-t border-gray-200" />}
+                  <div className="flex items-start gap-3 py-2">
+                    <Icon {...iconProps} className="h-5 w-5 shrink-0 mt-1" />
+                    <div className="space-y-2 flex-1">
+                      <h3 className="text-sm font-medium text-gray-900">{section.label}</h3>
                       {getSectionContent(section)}
                     </div>
                   </div>
@@ -135,4 +136,3 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
     </div>
   );
 };
-
