@@ -71,7 +71,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
   return (
     <Sidebar
       className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
-        isCollapsed ? "w-20" : "w-96"
+        isCollapsed ? "w-12" : "w-96"
       }`}
     >
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
@@ -79,7 +79,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
       <SidebarContent className="space-y-1">
         {sidebarSections.map((section, index) => (
           <React.Fragment key={section.id}>
-            {index > 0 && <div className="border-t border-gray-300/50" />}
+            {index > 0 && <div className="border-t border-gray-300/50 w-full" />}
             <SidebarSection 
               label={section.label} 
               icon={iconMap[section.icon]} 
