@@ -100,16 +100,32 @@ export function useTracks() {
       const fetchedTracks = await fetchArtistTopTracks();
       console.log('Fetched Spotify tracks:', fetchedTracks);
       
+      // Set tracks - IMPORTANT CHANGE: Include ALL tracks, not just those with URLs
+      const enhancedTracks = fetchedTracks.map(track => ({
+        ...track,
+        youtubeUrl: urlsMap?.[track.id]?.youtube_music_url || null,
+        spotifyUrl: track.external_urls?.spotify || null,
+        appleMusicUrl: urlsMap?.[track.id]?.apple_music_url || null,
+        amazonMusicUrl: urlsMap?.[track.id]?.amazon_music_url || null,
+        permalink: urlsMap?.[track.id]?.permalink || ''
+      }));
+      
+      console.log('Final enhanced tracks:', enhancedTracks);
+      setTracks(enhancedTracks);
+      
+      // Find a track to set as current
       if (urlsMap && fetchedTracks.length > 0) {
-        // Find a random track that has a URL in Supabase
+        // First try to find a track that has a URL in Supabase
         const tracksWithUrls = fetchedTracks.filter(track => urlsMap[track.id]);
+        
         if (tracksWithUrls.length > 0) {
+          // Use a track with URLs
           const randomIndex = Math.floor(Math.random() * tracksWithUrls.length);
           const randomTrack = tracksWithUrls[randomIndex];
           const randomTrackUrls = urlsMap[randomTrack.id];
           console.log('Setting initial random track with URLs:', randomTrackUrls);
           
-          setCurrentTrackIndex(randomIndex);
+          setCurrentTrackIndex(fetchedTracks.findIndex(t => t.id === randomTrack.id));
           setCurrentTrack({
             id: randomTrack.id,
             name: randomTrack.name,
@@ -124,21 +140,28 @@ export function useTracks() {
             amazonMusicUrl: randomTrackUrls?.amazon_music_url || null,
             permalink: randomTrackUrls?.permalink || ''
           });
+        } else {
+          // If no track has URLs, just use the first track from Spotify
+          const firstTrack = fetchedTracks[0];
+          console.log('No tracks with URLs found, using first track:', firstTrack);
+          
+          setCurrentTrackIndex(0);
+          setCurrentTrack({
+            id: firstTrack.id,
+            name: firstTrack.name,
+            artist: firstTrack.artists[0].name,
+            albumUrl: firstTrack.album.images[0]?.url,
+            isPlaying: false,
+            previewUrl: firstTrack.preview_url,
+            mp3Url: null,
+            youtubeUrl: null,
+            spotifyUrl: firstTrack.external_urls?.spotify || null,
+            appleMusicUrl: null,
+            amazonMusicUrl: null,
+            permalink: ''
+          });
         }
       }
-      
-      // Filter tracks to only include those that have URLs in Supabase
-      const enhancedTracks = fetchedTracks.filter(track => urlsMap?.[track.id]).map(track => ({
-        ...track,
-        youtubeUrl: urlsMap?.[track.id]?.youtube_music_url || null,
-        spotifyUrl: track.external_urls?.spotify || null,
-        appleMusicUrl: urlsMap?.[track.id]?.apple_music_url || null,
-        amazonMusicUrl: urlsMap?.[track.id]?.amazon_music_url || null,
-        permalink: urlsMap?.[track.id]?.permalink || ''
-      }));
-      
-      console.log('Final enhanced tracks:', enhancedTracks);
-      setTracks(enhancedTracks);
     } catch (error) {
       console.error('Error loading tracks:', error);
       toast({

@@ -8,10 +8,10 @@ interface SpotifyTrack {
     images: { url: string }[];
   };
   artists: { name: string }[];
-  youtubeUrl?: string;
-  spotifyUrl?: string;
-  appleMusicUrl?: string;
-  amazonMusicUrl?: string;
+  youtubeUrl?: string | null;
+  spotifyUrl?: string | null;
+  appleMusicUrl?: string | null;
+  amazonMusicUrl?: string | null;
 }
 
 interface PlaylistProps {
@@ -82,64 +82,66 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
                 <p className="text-white/70 text-sm">
                   {track.artists.map((artist) => artist.name).join(", ")}
                 </p>
-                <div className="flex gap-4 mt-1">
-                  {track.youtubeUrl && (
-                    <a
-                      href={track.youtubeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('youtube', track.name, track.artists[0].name);
-                      }}
-                    >
-                      YouTube <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                  {track.spotifyUrl && (
-                    <a
-                      href={track.spotifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('spotify', track.name, track.artists[0].name);
-                      }}
-                    >
-                      Spotify <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                  {track.appleMusicUrl && (
-                    <a
-                      href={track.appleMusicUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('apple_music', track.name, track.artists[0].name);
-                      }}
-                    >
-                      Apple Music <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                  {track.amazonMusicUrl && (
-                    <a
-                      href={track.amazonMusicUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('amazon_music', track.name, track.artists[0].name);
-                      }}
-                    >
-                      Amazon Music <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                </div>
+                {(track.youtubeUrl || track.spotifyUrl || track.appleMusicUrl || track.amazonMusicUrl) && (
+                  <div className="flex gap-4 mt-1">
+                    {track.youtubeUrl && (
+                      <a
+                        href={track.youtubeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleExternalLinkClick('youtube', track.name, track.artists[0].name);
+                        }}
+                      >
+                        YouTube <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    {track.spotifyUrl && (
+                      <a
+                        href={track.spotifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleExternalLinkClick('spotify', track.name, track.artists[0].name);
+                        }}
+                      >
+                        Spotify <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    {track.appleMusicUrl && (
+                      <a
+                        href={track.appleMusicUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleExternalLinkClick('apple_music', track.name, track.artists[0].name);
+                        }}
+                      >
+                        Apple Music <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    {track.amazonMusicUrl && (
+                      <a
+                        href={track.amazonMusicUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleExternalLinkClick('amazon_music', track.name, track.artists[0].name);
+                        }}
+                      >
+                        Amazon Music <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             <button
