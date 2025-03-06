@@ -35,7 +35,7 @@ serve(async (req) => {
           <title>Nathan Garcia Music</title>
           <meta property="og:image" content="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg">
           <meta property="og:title" content="Nathan Garcia Music">
-          <meta property="og:description" content="Check out Nathan Garcia's music!">
+          <meta property="og:description" content="Discover Nathan Garcia, a 7-year-old musical prodigy crafting whimsical, genre-blending songs with AI-assisted production. His innovative music fuses eclectic electronic pop beats with playful lyrics in English and Spanish, showcasing boundless creativity and imagination.">
           <style>
             body {
               margin: 0;
