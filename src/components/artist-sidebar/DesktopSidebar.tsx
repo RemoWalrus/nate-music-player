@@ -30,7 +30,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
       case "Artist":
         return (
           <div className="space-y-1">
-            <h3 className="font-medium">Nathan Garcia</h3>
+            <h3 className="font-medium text-sm">Nathan Garcia</h3>
             <p className="text-sm text-gray-500 whitespace-pre-line">{artistBio}</p>
           </div>
         );
@@ -76,10 +76,10 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
     >
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-      <SidebarContent className="space-y-1 overflow-hidden">
+      <SidebarContent className="space-y-0.5 overflow-hidden">
         {sidebarSections.map((section, index) => (
           <React.Fragment key={section.id}>
-            {index > 0 && <div className="border-t border-gray-300/50 w-full" />}
+            {index > 0 && <div className="border-t border-gray-300/50 w-full my-0.5" />}
             <SidebarSection 
               label={section.label} 
               icon={iconMap[section.icon]} 
