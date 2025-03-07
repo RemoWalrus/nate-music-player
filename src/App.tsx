@@ -13,12 +13,14 @@ function App() {
     <Router>
       <SidebarProvider>
         <CustomSidebarProvider>
-          <MetadataHead />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Toaster />
+          <div className="w-full h-full">
+            <MetadataHead />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Toaster />
+          </div>
         </CustomSidebarProvider>
       </SidebarProvider>
     </Router>

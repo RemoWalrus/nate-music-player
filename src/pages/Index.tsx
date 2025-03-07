@@ -45,7 +45,7 @@ const Index = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center"
+      <div className="min-h-screen flex items-center justify-center w-full"
            style={{ backgroundColor }}>
         <div style={{ color: textColor }}>Loading...</div>
       </div>
@@ -53,7 +53,7 @@ const Index = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-svh w-full">
+    <div className="flex flex-col min-h-svh w-full overflow-hidden">
       <div className="flex flex-1 w-full">
         <ArtistSidebar />
         <div 
