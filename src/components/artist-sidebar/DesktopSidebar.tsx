@@ -1,11 +1,10 @@
 
 import React, { useState } from "react";
 import { User, Music, Newspaper, Share2, Mail } from "lucide-react";
-import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
-import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { SidebarHeader } from "./components/SidebarHeader";
 import { SidebarSection } from "./components/SidebarSection";
 import { useShareButton } from "./components/ShareButton";
+import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { SidebarSection as SidebarSectionType } from "../types/sidebar";
 
 interface DesktopSidebarProps {
@@ -69,14 +68,12 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
   };
 
   return (
-    <Sidebar
-      className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
-        isCollapsed ? "w-20" : "w-96"
-      }`}
-    >
+    <div className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
+      isCollapsed ? "w-20" : "w-96"
+    }`}>
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-      <SidebarContent className="space-y-0.5 overflow-hidden">
+      <div className="space-y-0.5 overflow-hidden">
         {sidebarSections.map((section, index) => (
           <React.Fragment key={section.id}>
             {index > 0 && <div className="border-t border-gray-300/50 w-full my-0.5" />}
@@ -89,7 +86,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
             </SidebarSection>
           </React.Fragment>
         ))}
-      </SidebarContent>
-    </Sidebar>
+      </div>
+    </div>
   );
 };
