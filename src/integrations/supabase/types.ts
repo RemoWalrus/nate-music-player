@@ -99,6 +99,39 @@ export type Database = {
         }
         Relationships: []
       }
+      site_metadata: {
+        Row: {
+          author: string
+          created_at: string | null
+          description: string
+          id: string
+          keywords: string
+          og_image: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          keywords?: string
+          og_image?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          keywords?: string
+          og_image?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       track_urls: {
         Row: {
           amazon_music_url: string | null

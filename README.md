@@ -5,7 +5,43 @@
 
 **URL**: https://lovable.dev/projects/9b6a2bef-cf2f-43e6-995d-06322e272a45
 
+## Nathan Garcia Music Website - Features Overview
+
+The Nathan Garcia Music website is a dynamic platform showcasing Nathan's musical talent with the following features:
+
+1. **Music Player**: An interactive player that streams Nathan's tracks with playback controls.
+2. **Artist Sidebar**: Displays artist information, bio, and links to social platforms.
+3. **Playlist View**: Lists all available tracks with easy selection.
+4. **Dynamic Background**: Changes based on the currently playing track.
+5. **Responsive Design**: Optimized for both desktop and mobile devices.
+6. **SEO Optimization**: Includes sitemap.xml, robots.txt, and dynamic metadata.
+7. **External Platform Links**: Integration with Spotify, YouTube Music, and Apple Music.
+
 ## How to Update and Maintain the Site
+
+### Site Metadata
+
+The site's metadata (title, description, keywords, etc.) is stored in Supabase and can be updated:
+
+1. Access the Supabase dashboard
+2. Navigate to the Table Editor
+3. Select the `site_metadata` table
+4. Edit the record to update:
+   - `title`: The page title shown in browser tabs
+   - `description`: Meta description for search engines
+   - `keywords`: SEO keywords for search engines
+   - `author`: Content author name
+   - `og_image`: Image shown when shared on social media
+
+Example SQL to update metadata:
+```sql
+UPDATE site_metadata 
+SET 
+  title = 'New Title',
+  description = 'New description text...',
+  keywords = 'keyword1, keyword2, keyword3'
+WHERE id = 'your-metadata-id';
+```
 
 ### Adding New Tracks
 
@@ -17,14 +53,24 @@ To add new tracks to the player:
    - `youtube_music_url`: Link to the track on YouTube Music (optional)
    - `apple_music_url`: Link to the track on Apple Music (optional)
    - `mp3_url`: The filename of the MP3 in the storage bucket (optional)
+   - `track_name`: Name of the track
+   - `artist_name`: Artist name for the track
 
 Example SQL:
 ```sql
-INSERT INTO track_urls (spotify_track_id, youtube_music_url, apple_music_url)
+INSERT INTO track_urls (
+  spotify_track_id, 
+  youtube_music_url, 
+  apple_music_url,
+  track_name,
+  artist_name
+)
 VALUES (
   '123456',
   'https://music.youtube.com/watch?v=...',
-  'https://music.apple.com/us/album/...'
+  'https://music.apple.com/us/album/...',
+  'Track Name',
+  'Nathan Garcia'
 );
 ```
 
@@ -37,6 +83,44 @@ If you want to add MP3 files:
 3. File name should be clear and use only lowercase letters, numbers, and hyphens (e.g., "track-name.mp3")
 4. Upload the file to the 'audio' storage bucket in Supabase
 5. Update the track_urls record with the filename in the mp3_url column
+
+### Updating Artist Information
+
+To update the artist sidebar content:
+
+1. Access the Supabase dashboard
+2. Navigate to the Table Editor
+3. Select the `artists` table to update name and bio
+4. Select the `sidebar_sections` table to update sidebar content sections
+
+### Managing Platform Links
+
+To add or update social/music platform links:
+
+1. Access the Supabase dashboard
+2. Navigate to the Table Editor
+3. Select the `platform_links` table
+4. Edit existing links or add new ones with:
+   - `platform`: Platform name (e.g., "spotify", "youtube", "instagram")
+   - `url`: Full URL to the profile/page
+   - `icon`: Name of the Lucide icon to use
+   - `order_index`: Position in the list (lower numbers appear first)
+   - `is_active`: Toggle to enable/disable the link
+
+### Sitemap and Search Engine Submission
+
+The site includes:
+- A sitemap at `https://nathangarciamusic.com/sitemap.xml`
+- Robots.txt at `https://nathangarciamusic.com/robots.txt`
+
+To submit to search engines:
+1. Google Search Console: https://search.google.com/search-console
+   - Add your property and verify ownership
+   - Submit your sitemap URL
+
+2. Bing Webmaster Tools: https://www.bing.com/webmasters
+   - Add your site and verify ownership
+   - Submit your sitemap URL
 
 ### Analytics
 
