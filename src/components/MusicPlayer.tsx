@@ -50,8 +50,11 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
     console.log('Track state:', track);
     
     if (audioRef.current && audioSource) {
+      // Store current position and playing state
+      const wasPlaying = isPlaying;
+      const currentPosition = audioRef.current.currentTime;
+      
       audioRef.current.pause();
-      audioRef.current.currentTime = 0;
       
       let finalAudioSource = audioSource;
       if (track.mp3Url) {
@@ -68,7 +71,14 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
         }
       }
       
-      audioRef.current.src = finalAudioSource;
+      // Only set a new source if the track has changed
+      if (audioRef.current.src !== finalAudioSource) {
+        audioRef.current.src = finalAudioSource;
+        audioRef.current.currentTime = 0; // Reset time for new tracks
+      } else if (wasPlaying) {
+        // If same track, restore position
+        audioRef.current.currentTime = currentPosition;
+      }
       
       if (isPlaying) {
         console.log('Attempting to play audio...');
@@ -105,6 +115,20 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       console.log("No audio URL available for this track");
       return;
     }
+    
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error("Error resuming audio:", error);
+          });
+        }
+      }
+    }
+    
     setIsPlaying(!isPlaying);
   };
 
