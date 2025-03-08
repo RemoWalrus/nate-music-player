@@ -113,7 +113,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
         </button>
       </div>
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg">
+        <div className="absolute top-full left-0 right-0 bg-white shadow-lg max-h-[70vh] overflow-y-auto">
           <div className="p-4 space-y-4">
             {sidebarSections.map((section, index) => {
               const Icon = iconMap[section.icon];
