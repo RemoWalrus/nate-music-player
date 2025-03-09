@@ -53,13 +53,12 @@ export const MusicPlatformLinks = ({ className }: MusicPlatformLinksProps) => {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 transition-colors"
         >
           <span>{link.platform}</span>
-          <ExternalLink className="w-3.5 h-3.5" />
+          <ExternalLink className="w-3 h-3" />
         </a>
       ))}
     </div>
   );
 };
-

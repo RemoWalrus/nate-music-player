@@ -29,14 +29,14 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
       case "Artist":
         return (
           <div className="space-y-1 text-left">
-            <h3 className="font-medium text-sm">Nathan Garcia</h3>
-            <p className="text-sm text-gray-500 whitespace-pre-line">{artistBio}</p>
+            <h3 className="font-medium text-xs">Nathan Garcia</h3>
+            <p className="text-xs text-gray-500 whitespace-pre-line">{artistBio}</p>
           </div>
         );
       case "Music":
         return (
           <div className="space-y-1 text-left">
-            <h4 className="text-sm font-medium">Listen on</h4>
+            <h4 className="text-xs font-medium">Listen on</h4>
             <MusicPlatformLinks className="flex flex-col gap-1" />
           </div>
         );
@@ -44,7 +44,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
         return (
           <a 
             href="mailto:remo@romergarcia.com?subject=Nathan%20Garcia%20Music&body=Hi%2C%20I%27m%20reaching%20Nathan%20Garcia%27s%20team"
-            className="text-sm text-gray-500 hover:text-gray-700 text-left"
+            className="text-xs text-gray-500 hover:text-gray-700 text-left"
           >
             Email us!
           </a>
@@ -53,7 +53,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
         return (
           <button 
             onClick={handleShare}
-            className="text-sm text-gray-500 hover:text-gray-700 text-left"
+            className="text-xs text-gray-500 hover:text-gray-700 text-left"
           >
             Share with your friends
           </button>
@@ -61,7 +61,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
       default:
         return (
           <div className="space-y-1 text-left">
-            <p className="text-sm text-gray-500">{section.content}</p>
+            <p className="text-xs text-gray-500">{section.content}</p>
           </div>
         );
     }

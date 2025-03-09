@@ -24,14 +24,14 @@ export const SidebarSection = ({
   return (
     <SidebarGroup>
       <SidebarGroupLabel
-        className={`text-gray-500 ${isCollapsed ? "sr-only" : ""}`}
+        className={`text-gray-500 text-xs ${isCollapsed ? "sr-only" : ""}`}
       >
         {label}
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <div className="px-4 py-1.5 overflow-hidden">
-          <div className="flex items-center gap-3 text-gray-700">
-            <Icon {...iconProps} className="h-5 w-5 shrink-0" />
+          <div className="flex items-start gap-3 text-gray-700">
+            <Icon {...iconProps} className="h-4 w-4 shrink-0 mt-0.5" />
             {!isCollapsed && children}
           </div>
         </div>

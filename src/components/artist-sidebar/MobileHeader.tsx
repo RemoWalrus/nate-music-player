@@ -51,13 +51,13 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
         return (
           <div className="space-y-1 text-left">
             <h3 className="font-medium text-base">Nathan Garcia</h3>
-            <p className="text-sm text-gray-600 whitespace-pre-line">{artistBio}</p>
+            <p className="text-xs text-gray-600 whitespace-pre-line">{artistBio}</p>
           </div>
         );
       case "Music":
         return (
           <div className="space-y-2 text-left">
-            <h4 className="text-sm font-medium text-gray-900">Listen on</h4>
+            <h4 className="text-xs font-medium text-gray-900">Listen on</h4>
             <MusicPlatformLinks className="flex flex-col gap-2" />
           </div>
         );
@@ -65,7 +65,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
         return (
           <a 
             href="mailto:remo@romergarcia.com?subject=Nathan%20Garcia%20Music&body=Hi%2C%20I%27m%20reaching%20Nathan%20Garcia%27s%20team"
-            className="text-sm text-gray-600 hover:text-gray-900 text-left"
+            className="text-xs text-gray-600 hover:text-gray-900 text-left"
           >
             Contact us
           </a>
@@ -74,14 +74,14 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
         return (
           <button 
             onClick={handleShare}
-            className="text-sm text-gray-600 hover:text-gray-900 text-left"
+            className="text-xs text-gray-600 hover:text-gray-900 text-left"
           >
             Share this page
           </button>
         );
       default:
         return (
-          <p className="text-sm text-gray-600 text-left">
+          <p className="text-xs text-gray-600 text-left">
             {section.content}
           </p>
         );
@@ -100,7 +100,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
             className="h-8 w-8"
           />
           {currentTrack && currentTrack.isPlaying && (
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-xs font-medium text-gray-900">
               Now Playing: {currentTrack.name}
             </span>
           )}
@@ -113,7 +113,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
         </button>
       </div>
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg max-h-[70vh] overflow-y-auto">
+        <div className="fixed inset-0 top-[61px] bg-white z-50 overflow-y-auto">
           <div className="p-4 space-y-4">
             {sidebarSections.map((section, index) => {
               const Icon = iconMap[section.icon];
@@ -123,7 +123,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
                   <div className="flex items-start gap-3 py-2">
                     <Icon {...iconProps} className="h-5 w-5 shrink-0 mt-1" />
                     <div className="space-y-2 flex-1 text-left">
-                      <h3 className="text-sm font-medium text-gray-900">{section.label}</h3>
+                      <h3 className="text-xs font-medium text-gray-900">{section.label}</h3>
                       {getSectionContent(section)}
                     </div>
                   </div>
