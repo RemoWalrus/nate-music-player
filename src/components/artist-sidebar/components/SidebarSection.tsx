@@ -32,7 +32,11 @@ export const SidebarSection = ({
         <div className="px-4 py-1.5 overflow-hidden">
           <div className="flex items-start gap-3 text-gray-700">
             <Icon {...iconProps} className="h-4 w-4 shrink-0 mt-0.5" />
-            {!isCollapsed && children}
+            {!isCollapsed && (
+              <div className="text-sm">
+                {children}
+              </div>
+            )}
           </div>
         </div>
       </SidebarGroupContent>
