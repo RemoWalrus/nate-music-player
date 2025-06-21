@@ -57,99 +57,102 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
     window.dataLayer?.push(clickEvent);
   };
 
+  const getPlatformLinks = (track: SpotifyTrack) => {
+    const links = [];
+    
+    if (track.youtubeUrl) {
+      links.push({
+        url: track.youtubeUrl,
+        platform: 'youtube',
+        label: 'YouTube'
+      });
+    }
+    
+    if (track.spotifyUrl) {
+      links.push({
+        url: track.spotifyUrl,
+        platform: 'spotify',
+        label: 'Spotify'
+      });
+    }
+    
+    if (track.appleMusicUrl) {
+      links.push({
+        url: track.appleMusicUrl,
+        platform: 'apple_music',
+        label: 'Apple Music'
+      });
+    }
+    
+    if (track.amazonMusicUrl) {
+      links.push({
+        url: track.amazonMusicUrl,
+        platform: 'amazon_music',
+        label: 'Amazon Music'
+      });
+    }
+    
+    return links;
+  };
+
   console.log('GTM status:', window.dataLayer ? 'Loaded' : 'Not loaded');
   
   return (
     <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
       <div className="space-y-2">
-        {tracks.map((track) => (
-          <div
-            key={track.id}
-            className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
-              currentTrackId === track.id
-                ? "bg-white/20"
-                : "hover:bg-white/10"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <img
-                src={track.album.images[0]?.url}
-                alt={track.name}
-                className="w-12 h-12 rounded-md"
-              />
-              <div className="text-left">
-                <h3 className="text-white font-medium">{track.name}</h3>
-                <p className="text-white/70 text-sm">
-                  {track.artists.map((artist) => artist.name).join(", ")}
-                </p>
-                <div className="flex gap-4 mt-1">
-                  {track.youtubeUrl && (
-                    <a
-                      href={track.youtubeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('youtube', track.name, track.artists[0].name);
-                      }}
-                    >
-                      YouTube <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                  {track.spotifyUrl && (
-                    <a
-                      href={track.spotifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('spotify', track.name, track.artists[0].name);
-                      }}
-                    >
-                      Spotify <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                  {track.appleMusicUrl && (
-                    <a
-                      href={track.appleMusicUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('apple_music', track.name, track.artists[0].name);
-                      }}
-                    >
-                      Apple Music <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                  {track.amazonMusicUrl && (
-                    <a
-                      href={track.amazonMusicUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/60 hover:text-white text-xs flex items-center gap-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExternalLinkClick('amazon_music', track.name, track.artists[0].name);
-                      }}
-                    >
-                      Amazon Music <ExternalLink className="w-3 h-3" />
-                    </a>
+        {tracks.map((track) => {
+          const platformLinks = getPlatformLinks(track);
+          
+          return (
+            <div
+              key={track.id}
+              className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+                currentTrackId === track.id
+                  ? "bg-white/20"
+                  : "hover:bg-white/10"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <img
+                  src={track.album.images[0]?.url}
+                  alt={track.name}
+                  className="w-12 h-12 rounded-md"
+                />
+                <div className="text-left">
+                  <h3 className="text-white font-medium">{track.name}</h3>
+                  <p className="text-white/70 text-sm">
+                    {track.artists.map((artist) => artist.name).join(", ")}
+                  </p>
+                  {platformLinks.length > 0 && (
+                    <div className="flex gap-4 mt-1">
+                      {platformLinks.map((link) => (
+                        <a
+                          key={link.platform}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleExternalLinkClick(link.platform, track.name, track.artists[0].name);
+                          }}
+                        >
+                          {link.label} <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
+              <button
+                onClick={() => handleTrackSelect(track)}
+                className="p-2 rounded-full hover:bg-white/20 transition-colors"
+              >
+                <Play className="w-5 h-5 text-white" />
+              </button>
             </div>
-            <button
-              onClick={() => handleTrackSelect(track)}
-              className="p-2 rounded-full hover:bg-white/20 transition-colors"
-            >
-              <Play className="w-5 h-5 text-white" />
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
