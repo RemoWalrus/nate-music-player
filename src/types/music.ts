@@ -10,6 +10,8 @@ export interface SpotifyTrack {
   external_urls?: {
     spotify?: string;
   };
+  youtubeUrl?: string | null;
+  spotifyUrl?: string | null;
   appleMusicUrl?: string | null;
   amazonMusicUrl?: string | null;
   permalink?: string;
@@ -17,11 +19,14 @@ export interface SpotifyTrack {
 
 export interface TrackUrls {
   spotify_track_id: string;
+  track_name: string | null;
+  artist_name: string | null;
+  artwork_url: string | null;
   mp3_url: string | null;
   youtube_music_url: string | null;
   apple_music_url: string | null;
   amazon_music_url: string | null;
-  permalink: string;
+  permalink: string | null;
 }
 
 export interface Track {

@@ -90,7 +90,7 @@ export function useTracks() {
       preview_url: null,
       external_urls: {},
       youtubeUrl: trackData.youtube_music_url,
-      spotifyUrl: null,
+      spotifyUrl: `https://open.spotify.com/track/${trackData.spotify_track_id}`,
       appleMusicUrl: trackData.apple_music_url,
       amazonMusicUrl: trackData.amazon_music_url,
       permalink: trackData.permalink || ''
