@@ -38,8 +38,12 @@ const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
         src={albumUrl}
         alt="Album art"
         className="w-full h-full object-cover rounded-2xl shadow-2xl"
+        onLoad={() => {
+          console.log("Image loaded successfully:", albumUrl);
+        }}
         onError={(e) => {
-          console.error("Image failed to load");
+          console.error("Image failed to load:", albumUrl);
+          console.error("Image error event:", e);
           e.currentTarget.src = "/placeholder.svg";
         }}
       />
