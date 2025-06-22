@@ -18,7 +18,7 @@ export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<S
       } else {
         // It's a filename, get public URL from storage
         const { data: artworkPublicUrl } = supabase.storage
-          .from('graphics')
+          .from('artwork')
           .getPublicUrl(trackData.artwork_url);
         
         if (artworkPublicUrl) {
@@ -81,7 +81,7 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
             } else {
               // It's a filename, get public URL from storage
               const { data: artworkPublicUrl } = supabase.storage
-                .from('graphics')
+                .from('artwork')
                 .getPublicUrl(trackUrlData.artwork_url);
               
               if (artworkPublicUrl?.publicUrl) {
