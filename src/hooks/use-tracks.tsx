@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./use-toast";
@@ -28,7 +29,7 @@ export function useTracks() {
 
   const fetchTrackUrls = async (trackIds: string[]) => {
     try {
-      console.log('Fetching all track URLs from Supabase');
+      console.log('🔍 Starting fetchTrackUrls...');
       
       // Changed to fetch ALL tracks from track_urls table
       const { data: urlsData, error: urlsError } = await supabase
@@ -36,15 +37,19 @@ export function useTracks() {
         .select('*');
 
       if (urlsError) {
-        console.error('Error fetching track URLs:', urlsError);
+        console.error('❌ Error fetching track URLs:', urlsError);
         return null;
       }
 
-      console.log('Received track URLs data:', urlsData);
+      console.log('✅ Raw track URLs data from database:', urlsData);
+      console.log('📊 Number of tracks found:', urlsData?.length || 0);
 
       const urlsMap: Record<string, TrackUrls> = {};
       
       for (const track of urlsData || []) {
+        console.log(`🎵 Processing track: "${track.track_name}" (ID: ${track.spotify_track_id})`);
+        console.log(`🖼️ Artwork URL from DB: ${track.artwork_url}`);
+        
         let mp3Url = null;
         if (track.mp3_url) {
           const { data: publicUrl } = supabase.storage
@@ -59,7 +64,7 @@ export function useTracks() {
             pathParts[pathParts.length - 1] = encryptedFileName;
             url.pathname = pathParts.join('/');
             mp3Url = url.toString();
-            console.log('Generated encrypted URL for', track.spotify_track_id, ':', mp3Url);
+            console.log('🔊 Generated encrypted MP3 URL for', track.spotify_track_id, ':', mp3Url);
           }
         }
 
@@ -73,7 +78,7 @@ export function useTracks() {
           
           if (artworkPublicUrl) {
             artworkUrl = artworkPublicUrl.publicUrl;
-            console.log('Generated artwork URL for', track.spotify_track_id, ':', artworkUrl);
+            console.log('🖼️ Generated artwork URL for', track.spotify_track_id, ':', artworkUrl);
           }
         }
 
@@ -82,13 +87,16 @@ export function useTracks() {
           mp3_url: mp3Url,
           artwork_url: artworkUrl
         };
+        
+        console.log(`✅ Track "${track.track_name}" processed with artwork: ${artworkUrl}`);
       }
 
-      console.log('Final track URLs map:', urlsMap);
+      console.log('🗺️ Final track URLs map:', urlsMap);
+      console.log('📈 Total tracks in map:', Object.keys(urlsMap).length);
       setTrackUrls(urlsMap);
       return urlsMap;
     } catch (error) {
-      console.error('Error in fetchTrackUrls:', error);
+      console.error('💥 Error in fetchTrackUrls:', error);
       return null;
     }
   };
@@ -114,8 +122,11 @@ export function useTracks() {
   const loadTracks = async () => {
     try {
       setIsLoading(true);
+      console.log('🚀 Starting loadTracks...');
+      
       const credentialsLoaded = await loadSpotifyCredentials();
       if (!credentialsLoaded) {
+        console.error('❌ Failed to load Spotify credentials');
         toast({
           title: "Error",
           description: "Failed to load Spotify credentials. Please check your Supabase secrets.",
@@ -125,21 +136,33 @@ export function useTracks() {
         return;
       }
 
+      console.log('✅ Spotify credentials loaded');
+
       // First fetch track URLs from Supabase
       const urlsMap = await fetchTrackUrls([]);
+      console.log('📊 URLs map result:', urlsMap ? 'Success' : 'Failed');
       
       // Then fetch tracks from Spotify
       const fetchedTracks = await fetchArtistTopTracks();
-      console.log('Fetched Spotify tracks:', fetchedTracks);
+      console.log('🎵 Fetched Spotify tracks:', fetchedTracks?.length || 0, 'tracks');
       
       // Combine Spotify tracks with custom tracks from database
       const combinedTracks: SpotifyTrack[] = [];
       
       // Add Spotify tracks that have URLs in our database
       if (fetchedTracks.length > 0 && urlsMap) {
-        const tracksWithUrls = fetchedTracks.filter(track => urlsMap[track.id]);
+        const tracksWithUrls = fetchedTracks.filter(track => {
+          const hasUrls = urlsMap[track.id];
+          console.log(`🔍 Track "${track.name}" (${track.id}) has URLs: ${!!hasUrls}`);
+          return hasUrls;
+        });
+        
+        console.log('📋 Spotify tracks with URLs:', tracksWithUrls.length);
+        
         combinedTracks.push(...tracksWithUrls.map(track => {
           const trackUrlData = urlsMap[track.id];
+          console.log(`🎨 Using artwork for "${track.name}":`, trackUrlData.artwork_url || 'Spotify default');
+          
           return {
             ...track,
             // Use custom artwork if available, otherwise use Spotify's
@@ -161,13 +184,22 @@ export function useTracks() {
       if (urlsMap) {
         const spotifyTrackIds = new Set(fetchedTracks.map(track => track.id));
         const customTracks = Object.values(urlsMap)
-          .filter(trackData => !spotifyTrackIds.has(trackData.spotify_track_id))
+          .filter(trackData => {
+            const isCustom = !spotifyTrackIds.has(trackData.spotify_track_id);
+            if (isCustom) {
+              console.log(`🎭 Found custom track: "${trackData.track_name}"`);
+            }
+            return isCustom;
+          })
           .map(trackData => createCustomTrackFromUrls(trackData));
         
+        console.log('🎭 Custom tracks added:', customTracks.length);
         combinedTracks.push(...customTracks);
       }
       
-      console.log('Final combined tracks:', combinedTracks);
+      console.log('🎯 Final combined tracks:', combinedTracks.length);
+      console.log('📋 Track list:', combinedTracks.map(t => `"${t.name}" - ${t.album.images[0]?.url ? 'Has artwork' : 'No artwork'}`));
+      
       setTracks(combinedTracks);
       
       // Set initial random track if we have any tracks
@@ -175,7 +207,8 @@ export function useTracks() {
         const randomIndex = Math.floor(Math.random() * combinedTracks.length);
         const randomTrack = combinedTracks[randomIndex];
         const randomTrackUrls = urlsMap[randomTrack.id];
-        console.log('Setting initial random track with URLs:', randomTrackUrls);
+        console.log('🎲 Setting initial random track:', randomTrack.name);
+        console.log('🔗 Track URLs:', randomTrackUrls);
         
         setCurrentTrackIndex(randomIndex);
         setCurrentTrack({
@@ -194,7 +227,7 @@ export function useTracks() {
         });
       }
     } catch (error) {
-      console.error('Error loading tracks:', error);
+      console.error('💥 Error loading tracks:', error);
       toast({
         title: "Error",
         description: "Failed to load tracks. Please try again later.",
