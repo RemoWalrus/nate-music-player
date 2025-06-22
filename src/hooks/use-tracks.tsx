@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./use-toast";
@@ -64,9 +63,23 @@ export function useTracks() {
           }
         }
 
+        // Handle custom artwork URLs from Supabase storage
+        let artworkUrl = null;
+        if (track.artwork_url) {
+          const { data: artworkPublicUrl } = supabase.storage
+            .from('graphics')
+            .getPublicUrl(track.artwork_url);
+          
+          if (artworkPublicUrl) {
+            artworkUrl = artworkPublicUrl.publicUrl;
+            console.log('Generated artwork URL for', track.spotify_track_id, ':', artworkUrl);
+          }
+        }
+
         urlsMap[track.spotify_track_id] = {
           ...track,
-          mp3_url: mp3Url
+          mp3_url: mp3Url,
+          artwork_url: artworkUrl
         };
       }
 
@@ -126,6 +139,13 @@ export function useTracks() {
         const tracksWithUrls = fetchedTracks.filter(track => urlsMap[track.id]);
         combinedTracks.push(...tracksWithUrls.map(track => ({
           ...track,
+          // Override album artwork if custom artwork is available
+          album: {
+            ...track.album,
+            images: urlsMap[track.id]?.artwork_url 
+              ? [{ url: urlsMap[track.id].artwork_url }]
+              : track.album.images
+          },
           youtubeUrl: urlsMap[track.id]?.youtube_music_url || null,
           spotifyUrl: track.external_urls?.spotify || null,
           appleMusicUrl: urlsMap[track.id]?.apple_music_url || null,
