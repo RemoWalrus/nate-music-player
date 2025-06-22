@@ -1,13 +1,28 @@
 
 import { fetchArtistTopTracks } from "./spotify";
+import { supabase } from "@/integrations/supabase/client";
 import type { SpotifyTrack, TrackUrls } from "../types/music";
 
-export const createCustomTrackFromUrls = (trackData: TrackUrls): SpotifyTrack => {
+export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<SpotifyTrack> => {
+  let artworkUrl = '/placeholder.svg';
+  
+  // Handle custom artwork URLs from Supabase storage
+  if (trackData.artwork_url) {
+    const { data: artworkPublicUrl } = supabase.storage
+      .from('graphics')
+      .getPublicUrl(trackData.artwork_url);
+    
+    if (artworkPublicUrl) {
+      artworkUrl = artworkPublicUrl.publicUrl;
+      console.log('Generated artwork URL for custom track:', trackData.spotify_track_id, ':', artworkUrl);
+    }
+  }
+
   return {
     id: trackData.spotify_track_id,
     name: trackData.track_name || 'Unknown Track',
     album: {
-      images: [{ url: trackData.artwork_url || '/placeholder.svg' }]
+      images: [{ url: artworkUrl }]
     },
     artists: [{ name: trackData.artist_name || 'Unknown Artist' }],
     preview_url: null,
@@ -29,31 +44,47 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
   
   // Add Spotify tracks that have URLs in our database
   if (fetchedTracks.length > 0 && urlsMap) {
-    const tracksWithUrls = fetchedTracks.filter(track => urlsMap[track.id]);
-    combinedTracks.push(...tracksWithUrls.map(track => ({
-      ...track,
-      // Override album artwork if custom artwork is available
-      album: {
-        ...track.album,
-        images: urlsMap[track.id]?.artwork_url 
-          ? [{ url: urlsMap[track.id].artwork_url }]
-          : track.album.images
-      },
-      youtubeUrl: urlsMap[track.id]?.youtube_music_url || null,
-      spotifyUrl: track.external_urls?.spotify || null,
-      appleMusicUrl: urlsMap[track.id]?.apple_music_url || null,
-      amazonMusicUrl: urlsMap[track.id]?.amazon_music_url || null,
-      permalink: urlsMap[track.id]?.permalink || ''
-    })));
+    for (const track of fetchedTracks) {
+      if (urlsMap[track.id]) {
+        const trackUrlData = urlsMap[track.id];
+        let finalAlbumImages = track.album.images;
+        
+        // Override album artwork if custom artwork is available
+        if (trackUrlData.artwork_url) {
+          const { data: artworkPublicUrl } = supabase.storage
+            .from('graphics')
+            .getPublicUrl(trackUrlData.artwork_url);
+          
+          if (artworkPublicUrl) {
+            finalAlbumImages = [{ url: artworkPublicUrl.publicUrl }];
+            console.log('Using custom artwork for Spotify track:', track.id, ':', artworkPublicUrl.publicUrl);
+          }
+        }
+        
+        combinedTracks.push({
+          ...track,
+          album: {
+            ...track.album,
+            images: finalAlbumImages
+          },
+          youtubeUrl: trackUrlData.youtube_music_url || null,
+          spotifyUrl: track.external_urls?.spotify || null,
+          appleMusicUrl: trackUrlData.apple_music_url || null,
+          amazonMusicUrl: trackUrlData.amazon_music_url || null,
+          permalink: trackUrlData.permalink || ''
+        });
+      }
+    }
   }
   
   // Add custom tracks that don't have Spotify counterparts
   if (urlsMap) {
     const spotifyTrackIds = new Set(fetchedTracks.map(track => track.id));
-    const customTracks = Object.values(urlsMap)
+    const customTracksPromises = Object.values(urlsMap)
       .filter(trackData => !spotifyTrackIds.has(trackData.spotify_track_id))
       .map(trackData => createCustomTrackFromUrls(trackData));
     
+    const customTracks = await Promise.all(customTracksPromises);
     combinedTracks.push(...customTracks);
   }
   

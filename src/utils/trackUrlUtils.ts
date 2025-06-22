@@ -39,23 +39,12 @@ export const fetchTrackUrls = async (): Promise<Record<string, TrackUrls> | null
         }
       }
 
-      // Handle custom artwork URLs from Supabase storage
-      let artworkUrl = null;
-      if (track.artwork_url) {
-        const { data: artworkPublicUrl } = supabase.storage
-          .from('graphics')
-          .getPublicUrl(track.artwork_url);
-        
-        if (artworkPublicUrl) {
-          artworkUrl = artworkPublicUrl.publicUrl;
-          console.log('Generated artwork URL for', track.spotify_track_id, ':', artworkUrl);
-        }
-      }
-
+      // Store the original artwork_url filename, don't convert to public URL here
+      // The public URL conversion will be done in trackCombiner.ts when needed
       urlsMap[track.spotify_track_id] = {
         ...track,
         mp3_url: mp3Url,
-        artwork_url: artworkUrl
+        artwork_url: track.artwork_url // Keep original filename
       };
     }
 
