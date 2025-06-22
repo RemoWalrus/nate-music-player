@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./use-toast";
@@ -64,9 +63,24 @@ export function useTracks() {
           }
         }
 
+        // Handle custom artwork URLs from Supabase storage
+        let artworkUrl = track.artwork_url;
+        if (track.artwork_url && !track.artwork_url.startsWith('http')) {
+          // If artwork_url is just a filename, get the full URL from storage
+          const { data: artworkPublicUrl } = supabase.storage
+            .from('graphics')
+            .getPublicUrl(track.artwork_url);
+          
+          if (artworkPublicUrl) {
+            artworkUrl = artworkPublicUrl.publicUrl;
+            console.log('Generated artwork URL for', track.spotify_track_id, ':', artworkUrl);
+          }
+        }
+
         urlsMap[track.spotify_track_id] = {
           ...track,
-          mp3_url: mp3Url
+          mp3_url: mp3Url,
+          artwork_url: artworkUrl
         };
       }
 
@@ -124,14 +138,23 @@ export function useTracks() {
       // Add Spotify tracks that have URLs in our database
       if (fetchedTracks.length > 0 && urlsMap) {
         const tracksWithUrls = fetchedTracks.filter(track => urlsMap[track.id]);
-        combinedTracks.push(...tracksWithUrls.map(track => ({
-          ...track,
-          youtubeUrl: urlsMap[track.id]?.youtube_music_url || null,
-          spotifyUrl: track.external_urls?.spotify || null,
-          appleMusicUrl: urlsMap[track.id]?.apple_music_url || null,
-          amazonMusicUrl: urlsMap[track.id]?.amazon_music_url || null,
-          permalink: urlsMap[track.id]?.permalink || ''
-        })));
+        combinedTracks.push(...tracksWithUrls.map(track => {
+          const trackUrlData = urlsMap[track.id];
+          return {
+            ...track,
+            // Use custom artwork if available, otherwise use Spotify's
+            album: {
+              images: trackUrlData.artwork_url 
+                ? [{ url: trackUrlData.artwork_url }]
+                : track.album.images
+            },
+            youtubeUrl: trackUrlData?.youtube_music_url || null,
+            spotifyUrl: track.external_urls?.spotify || null,
+            appleMusicUrl: trackUrlData?.apple_music_url || null,
+            amazonMusicUrl: trackUrlData?.amazon_music_url || null,
+            permalink: trackUrlData?.permalink || ''
+          };
+        }));
       }
       
       // Add custom tracks that don't have Spotify counterparts
