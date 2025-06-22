@@ -21,6 +21,8 @@ export const fetchTrackUrls = async (): Promise<Record<string, TrackUrls> | null
     const urlsMap: Record<string, TrackUrls> = {};
     
     for (const track of urlsData || []) {
+      console.log('Processing track URL data:', track);
+      
       let mp3Url = null;
       if (track.mp3_url) {
         const { data: publicUrl } = supabase.storage
@@ -41,6 +43,7 @@ export const fetchTrackUrls = async (): Promise<Record<string, TrackUrls> | null
 
       // Store the original artwork_url filename, don't convert to public URL here
       // The public URL conversion will be done in trackCombiner.ts when needed
+      console.log('Storing artwork_url as:', track.artwork_url);
       urlsMap[track.spotify_track_id] = {
         ...track,
         mp3_url: mp3Url,
