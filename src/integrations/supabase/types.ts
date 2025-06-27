@@ -135,6 +135,7 @@ export type Database = {
       track_urls: {
         Row: {
           album: string | null
+          album_cover: string | null
           amazon_music_url: string | null
           apple_music_url: string | null
           artist_name: string | null
@@ -152,6 +153,7 @@ export type Database = {
         }
         Insert: {
           album?: string | null
+          album_cover?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null
@@ -169,6 +171,7 @@ export type Database = {
         }
         Update: {
           album?: string | null
+          album_cover?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null

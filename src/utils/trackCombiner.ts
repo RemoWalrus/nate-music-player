@@ -1,3 +1,4 @@
+
 import { fetchArtistTopTracks } from "./spotify";
 import { supabase } from "@/integrations/supabase/client";
 import type { SpotifyTrack, TrackUrls } from "../types/music";
@@ -6,20 +7,24 @@ export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<S
   let artworkUrl = '/placeholder.svg';
   
   console.log('Creating custom track from URLs:', trackData);
-  console.log('Artwork URL from data:', trackData.artwork_url);
+  
+  // Prioritize album_cover over individual artwork_url
+  const imageSource = trackData.album_cover || trackData.artwork_url;
+  console.log('Image source for custom track:', trackData.spotify_track_id, ':', imageSource);
   
   // Handle custom artwork URLs from Supabase storage
-  if (trackData.artwork_url) {
+  if (imageSource) {
     try {
       // Check if it's already a full URL
-      if (trackData.artwork_url.startsWith('http')) {
-        artworkUrl = trackData.artwork_url;
+      if (imageSource.startsWith('http')) {
+        artworkUrl = imageSource;
         console.log('Using full URL for custom track:', trackData.spotify_track_id, ':', artworkUrl);
       } else {
         // It's a filename, get public URL from storage
+        const bucketName = trackData.album_cover ? 'artwork' : 'artwork';
         const { data: artworkPublicUrl } = supabase.storage
-          .from('artwork')
-          .getPublicUrl(trackData.artwork_url);
+          .from(bucketName)
+          .getPublicUrl(imageSource);
         
         if (artworkPublicUrl) {
           artworkUrl = artworkPublicUrl.publicUrl;
@@ -30,7 +35,7 @@ export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<S
       console.error('Exception getting artwork URL:', error);
     }
   } else {
-    console.log('No artwork_url found for track:', trackData.spotify_track_id);
+    console.log('No artwork_url or album_cover found for track:', trackData.spotify_track_id);
   }
 
   // Better fallback handling for track name and artist
@@ -72,23 +77,27 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
         
         console.log('Processing Spotify track:', track.id, 'with URL data:', trackUrlData);
         console.log('Track name:', track.name);
-        console.log('Original artwork_url from database:', trackUrlData.artwork_url);
+        console.log('Album cover from database:', trackUrlData.album_cover);
+        console.log('Individual artwork_url from database:', trackUrlData.artwork_url);
         console.log('Default Spotify artwork:', track.album.images[0]?.url);
         
+        // Prioritize album_cover, then individual artwork_url
+        const imageSource = trackUrlData.album_cover || trackUrlData.artwork_url;
+        
         // Only override if we have custom artwork AND it's valid
-        if (trackUrlData.artwork_url) {
+        if (imageSource) {
           try {
             let customArtworkUrl = null;
             
             // Check if it's already a full URL
-            if (trackUrlData.artwork_url.startsWith('http')) {
-              customArtworkUrl = trackUrlData.artwork_url;
+            if (imageSource.startsWith('http')) {
+              customArtworkUrl = imageSource;
               console.log('Using full URL for Spotify track:', track.id, ':', customArtworkUrl);
             } else {
               // It's a filename, get public URL from storage
               const { data: artworkPublicUrl } = supabase.storage
                 .from('artwork')
-                .getPublicUrl(trackUrlData.artwork_url);
+                .getPublicUrl(imageSource);
               
               if (artworkPublicUrl?.publicUrl) {
                 customArtworkUrl = artworkPublicUrl.publicUrl;
@@ -99,7 +108,7 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
             // Only use custom artwork if we successfully got a URL
             if (customArtworkUrl) {
               finalAlbumImages = [{ url: customArtworkUrl }];
-              console.log('Using custom artwork for track:', track.name);
+              console.log('Using custom artwork for track:', track.name, '(album_cover priority)');
             } else {
               console.log('Failed to get custom artwork, using Spotify artwork for:', track.name);
             }
