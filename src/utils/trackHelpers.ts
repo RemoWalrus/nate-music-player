@@ -20,7 +20,8 @@ export const createTrackFromSpotify = (
     spotifyUrl: track.external_urls?.spotify || null,
     appleMusicUrl: trackUrlData?.apple_music_url || null,
     amazonMusicUrl: trackUrlData?.amazon_music_url || null,
-    permalink: trackUrlData?.permalink || ''
+    permalink: trackUrlData?.permalink || '',
+    trackNumber: trackUrlData?.track_number
   };
 };
 

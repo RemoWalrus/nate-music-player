@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
@@ -20,12 +21,20 @@ const ChipotleAlbum = () => {
     trackUrls
   } = useTracks();
 
-  // Filter tracks for Chipotle album only using the new album column
-  const chipotleTracks = tracks.filter(track => {
-    const trackUrlData = trackUrls[track.id];
-    return trackUrlData?.album?.toLowerCase() === 'chipotle' || 
-           track.name.toLowerCase().includes('chipotle');
-  });
+  // Filter and sort tracks for Chipotle album only using the new album column
+  const chipotleTracks = tracks
+    .filter(track => {
+      const trackUrlData = trackUrls[track.id];
+      return trackUrlData?.album?.toLowerCase() === 'chipotle' || 
+             track.name.toLowerCase().includes('chipotle');
+    })
+    .sort((a, b) => {
+      const trackUrlDataA = trackUrls[a.id];
+      const trackUrlDataB = trackUrls[b.id];
+      const trackNumberA = trackUrlDataA?.track_number || 999;
+      const trackNumberB = trackUrlDataB?.track_number || 999;
+      return trackNumberA - trackNumberB;
+    });
 
   useEffect(() => {
     loadTracks();
@@ -106,7 +115,7 @@ const ChipotleAlbum = () => {
               Chipotle
             </h1>
             <p className="text-lg" style={{ color: textColor }}>
-              Album by Nathan Garcia
+              Album by Nathan Garcia • {chipotleTracks.length} tracks
             </p>
           </div>
 
@@ -123,6 +132,8 @@ const ChipotleAlbum = () => {
             tracks={chipotleTracks}
             onTrackSelect={handleTrackSelect}
             currentTrackId={currentTrack?.id || ""}
+            showTrackNumbers={true}
+            trackUrls={trackUrls}
           />
           
           <footer 

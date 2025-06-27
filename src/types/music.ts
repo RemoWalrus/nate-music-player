@@ -1,3 +1,4 @@
+
 export interface SpotifyTrack {
   id: string;
   name: string;
@@ -29,6 +30,7 @@ export interface TrackUrls {
   permalink?: string;
   album?: string;
   single?: string;
+  track_number?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -46,4 +48,5 @@ export interface Track {
   appleMusicUrl: string | null;
   amazonMusicUrl: string | null;
   permalink: string;
+  trackNumber?: number;
 }

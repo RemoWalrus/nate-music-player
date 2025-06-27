@@ -14,10 +14,30 @@ interface SpotifyTrack {
   amazonMusicUrl?: string;
 }
 
+interface TrackUrls {
+  id: string;
+  spotify_track_id: string;
+  youtube_music_url?: string;
+  apple_music_url?: string;
+  amazon_music_url?: string;
+  mp3_url?: string;
+  track_name?: string;
+  artist_name?: string;
+  artwork_url?: string;
+  permalink?: string;
+  album?: string;
+  single?: string;
+  track_number?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 interface PlaylistProps {
   tracks: SpotifyTrack[];
   onTrackSelect: (track: SpotifyTrack) => void;
   currentTrackId: string;
+  showTrackNumbers?: boolean;
+  trackUrls?: Record<string, TrackUrls>;
 }
 
 declare global {
@@ -26,7 +46,13 @@ declare global {
   }
 }
 
-const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
+const Playlist = ({ 
+  tracks, 
+  onTrackSelect, 
+  currentTrackId, 
+  showTrackNumbers = false,
+  trackUrls = {}
+}: PlaylistProps) => {
   if (!tracks || tracks.length === 0) {
     return (
       <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
@@ -102,6 +128,8 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
       <div className="space-y-2">
         {tracks.map((track) => {
           const platformLinks = getPlatformLinks(track);
+          const trackUrlData = trackUrls[track.id];
+          const trackNumber = trackUrlData?.track_number;
           
           return (
             <div
@@ -113,6 +141,13 @@ const Playlist = ({ tracks, onTrackSelect, currentTrackId }: PlaylistProps) => {
               }`}
             >
               <div className="flex items-center gap-3">
+                {showTrackNumbers && trackNumber && (
+                  <div className="w-6 text-center">
+                    <span className="text-white/70 text-sm font-medium">
+                      {trackNumber}
+                    </span>
+                  </div>
+                )}
                 <img
                   src={track.album.images[0]?.url}
                   alt={track.name}

@@ -146,6 +146,7 @@ export type Database = {
           single: string | null
           spotify_track_id: string
           track_name: string | null
+          track_number: number | null
           updated_at: string | null
           youtube_music_url: string | null
         }
@@ -162,6 +163,7 @@ export type Database = {
           single?: string | null
           spotify_track_id: string
           track_name?: string | null
+          track_number?: number | null
           updated_at?: string | null
           youtube_music_url?: string | null
         }
@@ -178,6 +180,7 @@ export type Database = {
           single?: string | null
           spotify_track_id?: string
           track_name?: string | null
+          track_number?: number | null
           updated_at?: string | null
           youtube_music_url?: string | null
         }
