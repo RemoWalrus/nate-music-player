@@ -33,13 +33,19 @@ export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<S
     console.log('No artwork_url found for track:', trackData.spotify_track_id);
   }
 
+  // Better fallback handling for track name and artist
+  const trackName = trackData.track_name || `Track ${trackData.spotify_track_id}`;
+  const artistName = trackData.artist_name || 'Nathan Garcia';
+  
+  console.log('Creating track with name:', trackName, 'artist:', artistName);
+
   return {
     id: trackData.spotify_track_id,
-    name: trackData.track_name || 'Unknown Track',
+    name: trackName,
     album: {
       images: [{ url: artworkUrl }]
     },
-    artists: [{ name: trackData.artist_name || 'Unknown Artist' }],
+    artists: [{ name: artistName }],
     preview_url: null,
     external_urls: {},
     youtubeUrl: trackData.youtube_music_url,
