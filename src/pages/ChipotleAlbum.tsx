@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
@@ -22,8 +21,7 @@ const ChipotleAlbum = () => {
 
   // Filter tracks for Chipotle album only
   const chipotleTracks = tracks.filter(track => 
-    track.name.toLowerCase().includes('chipotle') || 
-    track.album?.name?.toLowerCase().includes('chipotle')
+    track.name.toLowerCase().includes('chipotle')
   );
 
   useEffect(() => {
