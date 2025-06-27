@@ -16,13 +16,16 @@ const ChipotleAlbum = () => {
     handleTrackSelect,
     handlePrevTrack,
     handleNextTrack,
-    loadTracks
+    loadTracks,
+    trackUrls
   } = useTracks();
 
-  // Filter tracks for Chipotle album only
-  const chipotleTracks = tracks.filter(track => 
-    track.name.toLowerCase().includes('chipotle')
-  );
+  // Filter tracks for Chipotle album only using the new album column
+  const chipotleTracks = tracks.filter(track => {
+    const trackUrlData = trackUrls[track.id];
+    return trackUrlData?.album?.toLowerCase() === 'chipotle' || 
+           track.name.toLowerCase().includes('chipotle');
+  });
 
   useEffect(() => {
     loadTracks();

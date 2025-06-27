@@ -1,4 +1,3 @@
-
 export interface SpotifyTrack {
   id: string;
   name: string;
@@ -18,15 +17,20 @@ export interface SpotifyTrack {
 }
 
 export interface TrackUrls {
+  id: string;
   spotify_track_id: string;
-  track_name: string | null;
-  artist_name: string | null;
-  artwork_url: string | null;
-  mp3_url: string | null;
-  youtube_music_url: string | null;
-  apple_music_url: string | null;
-  amazon_music_url: string | null;
-  permalink: string | null;
+  youtube_music_url?: string;
+  apple_music_url?: string;
+  amazon_music_url?: string;
+  mp3_url?: string;
+  track_name?: string;
+  artist_name?: string;
+  artwork_url?: string;
+  permalink?: string;
+  album?: string;
+  single?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Track {

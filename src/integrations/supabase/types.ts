@@ -134,6 +134,7 @@ export type Database = {
       }
       track_urls: {
         Row: {
+          album: string | null
           amazon_music_url: string | null
           apple_music_url: string | null
           artist_name: string | null
@@ -142,12 +143,14 @@ export type Database = {
           id: string
           mp3_url: string | null
           permalink: string | null
+          single: string | null
           spotify_track_id: string
           track_name: string | null
           updated_at: string | null
           youtube_music_url: string | null
         }
         Insert: {
+          album?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null
@@ -156,12 +159,14 @@ export type Database = {
           id?: string
           mp3_url?: string | null
           permalink?: string | null
+          single?: string | null
           spotify_track_id: string
           track_name?: string | null
           updated_at?: string | null
           youtube_music_url?: string | null
         }
         Update: {
+          album?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null
@@ -170,6 +175,7 @@ export type Database = {
           id?: string
           mp3_url?: string | null
           permalink?: string | null
+          single?: string | null
           spotify_track_id?: string
           track_name?: string | null
           updated_at?: string | null

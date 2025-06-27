@@ -109,6 +109,7 @@ export function useTracks() {
     handleTrackSelect,
     handlePrevTrack,
     handleNextTrack,
-    loadTracks
+    loadTracks,
+    trackUrls
   };
 }
