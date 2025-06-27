@@ -12,10 +12,11 @@ The Nathan Garcia Music website is a dynamic platform showcasing Nathan's musica
 1. **Music Player**: An interactive player that streams Nathan's tracks with playback controls.
 2. **Artist Sidebar**: Displays artist information, bio, and links to social platforms.
 3. **Playlist View**: Lists all available tracks with easy selection.
-4. **Dynamic Background**: Changes based on the currently playing track.
+4. **Dynamic Background**: Changes based on the currently playing track's album artwork.
 5. **Responsive Design**: Optimized for both desktop and mobile devices.
 6. **SEO Optimization**: Includes sitemap.xml, robots.txt, and dynamic metadata.
 7. **External Platform Links**: Integration with Spotify, YouTube Music, and Apple Music.
+8. **Custom Artwork Support**: Tracks can use custom artwork stored in Supabase storage.
 
 ## How to Update and Maintain the Site
 
@@ -52,37 +53,55 @@ To add new tracks to the player:
    - `spotify_track_id`: The Spotify track ID
    - `youtube_music_url`: Link to the track on YouTube Music (optional)
    - `apple_music_url`: Link to the track on Apple Music (optional)
+   - `amazon_music_url`: Link to the track on Amazon Music (optional)
    - `mp3_url`: The filename of the MP3 in the storage bucket (optional)
-   - `track_name`: Name of the track
-   - `artist_name`: Artist name for the track
+   - `track_name`: Name of the track (will fallback to "Track [ID]" if not provided)
+   - `artist_name`: Artist name for the track (will fallback to "Nathan Garcia" if not provided)
+   - `artwork_url`: Custom artwork filename or URL (optional)
 
 Example SQL:
 ```sql
 INSERT INTO track_urls (
   spotify_track_id, 
+  track_name,
+  artist_name,
   youtube_music_url, 
   apple_music_url,
-  track_name,
-  artist_name
+  amazon_music_url,
+  mp3_url,
+  artwork_url
 )
 VALUES (
   '123456',
+  'Track Name',
+  'Nathan Garcia',
   'https://music.youtube.com/watch?v=...',
   'https://music.apple.com/us/album/...',
-  'Track Name',
-  'Nathan Garcia'
+  'https://music.amazon.com/albums/...',
+  'track-name.mp3',
+  'custom-artwork.jpg'
 );
 ```
 
 ### Adding MP3 Files
 
-If you want to add MP3 files:
+If you want to add MP3 files for full-length playback:
 
 1. Make sure the file is in MP3 format
 2. The file should be high quality (at least 192kbps)
 3. File name should be clear and use only lowercase letters, numbers, and hyphens (e.g., "track-name.mp3")
 4. Upload the file to the 'audio' storage bucket in Supabase
 5. Update the track_urls record with the filename in the mp3_url column
+
+### Adding Custom Artwork
+
+To add custom artwork for tracks:
+
+1. Prepare image file (JPG, PNG recommended)
+2. Use clear filename with lowercase letters, numbers, and hyphens (e.g., "track-artwork.jpg")
+3. Upload the file to the 'artwork' storage bucket in Supabase
+4. Update the track_urls record with the filename in the artwork_url column
+5. The system will automatically use the custom artwork and extract colors for the dynamic background
 
 ### Updating Artist Information
 
@@ -136,6 +155,28 @@ The site tracks two types of events in Google Analytics 4:
 
 View these in GA4 under Reports > Engagement > Events
 
+## Technical Implementation Details
+
+### Track System Architecture
+
+The website uses a hybrid approach for track management:
+
+1. **Spotify Integration**: Fetches basic track metadata from Spotify API
+2. **Custom Database**: Stores additional URLs, custom artwork, and MP3 files in Supabase
+3. **Smart Fallbacks**: Automatically handles missing track information with sensible defaults
+
+### Storage Buckets
+
+- `audio`: Stores MP3 files for full-length track playback
+- `artwork`: Stores custom album artwork images
+
+### Key Features
+
+- **Dynamic Background Colors**: Extracted from album artwork using color.js library
+- **Responsive Design**: Mobile-optimized with collapsible sidebar
+- **Error Handling**: Graceful fallbacks for missing images and track information
+- **SEO Optimization**: Dynamic metadata and proper structured data
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
@@ -179,6 +220,8 @@ This project is built with:
 - Tailwind CSS
 - Supabase (for data storage and file hosting)
 - Google Analytics 4 (for usage tracking)
+- color.js (for dynamic background color extraction)
+- Lucide React (for icons)
 
 ## How can I deploy this project?
 
