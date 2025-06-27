@@ -3,14 +3,21 @@ import { fetchArtistTopTracks } from "./spotify";
 import { supabase } from "@/integrations/supabase/client";
 import type { SpotifyTrack, TrackUrls } from "../types/music";
 
-export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<SpotifyTrack> => {
+export interface TrackCombinerOptions {
+  preferAlbumCover?: boolean;
+}
+
+export const createCustomTrackFromUrls = async (trackData: TrackUrls, options: TrackCombinerOptions = {}): Promise<SpotifyTrack> => {
   let artworkUrl = '/placeholder.svg';
   
   console.log('Creating custom track from URLs:', trackData);
   
-  // Prioritize album_cover over individual artwork_url
-  const imageSource = trackData.album_cover || trackData.artwork_url;
-  console.log('Image source for custom track:', trackData.spotify_track_id, ':', imageSource);
+  // Choose artwork based on options - prioritize album_cover only if explicitly requested
+  const imageSource = options.preferAlbumCover 
+    ? (trackData.album_cover || trackData.artwork_url)
+    : (trackData.artwork_url || trackData.album_cover);
+  
+  console.log('Image source for custom track:', trackData.spotify_track_id, ':', imageSource, 'preferAlbumCover:', options.preferAlbumCover);
   
   // Handle custom artwork URLs from Supabase storage
   if (imageSource) {
@@ -21,7 +28,7 @@ export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<S
         console.log('Using full URL for custom track:', trackData.spotify_track_id, ':', artworkUrl);
       } else {
         // It's a filename, get public URL from storage
-        const bucketName = trackData.album_cover ? 'artwork' : 'artwork';
+        const bucketName = 'artwork';
         const { data: artworkPublicUrl } = supabase.storage
           .from(bucketName)
           .getPublicUrl(imageSource);
@@ -61,7 +68,7 @@ export const createCustomTrackFromUrls = async (trackData: TrackUrls): Promise<S
   };
 };
 
-export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> | null): Promise<SpotifyTrack[]> => {
+export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> | null, options: TrackCombinerOptions = {}): Promise<SpotifyTrack[]> => {
   const combinedTracks: SpotifyTrack[] = [];
   
   // Fetch tracks from Spotify
@@ -80,9 +87,12 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
         console.log('Album cover from database:', trackUrlData.album_cover);
         console.log('Individual artwork_url from database:', trackUrlData.artwork_url);
         console.log('Default Spotify artwork:', track.album.images[0]?.url);
+        console.log('Prefer album cover:', options.preferAlbumCover);
         
-        // Prioritize album_cover, then individual artwork_url
-        const imageSource = trackUrlData.album_cover || trackUrlData.artwork_url;
+        // Choose artwork based on options
+        const imageSource = options.preferAlbumCover 
+          ? (trackUrlData.album_cover || trackUrlData.artwork_url)
+          : (trackUrlData.artwork_url || trackUrlData.album_cover);
         
         // Only override if we have custom artwork AND it's valid
         if (imageSource) {
@@ -108,7 +118,8 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
             // Only use custom artwork if we successfully got a URL
             if (customArtworkUrl) {
               finalAlbumImages = [{ url: customArtworkUrl }];
-              console.log('Using custom artwork for track:', track.name, '(album_cover priority)');
+              const artworkType = options.preferAlbumCover ? 'album cover' : 'individual artwork';
+              console.log(`Using ${artworkType} for track:`, track.name);
             } else {
               console.log('Failed to get custom artwork, using Spotify artwork for:', track.name);
             }
@@ -141,7 +152,7 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
     const spotifyTrackIds = new Set(fetchedTracks.map(track => track.id));
     const customTracksPromises = Object.values(urlsMap)
       .filter(trackData => !spotifyTrackIds.has(trackData.spotify_track_id))
-      .map(trackData => createCustomTrackFromUrls(trackData));
+      .map(trackData => createCustomTrackFromUrls(trackData, options));
     
     const customTracks = await Promise.all(customTracksPromises);
     console.log('Created custom tracks:', customTracks);

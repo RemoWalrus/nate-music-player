@@ -10,6 +10,7 @@ const ChipotleAlbum = () => {
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [textColor, setTextColor] = useState("rgba(255, 255, 255, 0.6)");
   const isMobile = useIsMobile();
+  // Album page should prefer album covers for consistent album artwork
   const {
     tracks,
     currentTrack,
@@ -19,7 +20,7 @@ const ChipotleAlbum = () => {
     handleNextTrack,
     loadTracks,
     trackUrls
-  } = useTracks();
+  } = useTracks({ preferAlbumCover: true });
 
   // Filter and sort tracks for Chipotle album only using the new album column
   const chipotleTracks = tracks

@@ -10,6 +10,7 @@ const Index = () => {
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [textColor, setTextColor] = useState("rgba(255, 255, 255, 0.6)");
   const isMobile = useIsMobile();
+  // Homepage should prefer individual track artwork over album covers
   const {
     tracks,
     currentTrack,
@@ -18,7 +19,7 @@ const Index = () => {
     handlePrevTrack,
     handleNextTrack,
     loadTracks
-  } = useTracks();
+  } = useTracks({ preferAlbumCover: false });
 
   useEffect(() => {
     loadTracks();

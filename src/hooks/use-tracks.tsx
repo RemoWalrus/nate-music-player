@@ -3,11 +3,11 @@ import { useState } from "react";
 import { useToast } from "./use-toast";
 import { loadSpotifyCredentials } from "../utils/spotify";
 import { fetchTrackUrls } from "../utils/trackUrlUtils";
-import { combineTracksWithUrls } from "../utils/trackCombiner";
+import { combineTracksWithUrls, TrackCombinerOptions } from "../utils/trackCombiner";
 import { createTrackFromSpotify, getRandomTrackIndex } from "../utils/trackHelpers";
 import type { SpotifyTrack, TrackUrls, Track } from "../types/music";
 
-export function useTracks() {
+export function useTracks(options: TrackCombinerOptions = {}) {
   const { toast } = useToast();
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [trackUrls, setTrackUrls] = useState<Record<string, TrackUrls>>({});
@@ -48,8 +48,8 @@ export function useTracks() {
         setTrackUrls(urlsMap);
       }
       
-      // Combine Spotify tracks with custom tracks from database
-      const combinedTracks = await combineTracksWithUrls(urlsMap);
+      // Combine Spotify tracks with custom tracks from database, passing options
+      const combinedTracks = await combineTracksWithUrls(urlsMap, options);
       setTracks(combinedTracks);
       
       // Set initial random track if we have any tracks
