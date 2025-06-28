@@ -1,5 +1,6 @@
 
 import { ChevronLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface SidebarHeaderProps {
   isCollapsed: boolean;
@@ -23,11 +24,13 @@ export const SidebarHeader = ({ isCollapsed, setIsCollapsed }: SidebarHeaderProp
           </button>
         </div>
         <div className={`${isCollapsed ? "mt-2" : "h-32"} w-full flex flex-col items-center justify-center gap-3`}>
-          <img 
-            src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
-            alt="Nathan Garcia Logo" 
-            className={isCollapsed ? "h-8 w-8" : "h-24 w-32"}
-          />
+          <Link to="/" className="hover:opacity-80 transition-opacity">
+            <img 
+              src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
+              alt="Nathan Garcia Logo" 
+              className={isCollapsed ? "h-8 w-8" : "h-24 w-32"}
+            />
+          </Link>
           {!isCollapsed && (
             <span className="text-[#ED2024] font-medium text-lg">About Nathan Garcia</span>
           )}

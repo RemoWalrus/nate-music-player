@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import { Menu, Disc, Music, Share2, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 import { AlbumPlatformLinks } from "./AlbumPlatformLinks";
 import { useToast } from "@/hooks/use-toast";
 import { Album } from "@/hooks/use-album";
@@ -115,11 +116,13 @@ export const AlbumMobileHeader = ({ album }: AlbumMobileHeaderProps) => {
     <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
-          <img 
-            src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
-            alt="Nathan Garcia Logo" 
-            className="h-8 w-8"
-          />
+          <Link to="/" className="hover:opacity-80 transition-opacity">
+            <img 
+              src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
+              alt="Nathan Garcia Logo" 
+              className="h-8 w-8"
+            />
+          </Link>
           {currentTrack && currentTrack.isPlaying && (
             <span className="text-xs font-medium text-gray-900">
               Now Playing: {currentTrack.name}
