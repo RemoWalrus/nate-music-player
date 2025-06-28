@@ -66,8 +66,9 @@ export const AlbumPlatformLinks = ({ album, className = "" }: AlbumPlatformLinks
   }, [album]);
 
   const handleClick = (platform: string, url: string) => {
-    if (window.gtag) {
-      window.gtag('event', 'external_link_click', {
+    // Type-safe way to check for gtag
+    if (typeof (window as any).gtag === 'function') {
+      (window as any).gtag('event', 'external_link_click', {
         platform: platform,
         album_name: album.name
       });
