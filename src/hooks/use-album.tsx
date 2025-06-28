@@ -10,6 +10,7 @@ export interface Album {
   youtube_music_url: string | null;
   apple_music_url: string | null;
   amazon_music_url: string | null;
+  album_cover: string | null;
 }
 
 export function useAlbum(albumName: string) {

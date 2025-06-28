@@ -11,6 +11,7 @@ const AlbumPage = () => {
   const { albumName } = useParams<{ albumName: string }>();
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [textColor, setTextColor] = useState("rgba(255, 255, 255, 0.6)");
+  const [currentAlbumTrackIndex, setCurrentAlbumTrackIndex] = useState(0);
   const isMobile = useIsMobile();
   
   // Album page should prefer album covers for consistent album artwork
@@ -19,8 +20,6 @@ const AlbumPage = () => {
     currentTrack,
     isLoading,
     handleTrackSelect,
-    handlePrevTrack,
-    handleNextTrack,
     loadTracks,
     trackUrls
   } = useTracks({ preferAlbumCover: true });
@@ -46,6 +45,29 @@ const AlbumPage = () => {
   useEffect(() => {
     loadTracks();
   }, []);
+
+  // Handle album-specific navigation
+  const handleAlbumPrevTrack = () => {
+    if (albumTracks.length === 0) return;
+    const newIndex = (currentAlbumTrackIndex - 1 + albumTracks.length) % albumTracks.length;
+    setCurrentAlbumTrackIndex(newIndex);
+    handleTrackSelect(albumTracks[newIndex]);
+  };
+
+  const handleAlbumNextTrack = () => {
+    if (albumTracks.length === 0) return;
+    const newIndex = (currentAlbumTrackIndex + 1) % albumTracks.length;
+    setCurrentAlbumTrackIndex(newIndex);
+    handleTrackSelect(albumTracks[newIndex]);
+  };
+
+  const handleAlbumTrackSelect = (track: any) => {
+    const newIndex = albumTracks.findIndex(t => t.id === track.id);
+    if (newIndex !== -1) {
+      setCurrentAlbumTrackIndex(newIndex);
+    }
+    handleTrackSelect(track);
+  };
 
   // Calculate relative luminance
   const getLuminance = (r: number, g: number, b: number) => {
@@ -135,14 +157,14 @@ const AlbumPage = () => {
             <MusicPlayer 
               track={currentTrack}
               setBackgroundColor={setBackgroundColor}
-              onPrevTrack={handlePrevTrack}
-              onNextTrack={handleNextTrack}
+              onPrevTrack={handleAlbumPrevTrack}
+              onNextTrack={handleAlbumNextTrack}
             />
           )}
           
           <Playlist 
             tracks={albumTracks}
-            onTrackSelect={handleTrackSelect}
+            onTrackSelect={handleAlbumTrackSelect}
             currentTrackId={currentTrack?.id || ""}
             showTrackNumbers={true}
             trackUrls={trackUrls}

@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       albums: {
         Row: {
+          album_cover: string | null
           amazon_music_url: string | null
           apple_music_url: string | null
           created_at: string
@@ -22,6 +23,7 @@ export type Database = {
           youtube_music_url: string | null
         }
         Insert: {
+          album_cover?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           created_at?: string
@@ -33,6 +35,7 @@ export type Database = {
           youtube_music_url?: string | null
         }
         Update: {
+          album_cover?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           created_at?: string
@@ -171,7 +174,6 @@ export type Database = {
       track_urls: {
         Row: {
           album: string | null
-          album_cover: string | null
           amazon_music_url: string | null
           apple_music_url: string | null
           artist_name: string | null
@@ -189,7 +191,6 @@ export type Database = {
         }
         Insert: {
           album?: string | null
-          album_cover?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null
@@ -207,7 +208,6 @@ export type Database = {
         }
         Update: {
           album?: string | null
-          album_cover?: string | null
           amazon_music_url?: string | null
           apple_music_url?: string | null
           artist_name?: string | null

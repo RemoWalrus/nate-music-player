@@ -31,7 +31,6 @@ export interface TrackUrls {
   album?: string;
   single?: string;
   track_number?: number;
-  album_cover?: string;
   created_at?: string;
   updated_at?: string;
 }

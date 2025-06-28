@@ -12,37 +12,53 @@ export const createCustomTrackFromUrls = async (trackData: TrackUrls, options: T
   
   console.log('Creating custom track from URLs:', trackData);
   
-  // Choose artwork based on options - prioritize album_cover only if explicitly requested
-  const imageSource = options.preferAlbumCover 
-    ? (trackData.album_cover || trackData.artwork_url)
-    : (trackData.artwork_url || trackData.album_cover);
-  
-  console.log('Image source for custom track:', trackData.spotify_track_id, ':', imageSource, 'preferAlbumCover:', options.preferAlbumCover);
-  
-  // Handle custom artwork URLs from Supabase storage
-  if (imageSource) {
+  // For album pages, try to get album cover from albums table
+  if (options.preferAlbumCover && trackData.album) {
     try {
-      // Check if it's already a full URL
-      if (imageSource.startsWith('http')) {
-        artworkUrl = imageSource;
-        console.log('Using full URL for custom track:', trackData.spotify_track_id, ':', artworkUrl);
+      const { data: albumData } = await supabase
+        .from('albums')
+        .select('album_cover')
+        .ilike('name', trackData.album)
+        .single();
+      
+      if (albumData?.album_cover) {
+        console.log('Found album cover from albums table:', albumData.album_cover);
+        // Handle custom artwork URLs from Supabase storage
+        if (albumData.album_cover.startsWith('http')) {
+          artworkUrl = albumData.album_cover;
+        } else {
+          // It's a filename, get public URL from storage
+          const { data: artworkPublicUrl } = supabase.storage
+            .from('artwork')
+            .getPublicUrl(albumData.album_cover);
+          
+          if (artworkPublicUrl) {
+            artworkUrl = artworkPublicUrl.publicUrl;
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching album cover:', error);
+    }
+  }
+  
+  // Fallback to individual artwork if no album cover found
+  if (artworkUrl === '/placeholder.svg' && trackData.artwork_url) {
+    try {
+      if (trackData.artwork_url.startsWith('http')) {
+        artworkUrl = trackData.artwork_url;
       } else {
-        // It's a filename, get public URL from storage
-        const bucketName = 'artwork';
         const { data: artworkPublicUrl } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(imageSource);
+          .from('artwork')
+          .getPublicUrl(trackData.artwork_url);
         
         if (artworkPublicUrl) {
           artworkUrl = artworkPublicUrl.publicUrl;
-          console.log('Generated artwork URL for custom track:', trackData.spotify_track_id, ':', artworkUrl);
         }
       }
     } catch (error) {
       console.error('Exception getting artwork URL:', error);
     }
-  } else {
-    console.log('No artwork_url or album_cover found for track:', trackData.spotify_track_id);
   }
 
   // Better fallback handling for track name and artist
@@ -75,6 +91,27 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
   const fetchedTracks = await fetchArtistTopTracks();
   console.log('Fetched Spotify tracks:', fetchedTracks);
   
+  // Get album covers from albums table for album pages
+  let albumCovers: Record<string, string> = {};
+  if (options.preferAlbumCover) {
+    try {
+      const { data: albumsData } = await supabase
+        .from('albums')
+        .select('name, album_cover');
+      
+      if (albumsData) {
+        albumCovers = albumsData.reduce((acc, album) => {
+          if (album.album_cover) {
+            acc[album.name.toLowerCase()] = album.album_cover;
+          }
+          return acc;
+        }, {} as Record<string, string>);
+      }
+    } catch (error) {
+      console.error('Error fetching album covers:', error);
+    }
+  }
+  
   // Add Spotify tracks that have URLs in our database
   if (fetchedTracks.length > 0 && urlsMap) {
     for (const track of fetchedTracks) {
@@ -83,52 +120,60 @@ export const combineTracksWithUrls = async (urlsMap: Record<string, TrackUrls> |
         let finalAlbumImages = track.album.images; // Default to Spotify artwork
         
         console.log('Processing Spotify track:', track.id, 'with URL data:', trackUrlData);
-        console.log('Track name:', track.name);
-        console.log('Album cover from database:', trackUrlData.album_cover);
-        console.log('Individual artwork_url from database:', trackUrlData.artwork_url);
-        console.log('Default Spotify artwork:', track.album.images[0]?.url);
-        console.log('Prefer album cover:', options.preferAlbumCover);
         
-        // Choose artwork based on options
-        const imageSource = options.preferAlbumCover 
-          ? (trackUrlData.album_cover || trackUrlData.artwork_url)
-          : (trackUrlData.artwork_url || trackUrlData.album_cover);
+        // For album pages, prioritize album cover from albums table
+        if (options.preferAlbumCover && trackUrlData.album) {
+          const albumCover = albumCovers[trackUrlData.album.toLowerCase()];
+          if (albumCover) {
+            try {
+              let customArtworkUrl = null;
+              
+              if (albumCover.startsWith('http')) {
+                customArtworkUrl = albumCover;
+              } else {
+                const { data: artworkPublicUrl } = supabase.storage
+                  .from('artwork')
+                  .getPublicUrl(albumCover);
+                
+                if (artworkPublicUrl?.publicUrl) {
+                  customArtworkUrl = artworkPublicUrl.publicUrl;
+                }
+              }
+              
+              if (customArtworkUrl) {
+                finalAlbumImages = [{ url: customArtworkUrl }];
+                console.log('Using album cover for track:', track.name);
+              }
+            } catch (error) {
+              console.error('Exception getting album cover URL:', error);
+            }
+          }
+        }
         
-        // Only override if we have custom artwork AND it's valid
-        if (imageSource) {
+        // Fallback to individual artwork if no album cover
+        if (finalAlbumImages === track.album.images && trackUrlData.artwork_url) {
           try {
             let customArtworkUrl = null;
             
-            // Check if it's already a full URL
-            if (imageSource.startsWith('http')) {
-              customArtworkUrl = imageSource;
-              console.log('Using full URL for Spotify track:', track.id, ':', customArtworkUrl);
+            if (trackUrlData.artwork_url.startsWith('http')) {
+              customArtworkUrl = trackUrlData.artwork_url;
             } else {
-              // It's a filename, get public URL from storage
               const { data: artworkPublicUrl } = supabase.storage
                 .from('artwork')
-                .getPublicUrl(imageSource);
+                .getPublicUrl(trackUrlData.artwork_url);
               
               if (artworkPublicUrl?.publicUrl) {
                 customArtworkUrl = artworkPublicUrl.publicUrl;
-                console.log('Generated custom artwork URL for Spotify track:', track.id, ':', customArtworkUrl);
               }
             }
             
-            // Only use custom artwork if we successfully got a URL
             if (customArtworkUrl) {
               finalAlbumImages = [{ url: customArtworkUrl }];
-              const artworkType = options.preferAlbumCover ? 'album cover' : 'individual artwork';
-              console.log(`Using ${artworkType} for track:`, track.name);
-            } else {
-              console.log('Failed to get custom artwork, using Spotify artwork for:', track.name);
+              console.log('Using individual artwork for track:', track.name);
             }
           } catch (error) {
-            console.error('Exception getting Spotify track artwork URL, falling back to Spotify artwork:', error);
-            // Keep the default Spotify artwork
+            console.error('Exception getting individual artwork URL:', error);
           }
-        } else {
-          console.log('No custom artwork for Spotify track:', track.id, 'using default Spotify artwork');
         }
         
         combinedTracks.push({
