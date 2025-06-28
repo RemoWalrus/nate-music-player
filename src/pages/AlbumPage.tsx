@@ -6,6 +6,8 @@ import Playlist from "../components/Playlist";
 import { ArtistSidebar } from "../components/ArtistSidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTracks } from "@/hooks/use-tracks";
+import { useAlbum } from "@/hooks/use-album";
+import NotFound from "./NotFound";
 
 const AlbumPage = () => {
   const { albumName } = useParams<{ albumName: string }>();
@@ -13,6 +15,9 @@ const AlbumPage = () => {
   const [textColor, setTextColor] = useState("rgba(255, 255, 255, 0.6)");
   const [currentAlbumTrackIndex, setCurrentAlbumTrackIndex] = useState(0);
   const isMobile = useIsMobile();
+  
+  // Check if album exists in database
+  const { album, isLoading: albumLoading, error: albumError } = useAlbum(albumName || "");
   
   // Album page should prefer album covers for consistent album artwork
   const {
@@ -93,7 +98,12 @@ const AlbumPage = () => {
     return <Navigate to="/404" replace />;
   }
 
-  if (isLoading) {
+  // Show 404 if album doesn't exist in database or has error
+  if (!albumLoading && (albumError || !album)) {
+    return <NotFound />;
+  }
+
+  if (isLoading || albumLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center w-full"
            style={{ backgroundColor }}>
