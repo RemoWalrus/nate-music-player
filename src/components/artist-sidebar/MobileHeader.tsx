@@ -1,11 +1,13 @@
 
-import React, { useState } from "react";
-import { Menu, User, Music, Newspaper, Share2, Mail } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Menu, User, Music, Newspaper, Share2, Mail, Disc } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { useToast } from "@/hooks/use-toast";
 import { SidebarSection } from "../types/sidebar";
 import { useTracks } from "@/hooks/use-tracks";
+import { supabase } from "@/integrations/supabase/client";
+import { Album } from "@/hooks/use-album";
 
 interface MobileHeaderProps {
   artistBio: string;
@@ -18,12 +20,31 @@ const iconMap: { [key: string]: typeof User } = {
   Newspaper,
   Mail,
   Share2,
+  Disk: Disc,
 };
 
 export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [albums, setAlbums] = useState<Album[]>([]);
   const { toast } = useToast();
   const { currentTrack } = useTracks();
+
+  useEffect(() => {
+    const fetchAlbums = async () => {
+      const { data, error } = await supabase
+        .from('albums')
+        .select('*')
+        .order('name');
+      
+      if (error) {
+        console.error('Error fetching albums:', error);
+      } else if (data) {
+        setAlbums(data);
+      }
+    };
+
+    fetchAlbums();
+  }, []);
 
   const handleShare = async () => {
     try {
@@ -89,6 +110,48 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
     }
   };
 
+  const getAlbumsContent = () => {
+    if (albums.length === 0) {
+      return (
+        <div className="space-y-1 text-left">
+          <p className="text-xs text-gray-600">No albums available</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-2 text-left">
+        {albums.map((album) => (
+          <Link
+            key={album.id}
+            to={`/albums/${album.name.toLowerCase()}`}
+            className="block text-xs text-gray-600 hover:text-gray-900 transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {album.name.charAt(0).toUpperCase() + album.name.slice(1)}
+          </Link>
+        ))}
+      </div>
+    );
+  };
+
+  // Insert Albums section before Contact section
+  const sectionsWithAlbums = [...sidebarSections];
+  const contactIndex = sectionsWithAlbums.findIndex(section => section.label === "Contact");
+  
+  if (contactIndex !== -1) {
+    sectionsWithAlbums.splice(contactIndex, 0, {
+      id: 'albums-section',
+      label: albums.length === 1 ? 'Album' : 'Albums',
+      icon: 'Disk',
+      content: '',
+      order_index: contactIndex,
+      is_active: true,
+      created_at: '',
+      updated_at: ''
+    });
+  }
+
   const iconProps = { color: "#ea384c" };
 
   return (
@@ -118,7 +181,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
       {isMobileMenuOpen && (
         <div className="fixed inset-0 top-[61px] bg-white z-50 overflow-y-auto">
           <div className="p-4 space-y-4">
-            {sidebarSections.map((section, index) => {
+            {sectionsWithAlbums.map((section, index) => {
               const Icon = iconMap[section.icon];
               return (
                 <React.Fragment key={section.id}>
@@ -127,7 +190,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
                     <Icon {...iconProps} className="h-5 w-5 shrink-0 mt-1" />
                     <div className="space-y-2 flex-1 text-left">
                       <h3 className="text-xs font-medium text-gray-900">{section.label}</h3>
-                      {getSectionContent(section)}
+                      {section.id === 'albums-section' ? getAlbumsContent() : getSectionContent(section)}
                     </div>
                   </div>
                 </React.Fragment>
