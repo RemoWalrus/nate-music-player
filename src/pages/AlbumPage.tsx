@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import MusicPlayer from "../components/MusicPlayer";
@@ -145,7 +146,7 @@ const AlbumPage = () => {
       <div className="flex flex-1 w-full">
         <ArtistSidebar />
         <div 
-          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-4 relative w-full ${
+          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 relative w-full ${
             isMobile ? "mt-16" : ""
           }`}
           style={{ 
@@ -153,8 +154,8 @@ const AlbumPage = () => {
             background: backgroundColor
           }}
         >
-          <div className="text-center mb-2">
-            <h1 className="text-4xl font-bold mb-1" style={{ color: textColor }}>
+          <div className="text-center mb-4">
+            <h1 className="text-4xl font-bold mb-2" style={{ color: textColor }}>
               {albumDisplayName}
             </h1>
             <p className="text-lg" style={{ color: textColor }}>
