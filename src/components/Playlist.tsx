@@ -61,7 +61,7 @@ const Playlist = ({
 
   if (!tracks || tracks.length === 0) {
     return (
-      <div className={`mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
+      <div className={`mt-4 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
         <p className="text-white text-center">Loading tracks...</p>
       </div>
     );
@@ -130,7 +130,7 @@ const Playlist = ({
   console.log('GTM status:', window.dataLayer ? 'Loaded' : 'Not loaded');
   
   return (
-    <div className={`mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
+    <div className={`mt-4 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
       <div className={`space-y-2 ${isAlbumPage ? 'max-h-96 overflow-y-auto' : ''}`}>
         {tracks.map((track) => {
           const platformLinks = getPlatformLinks(track);

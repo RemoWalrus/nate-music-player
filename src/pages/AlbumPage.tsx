@@ -146,7 +146,7 @@ const AlbumPage = () => {
       <div className="flex flex-1 w-full">
         <ArtistSidebar />
         <div 
-          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-2 relative w-full ${
+          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-1 relative w-full ${
             isMobile ? "mt-16" : ""
           }`}
           style={{ 
@@ -164,7 +164,7 @@ const AlbumPage = () => {
           </div>
 
           {currentTrack && albumTracks.some(track => track.id === currentTrack.id) && (
-            <div className="mb-2">
+            <div className="mb-1">
               <MusicPlayer 
                 track={currentTrack}
                 setBackgroundColor={setBackgroundColor}

@@ -58,7 +58,7 @@ const Index = () => {
       <div className="flex flex-1 w-full">
         <ArtistSidebar />
         <div 
-          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-8 relative w-full ${
+          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-4 relative w-full ${
             isMobile ? "mt-16" : ""
           }`}
           style={{ 
