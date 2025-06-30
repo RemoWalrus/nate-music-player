@@ -101,14 +101,14 @@ const NotFound = () => {
             }
           }
 
-          @keyframes circleReveal {
+          @keyframes maskReveal {
             0% {
-              transform: scale(0);
-              opacity: 0;
+              -webkit-mask-size: 0% 0%;
+              mask-size: 0% 0%;
             }
             100% {
-              transform: scale(1);
-              opacity: 1;
+              -webkit-mask-size: 200% 200%;
+              mask-size: 200% 200%;
             }
           }
           
@@ -139,10 +139,16 @@ const NotFound = () => {
           }
 
           .content-circle {
-            animation: circleReveal 0.6s ease-out forwards;
+            -webkit-mask: radial-gradient(circle at center, black 0%, black 100%);
+            mask: radial-gradient(circle at center, black 0%, black 100%);
+            -webkit-mask-position: center;
+            mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-size: 0% 0%;
+            mask-size: 0% 0%;
+            animation: maskReveal 0.8s ease-out forwards;
             animation-delay: 3.2s;
-            transform: scale(0);
-            opacity: 0;
           }
         `}
       </style>
@@ -150,7 +156,7 @@ const NotFound = () => {
       <div className="drop"></div>
       <div className="splash"></div>
       
-      <div className={`bg-white/95 rounded-full p-20 shadow-2xl text-center max-w-lg mx-4 content-circle`}>
+      <div className="bg-white/95 rounded-full p-20 shadow-2xl text-center max-w-lg mx-4 content-circle">
         <Link to="/" className="hover:opacity-80 transition-opacity mb-8 inline-block">
           <img 
             src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
