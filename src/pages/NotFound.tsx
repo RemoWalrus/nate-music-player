@@ -7,6 +7,7 @@ const NotFound = () => {
   const location = useLocation();
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
   const [errorNumberColor, setErrorNumberColor] = useState("rgb(30, 30, 30)");
+  const [showContent, setShowContent] = useState(false);
 
   // Array of background colors similar to those used by the music player
   const backgroundColors = [
@@ -51,6 +52,13 @@ const NotFound = () => {
     const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
     setBackgroundColor(randomColor);
     setErrorNumberColor(ensureContrast(randomColor));
+
+    // Show content after splash animation completes
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 3200); // Animation takes about 3.2 seconds total
+
+    return () => clearTimeout(timer);
   }, [location.pathname]);
 
   return (
@@ -65,7 +73,7 @@ const NotFound = () => {
               transform: translateY(-100vh) translateX(-50%);
               opacity: 1;
             }
-            90% {
+            85% {
               transform: translateY(calc(50vh - 120px)) translateX(-50%);
               opacity: 1;
             }
@@ -77,19 +85,30 @@ const NotFound = () => {
           
           @keyframes splash {
             0% {
-              transform: translateX(-50%) translateY(-50%) scale(1);
+              transform: translateX(-50%) translateY(-50%) scale(0);
               opacity: 0;
             }
             10% {
               opacity: 1;
             }
             50% {
-              transform: translateX(-50%) translateY(-50%) scale(1.3);
-              opacity: 0.8;
+              transform: translateX(-50%) translateY(-50%) scale(3);
+              opacity: 0.9;
             }
             100% {
-              transform: translateX(-50%) translateY(-50%) scale(1);
+              transform: translateX(-50%) translateY(-50%) scale(8);
               opacity: 0;
+            }
+          }
+
+          @keyframes circleReveal {
+            0% {
+              transform: scale(0);
+              opacity: 0;
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
             }
           }
           
@@ -101,20 +120,28 @@ const NotFound = () => {
             height: 12px;
             background: white;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            animation: dropFall 2s ease-in infinite;
-            animation-delay: 1s;
+            animation: dropFall 2.5s ease-in forwards;
+            animation-delay: 0.5s;
+            opacity: 0;
           }
           
           .splash {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 40px;
-            height: 8px;
-            background: radial-gradient(ellipse, white 0%, transparent 70%);
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, white 0%, transparent 70%);
             border-radius: 50%;
-            animation: splash 0.5s ease-out infinite;
+            animation: splash 0.8s ease-out forwards;
             animation-delay: 2.8s;
+            opacity: 0;
+          }
+
+          .content-circle {
+            animation: circleReveal 0.6s ease-out forwards;
+            animation-delay: 3.2s;
+            transform: scale(0);
             opacity: 0;
           }
         `}
@@ -123,7 +150,7 @@ const NotFound = () => {
       <div className="drop"></div>
       <div className="splash"></div>
       
-      <div className="bg-white/95 rounded-full p-20 shadow-2xl text-center max-w-lg mx-4">
+      <div className={`bg-white/95 rounded-full p-20 shadow-2xl text-center max-w-lg mx-4 content-circle`}>
         <Link to="/" className="hover:opacity-80 transition-opacity mb-8 inline-block">
           <img 
             src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
