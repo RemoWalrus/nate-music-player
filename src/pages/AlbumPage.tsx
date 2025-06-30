@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import MusicPlayer from "../components/MusicPlayer";
@@ -145,7 +146,7 @@ const AlbumPage = () => {
       <div className="flex flex-1 w-full">
         <ArtistSidebar />
         <div 
-          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-4 relative w-full ${
+          className={`flex-1 flex flex-col items-center transition-colors duration-500 ease-in-out p-4 gap-2 relative w-full ${
             isMobile ? "mt-16" : ""
           }`}
           style={{ 
@@ -153,7 +154,7 @@ const AlbumPage = () => {
             background: backgroundColor
           }}
         >
-          <div className="text-center mb-2">
+          <div className="text-center mb-1">
             <h1 className="text-4xl font-bold mb-1" style={{ color: textColor }}>
               {albumDisplayName}
             </h1>
@@ -163,21 +164,25 @@ const AlbumPage = () => {
           </div>
 
           {currentTrack && albumTracks.some(track => track.id === currentTrack.id) && (
-            <MusicPlayer 
-              track={currentTrack}
-              setBackgroundColor={setBackgroundColor}
-              onPrevTrack={handleAlbumPrevTrack}
-              onNextTrack={handleAlbumNextTrack}
-            />
+            <div className="mb-2">
+              <MusicPlayer 
+                track={currentTrack}
+                setBackgroundColor={setBackgroundColor}
+                onPrevTrack={handleAlbumPrevTrack}
+                onNextTrack={handleAlbumNextTrack}
+              />
+            </div>
           )}
           
-          <Playlist 
-            tracks={albumTracks}
-            onTrackSelect={handleAlbumTrackSelect}
-            currentTrackId={currentTrack?.id || ""}
-            showTrackNumbers={true}
-            trackUrls={trackUrls}
-          />
+          <div className="w-full max-w-2xl mx-auto">
+            <Playlist 
+              tracks={albumTracks}
+              onTrackSelect={handleAlbumTrackSelect}
+              currentTrackId={currentTrack?.id || ""}
+              showTrackNumbers={true}
+              trackUrls={trackUrls}
+            />
+          </div>
           
           <footer 
             className="w-full text-center py-4 text-sm font-light mt-auto"

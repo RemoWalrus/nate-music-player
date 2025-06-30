@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { average } from "color.js";
+import { useLocation } from "react-router-dom";
 
 interface AlbumArtProps {
   albumUrl: string;
@@ -11,6 +12,10 @@ const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [imageSrc, setImageSrc] = useState(albumUrl);
   const [hasError, setHasError] = useState(false);
+  const location = useLocation();
+  
+  // Check if we're on an album page
+  const isAlbumPage = location.pathname.startsWith('/album/') || location.pathname === '/chipotle';
 
   useEffect(() => {
     setImageSrc(albumUrl);
@@ -55,7 +60,7 @@ const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
   };
 
   return (
-    <div className="relative w-64 h-64 sm:w-80 sm:h-80">
+    <div className={`relative ${isAlbumPage ? 'w-72 h-72 sm:w-96 sm:h-96' : 'w-64 h-64 sm:w-80 sm:h-80'}`}>
       <img
         ref={imageRef}
         src={imageSrc}

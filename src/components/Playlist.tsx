@@ -1,5 +1,6 @@
 
 import { Play, ExternalLink } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 interface SpotifyTrack {
   id: string;
@@ -53,9 +54,14 @@ const Playlist = ({
   showTrackNumbers = false,
   trackUrls = {}
 }: PlaylistProps) => {
+  const location = useLocation();
+  
+  // Check if we're on an album page
+  const isAlbumPage = location.pathname.startsWith('/album/') || location.pathname === '/chipotle';
+
   if (!tracks || tracks.length === 0) {
     return (
-      <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
+      <div className={`mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
         <p className="text-white text-center">Loading tracks...</p>
       </div>
     );
@@ -124,8 +130,8 @@ const Playlist = ({
   console.log('GTM status:', window.dataLayer ? 'Loaded' : 'Not loaded');
   
   return (
-    <div className="mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl p-4">
-      <div className="space-y-2">
+    <div className={`mt-8 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
+      <div className={`space-y-2 ${isAlbumPage ? 'max-h-96 overflow-y-auto' : ''}`}>
         {tracks.map((track) => {
           const platformLinks = getPlatformLinks(track);
           const trackUrlData = trackUrls[track.id];
@@ -134,7 +140,7 @@ const Playlist = ({
           return (
             <div
               key={track.id}
-              className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+              className={`flex items-center justify-between ${isAlbumPage ? 'p-4' : 'p-3'} rounded-lg transition-colors ${
                 currentTrackId === track.id
                   ? "bg-white/20"
                   : "hover:bg-white/10"
@@ -151,7 +157,7 @@ const Playlist = ({
                 <img
                   src={track.album.images[0]?.url}
                   alt={track.name}
-                  className="w-12 h-12 rounded-md"
+                  className={`${isAlbumPage ? 'w-14 h-14' : 'w-12 h-12'} rounded-md`}
                 />
                 <div className="text-left">
                   <h3 className="text-white font-medium">{track.name}</h3>
