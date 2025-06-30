@@ -92,7 +92,7 @@ const NotFound = () => {
         </Link>
       </div>
 
-      <style>{`
+      <style jsx>{`
         @keyframes drop-fall {
           0% {
             transform: translateY(-100vh) translateX(-50%);
