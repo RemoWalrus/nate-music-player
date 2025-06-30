@@ -1,4 +1,3 @@
-
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -39,7 +38,7 @@ const NotFound = () => {
       className="min-h-screen flex items-center justify-center transition-colors duration-500 ease-in-out"
       style={{ backgroundColor }}
     >
-      <div className="bg-white rounded-full p-12 shadow-2xl text-center max-w-md mx-4">
+      <div className="bg-white/95 rounded-full p-16 shadow-2xl text-center max-w-lg mx-4">
         <Link to="/" className="hover:opacity-80 transition-opacity mb-8 inline-block">
           <img 
             src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
