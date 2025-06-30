@@ -1,3 +1,4 @@
+
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -5,6 +6,7 @@ import { Link } from "react-router-dom";
 const NotFound = () => {
   const location = useLocation();
   const [backgroundColor, setBackgroundColor] = useState("rgb(30, 30, 30)");
+  const [errorNumberColor, setErrorNumberColor] = useState("rgb(30, 30, 30)");
 
   // Array of background colors similar to those used by the music player
   const backgroundColors = [
@@ -22,6 +24,23 @@ const NotFound = () => {
     "rgb(168, 85, 247)"
   ];
 
+  // Function to ensure sufficient contrast
+  const ensureContrast = (color: string) => {
+    const rgb = color.match(/\d+/g);
+    if (!rgb) return color;
+    
+    const [r, g, b] = rgb.map(Number);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    
+    // If the color is too light (luminance > 0.7), darken it
+    if (luminance > 0.7) {
+      const darkenFactor = 0.6;
+      return `rgb(${Math.floor(r * darkenFactor)}, ${Math.floor(g * darkenFactor)}, ${Math.floor(b * darkenFactor)})`;
+    }
+    
+    return color;
+  };
+
   useEffect(() => {
     console.error(
       "404 Error: User attempted to access non-existent route:",
@@ -31,14 +50,80 @@ const NotFound = () => {
     // Set a random background color
     const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
     setBackgroundColor(randomColor);
+    setErrorNumberColor(ensureContrast(randomColor));
   }, [location.pathname]);
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center transition-colors duration-500 ease-in-out"
+      className="min-h-screen flex items-center justify-center transition-colors duration-500 ease-in-out relative overflow-hidden"
       style={{ backgroundColor }}
     >
-      <div className="bg-white/95 rounded-full p-16 shadow-2xl text-center max-w-lg mx-4">
+      <style>
+        {`
+          @keyframes dropFall {
+            0% {
+              transform: translateY(-100vh) translateX(-50%);
+              opacity: 1;
+            }
+            90% {
+              transform: translateY(calc(50vh - 120px)) translateX(-50%);
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(calc(50vh - 100px)) translateX(-50%);
+              opacity: 0;
+            }
+          }
+          
+          @keyframes splash {
+            0% {
+              transform: translateX(-50%) translateY(-50%) scale(1);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            50% {
+              transform: translateX(-50%) translateY(-50%) scale(1.3);
+              opacity: 0.8;
+            }
+            100% {
+              transform: translateX(-50%) translateY(-50%) scale(1);
+              opacity: 0;
+            }
+          }
+          
+          .drop {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 8px;
+            height: 12px;
+            background: white;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: dropFall 2s ease-in infinite;
+            animation-delay: 1s;
+          }
+          
+          .splash {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 8px;
+            background: radial-gradient(ellipse, white 0%, transparent 70%);
+            border-radius: 50%;
+            animation: splash 0.5s ease-out infinite;
+            animation-delay: 2.8s;
+            opacity: 0;
+          }
+        `}
+      </style>
+      
+      <div className="drop"></div>
+      <div className="splash"></div>
+      
+      <div className="bg-white/95 rounded-full p-20 shadow-2xl text-center max-w-lg mx-4">
         <Link to="/" className="hover:opacity-80 transition-opacity mb-8 inline-block">
           <img 
             src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
@@ -46,7 +131,12 @@ const NotFound = () => {
             className="h-24 w-32 mx-auto mb-6"
           />
         </Link>
-        <h1 className="text-8xl font-bold mb-4 text-gray-800">404</h1>
+        <h1 
+          className="text-8xl font-bold mb-4"
+          style={{ color: errorNumberColor }}
+        >
+          404
+        </h1>
         <p className="text-xl text-gray-600 mb-6">Oops! Page not found</p>
         <Link to="/" className="text-blue-500 hover:text-blue-700 underline text-lg">
           Return to Home
