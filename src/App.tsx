@@ -20,6 +20,7 @@ function App() {
               <Route path="/" element={<Index />} />
               <Route path="/albums/:albumName" element={<AlbumPage />} />
               <Route path="/albums" element={<Navigate to="/albums/chipotle" replace />} />
+              <Route path="/404" element={<NotFound />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

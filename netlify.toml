@@ -3,7 +3,22 @@
   command = "npm run build"
   publish = "dist"
 
+# Handle subdomain routing - redirect unknown subdomains to 404
+[[redirects]]
+  from = "https://:subdomain.nathanmusic.com/*"
+  to = "https://nathanmusic.com/404"
+  status = 404
+  conditions = {Host = [":subdomain.nathanmusic.com"]}
+  force = true
+
+# Handle main domain - catch all for SPA routing
 [[redirects]]
   from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Handle direct 404 requests
+[[redirects]]
+  from = "/404"
   to = "/index.html"
   status = 200
