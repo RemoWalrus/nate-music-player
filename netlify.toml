@@ -5,10 +5,10 @@
 
 # Handle subdomain routing - redirect unknown subdomains to 404
 [[redirects]]
-  from = "https://:subdomain.nathanmusic.com/*"
-  to = "https://nathanmusic.com/404"
+  from = "https://:subdomain.nathangarciamusic.com/*"
+  to = "https://nathangarciamusic.com/404"
   status = 404
-  conditions = {Host = [":subdomain.nathanmusic.com"]}
+  conditions = {Host = [":subdomain.nathangarciamusic.com"]}
   force = true
 
 # Handle main domain - catch all for SPA routing
