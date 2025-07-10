@@ -140,7 +140,7 @@ const Playlist = ({
           return (
             <div
               key={track.id}
-              className={`flex items-center justify-between ${isAlbumPage ? 'p-3' : 'p-2'} rounded-lg transition-colors ${
+              className={`flex items-center justify-between ${isAlbumPage ? 'p-2' : 'py-1 px-2'} rounded-lg transition-colors ${
                 currentTrackId === track.id
                   ? "bg-white/20"
                   : "hover:bg-white/10"
