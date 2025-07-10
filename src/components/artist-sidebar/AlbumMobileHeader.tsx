@@ -151,60 +151,65 @@ export const AlbumMobileHeader = ({ album, backgroundColor }: AlbumMobileHeaderP
   const iconProps = { color: "#ea384c" };
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 backdrop-blur-sm z-[9998] shadow-sm" style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}>
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-3">
-          <Link to="/" className="hover:opacity-80 transition-opacity">
-            <img 
-              src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
-              alt="Nathan Garcia Logo" 
-              className="h-8 w-8"
-            />
-          </Link>
-          {currentTrack && currentTrack.isPlaying && (
-            <span className="text-xs font-medium text-gray-900">
-              Now Playing: {currentTrack.name}
-            </span>
-          )}
+    <>
+      <div className="md:hidden fixed top-0 left-0 right-0 backdrop-blur-sm z-[999999] shadow-sm" style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}>
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-3">
+            <Link to="/" className="hover:opacity-80 transition-opacity">
+              <img 
+                src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
+                alt="Nathan Garcia Logo" 
+                className="h-8 w-8"
+              />
+            </Link>
+            {currentTrack && currentTrack.isPlaying && (
+              <span className="text-xs font-medium text-gray-900">
+                Now Playing: {currentTrack.name}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+            }}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors z-[999999]"
+            aria-label="Toggle menu"
+          >
+            <Menu {...iconProps} className="h-5 w-5" />
+          </button>
         </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsMobileMenuOpen(!isMobileMenuOpen);
-          }}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          aria-label="Toggle menu"
-        >
-          <Menu {...iconProps} className="h-5 w-5" />
-        </button>
       </div>
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-[61px] backdrop-blur-sm z-[9999] overflow-y-auto" 
-             style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}
-             onClick={(e) => {
-               if (e.target === e.currentTarget) {
-                 setIsMobileMenuOpen(false);
-               }
-             }}>
-          <div className="p-4 space-y-4">
-            {sidebarSections.map((section, index) => {
-              const Icon = iconMap[section.icon];
-              return (
-                <React.Fragment key={section.id}>
-                  {index > 0 && <div className="border-t border-gray-200" />}
-                  <div className="flex items-start gap-3 py-2">
-                    <Icon {...iconProps} className="h-5 w-5 shrink-0 mt-1" />
-                    <div className="space-y-2 flex-1 text-left">
-                      <h3 className="text-xs font-medium text-gray-900">{section.label}</h3>
-                      {getSectionContent(section.label)}
+        <div 
+          className="md:hidden fixed inset-0 top-0 bg-black/50 z-[999998] overflow-y-auto" 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsMobileMenuOpen(false);
+            }
+          }}
+        >
+          <div className="mt-[77px] min-h-screen" style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}>
+            <div className="p-4 space-y-4">
+              {sidebarSections.map((section, index) => {
+                const Icon = iconMap[section.icon];
+                return (
+                  <React.Fragment key={section.id}>
+                    {index > 0 && <div className="border-t border-gray-200" />}
+                    <div className="flex items-start gap-3 py-2">
+                      <Icon {...iconProps} className="h-5 w-5 shrink-0 mt-1" />
+                      <div className="space-y-2 flex-1 text-left">
+                        <h3 className="text-xs font-medium text-gray-900">{section.label}</h3>
+                        {getSectionContent(section.label)}
+                      </div>
                     </div>
-                  </div>
-                </React.Fragment>
-              );
-            })}
+                  </React.Fragment>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };

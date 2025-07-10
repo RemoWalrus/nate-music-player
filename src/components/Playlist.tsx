@@ -146,7 +146,7 @@ const Playlist = ({
                   : "hover:bg-white/10"
               }`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-1">
                 {showTrackNumbers && trackNumber && (
                   <div className="w-6 text-center">
                     <span className="text-white/70 text-sm font-medium">
@@ -154,11 +154,19 @@ const Playlist = ({
                     </span>
                   </div>
                 )}
-                <img
-                  src={track.album.images[0]?.url}
-                  alt={track.name}
-                  className={`${isAlbumPage ? 'w-14 h-14' : 'w-12 h-12'} rounded-md`}
-                />
+                <div className="relative group">
+                  <img
+                    src={track.album.images[0]?.url}
+                    alt={track.name}
+                    className={`${isAlbumPage ? 'w-14 h-14' : 'w-12 h-12'} rounded-md`}
+                  />
+                  <button
+                    onClick={() => handleTrackSelect(track)}
+                    className="absolute inset-0 bg-black/60 rounded-md opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                  >
+                    <Play className="w-5 h-5 text-white" fill="white" />
+                  </button>
+                </div>
                 <div className="text-left">
                   <h3 className="text-white font-medium">{track.name}</h3>
                   <p className="text-white/70 text-sm">
@@ -185,12 +193,6 @@ const Playlist = ({
                   )}
                 </div>
               </div>
-              <button
-                onClick={() => handleTrackSelect(track)}
-                className="p-2 rounded-full hover:bg-white/20 transition-colors"
-              >
-                <Play className="w-5 h-5 text-white" />
-              </button>
             </div>
           );
         })}
