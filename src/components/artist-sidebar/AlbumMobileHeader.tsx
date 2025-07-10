@@ -9,6 +9,7 @@ import { useTracks } from "@/hooks/use-tracks";
 
 interface AlbumMobileHeaderProps {
   album: Album;
+  backgroundColor?: string;
 }
 
 const iconMap: { [key: string]: typeof Disc } = {
@@ -18,10 +19,47 @@ const iconMap: { [key: string]: typeof Disc } = {
   Share2,
 };
 
-export const AlbumMobileHeader = ({ album }: AlbumMobileHeaderProps) => {
+export const AlbumMobileHeader = ({ album, backgroundColor }: AlbumMobileHeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { toast } = useToast();
   const { currentTrack } = useTracks();
+
+  // Convert RGB background color to a much lighter version
+  const getLighterBackgroundColor = (bgColor?: string) => {
+    if (!bgColor) return 'hsl(162, 15%, 94%)';
+    
+    const rgbMatch = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (!rgbMatch) return 'hsl(162, 15%, 94%)';
+    
+    const [, r, g, b] = rgbMatch.map(Number);
+    
+    // Convert RGB to HSL
+    const rNorm = r / 255;
+    const gNorm = g / 255;
+    const bNorm = b / 255;
+    
+    const max = Math.max(rNorm, gNorm, bNorm);
+    const min = Math.min(rNorm, gNorm, bNorm);
+    const diff = max - min;
+    
+    let h = 0;
+    if (diff !== 0) {
+      if (max === rNorm) h = ((gNorm - bNorm) / diff) % 6;
+      else if (max === gNorm) h = (bNorm - rNorm) / diff + 2;
+      else h = (rNorm - gNorm) / diff + 4;
+    }
+    h = Math.round(h * 60);
+    if (h < 0) h += 360;
+    
+    const l = (max + min) / 2;
+    const s = diff === 0 ? 0 : diff / (1 - Math.abs(2 * l - 1));
+    
+    // Create a much lighter version with reduced saturation
+    const lightness = Math.max(92, l * 100); // Ensure minimum 92% lightness
+    const saturation = Math.min(15, s * 100); // Cap saturation at 15%
+    
+    return `hsl(${h}, ${saturation}%, ${lightness}%)`;
+  };
 
   const albumDisplayName = album.name.charAt(0).toUpperCase() + album.name.slice(1).toLowerCase();
 
@@ -113,7 +151,7 @@ export const AlbumMobileHeader = ({ album }: AlbumMobileHeaderProps) => {
   const iconProps = { color: "#ea384c" };
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 backdrop-blur-sm z-50 shadow-sm" style={{ backgroundColor: 'hsl(162, 15%, 94%)' }}>
+    <div className="md:hidden fixed top-0 left-0 right-0 backdrop-blur-sm z-[9998] shadow-sm" style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}>
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
           <Link to="/" className="hover:opacity-80 transition-opacity">
@@ -130,14 +168,24 @@ export const AlbumMobileHeader = ({ album }: AlbumMobileHeaderProps) => {
           )}
         </div>
         <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMobileMenuOpen(!isMobileMenuOpen);
+          }}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="Toggle menu"
         >
           <Menu {...iconProps} className="h-5 w-5" />
         </button>
       </div>
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-[61px] backdrop-blur-sm z-50 overflow-y-auto" style={{ backgroundColor: 'hsl(162, 15%, 94%)' }}>
+        <div className="fixed inset-0 top-[61px] backdrop-blur-sm z-[9999] overflow-y-auto" 
+             style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}
+             onClick={(e) => {
+               if (e.target === e.currentTarget) {
+                 setIsMobileMenuOpen(false);
+               }
+             }}>
           <div className="p-4 space-y-4">
             {sidebarSections.map((section, index) => {
               const Icon = iconMap[section.icon];

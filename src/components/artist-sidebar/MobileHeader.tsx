@@ -155,7 +155,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
   const iconProps = { color: "#ea384c" };
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
+    <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-[9998] shadow-sm">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
           <Link to="/" className="hover:opacity-80 transition-opacity">
@@ -172,14 +172,23 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
           )}
         </div>
         <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMobileMenuOpen(!isMobileMenuOpen);
+          }}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="Toggle menu"
         >
           <Menu {...iconProps} className="h-5 w-5" />
         </button>
       </div>
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-[61px] bg-white z-50 overflow-y-auto">
+        <div className="fixed inset-0 top-[61px] bg-white z-[9999] overflow-y-auto"
+             onClick={(e) => {
+               if (e.target === e.currentTarget) {
+                 setIsMobileMenuOpen(false);
+               }
+             }}>
           <div className="p-4 space-y-4">
             {sectionsWithAlbums.map((section, index) => {
               const Icon = iconMap[section.icon];
