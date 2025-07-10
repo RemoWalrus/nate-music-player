@@ -182,7 +182,7 @@ export const AlbumMobileHeader = ({ album, backgroundColor }: AlbumMobileHeaderP
       </div>
       {isMobileMenuOpen && (
         <div 
-          className="md:hidden fixed inset-0 top-[77px] bg-black/20 z-[999998] overflow-y-auto" 
+          className="md:hidden fixed inset-0 top-[73px] bg-black/20 z-[999998] overflow-y-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setIsMobileMenuOpen(false);
