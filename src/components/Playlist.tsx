@@ -131,7 +131,7 @@ const Playlist = ({
   
   return (
     <div className={`mt-4 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
-      <div className={`space-y-2 ${isAlbumPage ? 'max-h-96 overflow-y-auto' : ''}`}>
+      <div className={`space-y-1 ${isAlbumPage ? 'max-h-96 overflow-y-auto' : ''}`}>
         {tracks.map((track) => {
           const platformLinks = getPlatformLinks(track);
           const trackUrlData = trackUrls[track.id];
@@ -140,7 +140,7 @@ const Playlist = ({
           return (
             <div
               key={track.id}
-              className={`flex items-center justify-between ${isAlbumPage ? 'p-4' : 'p-3'} rounded-lg transition-colors ${
+              className={`flex items-center justify-between ${isAlbumPage ? 'p-3' : 'p-2'} rounded-lg transition-colors ${
                 currentTrackId === track.id
                   ? "bg-white/20"
                   : "hover:bg-white/10"
