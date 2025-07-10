@@ -113,7 +113,7 @@ export const AlbumMobileHeader = ({ album }: AlbumMobileHeaderProps) => {
   const iconProps = { color: "#ea384c" };
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 shadow-sm">
+    <div className="md:hidden fixed top-0 left-0 right-0 backdrop-blur-sm z-50 shadow-sm" style={{ backgroundColor: 'hsl(162, 8%, 97%)' }}>
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
           <Link to="/" className="hover:opacity-80 transition-opacity">
@@ -137,7 +137,7 @@ export const AlbumMobileHeader = ({ album }: AlbumMobileHeaderProps) => {
         </button>
       </div>
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-[61px] bg-white/95 backdrop-blur-sm z-50 overflow-y-auto">
+        <div className="fixed inset-0 top-[61px] backdrop-blur-sm z-50 overflow-y-auto" style={{ backgroundColor: 'hsl(162, 8%, 97%)' }}>
           <div className="p-4 space-y-4">
             {sidebarSections.map((section, index) => {
               const Icon = iconMap[section.icon];
