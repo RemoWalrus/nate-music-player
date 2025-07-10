@@ -182,15 +182,14 @@ export const AlbumMobileHeader = ({ album, backgroundColor }: AlbumMobileHeaderP
       </div>
       {isMobileMenuOpen && (
         <div 
-          className="md:hidden fixed inset-0 top-[77px] overflow-y-auto" 
-          style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}
+          className="md:hidden fixed inset-0 top-[77px] bg-black/20 z-[999998] overflow-y-auto" 
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setIsMobileMenuOpen(false);
             }
           }}
         >
-          <div className="min-h-screen">
+          <div className="min-h-screen" style={{ backgroundColor: getLighterBackgroundColor(backgroundColor) }}>
             <div className="p-4 space-y-4">
               {sidebarSections.map((section, index) => {
                 const Icon = iconMap[section.icon];
