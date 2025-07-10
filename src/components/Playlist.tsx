@@ -140,7 +140,7 @@ const Playlist = ({
           return (
             <div
               key={track.id}
-              className={`flex items-center justify-between ${isAlbumPage ? 'p-2' : 'py-1 px-2'} rounded-lg transition-colors ${
+              className={`flex items-center justify-between ${isAlbumPage ? 'py-1 px-2' : 'py-0.5 px-2'} rounded-lg transition-colors ${
                 currentTrackId === track.id
                   ? "bg-white/20"
                   : "hover:bg-white/10"
@@ -158,7 +158,7 @@ const Playlist = ({
                   <img
                     src={track.album.images[0]?.url}
                     alt={track.name}
-                    className={`${isAlbumPage ? 'w-14 h-14' : 'w-12 h-12'} rounded-md`}
+                    className={`${isAlbumPage ? 'w-14 h-14' : 'w-12 h-12'} rounded-md object-cover flex-shrink-0`}
                   />
                   <button
                     onClick={() => handleTrackSelect(track)}
