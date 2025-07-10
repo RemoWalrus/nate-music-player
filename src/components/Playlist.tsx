@@ -173,14 +173,14 @@ const Playlist = ({
                     {track.artists.map((artist) => artist.name).join(", ")}
                   </p>
                   {platformLinks.length > 0 && (
-                    <div className="flex gap-4 mt-1">
+                    <div className="flex gap-3 mt-1">
                       {platformLinks.map((link) => (
                         <a
                           key={link.platform}
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-white/60 hover:text-white text-xs flex items-center gap-1"
+                          className="text-white/60 hover:text-white text-xs flex items-center gap-1.5"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleExternalLinkClick(link.platform, track.name, track.artists[0].name);
