@@ -103,7 +103,7 @@ export const AlbumDesktopSidebar = ({ album }: AlbumDesktopSidebarProps) => {
   return (
     <div className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md border-r border-white/30 ${
       isCollapsed ? "w-20" : "w-96"
-    }`} style={{ backgroundColor: 'hsl(162, 8%, 97%)' }}>
+    }`} style={{ backgroundColor: 'hsl(162, 15%, 94%)' }}>
       <div className="p-4 border-b border-gray-300/50">
         <div className="flex flex-col">
           <div className="flex justify-end">
