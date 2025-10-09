@@ -7,6 +7,7 @@ import { ArtistSidebar } from "../components/ArtistSidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTracks } from "@/hooks/use-tracks";
 import { useAlbum } from "@/hooks/use-album";
+import { useMetadata } from "@/hooks/use-metadata";
 import NotFound from "./NotFound";
 
 const AlbumPage = () => {
@@ -15,6 +16,7 @@ const AlbumPage = () => {
   const [textColor, setTextColor] = useState("rgba(255, 255, 255, 0.6)");
   const [currentAlbumTrackIndex, setCurrentAlbumTrackIndex] = useState(0);
   const isMobile = useIsMobile();
+  const { metadata } = useMetadata();
   
   // Check if album exists in database
   const { album, isLoading: albumLoading, error: albumError } = useAlbum(albumName || "");
@@ -50,6 +52,19 @@ const AlbumPage = () => {
   useEffect(() => {
     loadTracks();
   }, []);
+
+  // Update page title with album name
+  useEffect(() => {
+    if (album && metadata) {
+      document.title = `${album.name} | ${metadata.title}`;
+    }
+    
+    return () => {
+      if (metadata) {
+        document.title = metadata.title;
+      }
+    };
+  }, [album, metadata]);
 
   // Handle album-specific navigation
   const handleAlbumPrevTrack = () => {
