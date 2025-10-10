@@ -16,8 +16,8 @@ serve(async (req) => {
     let prompt = "";
     const messages: any[] = [];
 
-    if (characterName.toLowerCase() === "todita" && characterType === "android") {
-      // Use the exact reference image for Todita android
+    if (characterName.toLowerCase() === "todita") {
+      // Always use the exact reference image for Todita, regardless of type selected
       messages.push({
         role: "user",
         content: [
