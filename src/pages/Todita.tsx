@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
+import { Download } from "lucide-react";
 import toditaReference from "@/assets/todita-reference.jpeg";
 
 const Todita = () => {
@@ -12,6 +13,44 @@ const Todita = () => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
+
+  const handleDownload = () => {
+    if (!generatedImage) return;
+
+    try {
+      // Convert base64 to blob
+      const base64Data = generatedImage.split(',')[1];
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/png' });
+
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `todita-${characterName || 'character'}-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Image downloaded!",
+        description: `${characterName} has been saved to your device.`,
+      });
+    } catch (error) {
+      console.error("Error downloading image:", error);
+      toast({
+        title: "Download failed",
+        description: "Failed to download the image",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleGenerate = async () => {
     if (!characterName.trim()) {
@@ -148,12 +187,20 @@ const Todita = () => {
             <h2 className="text-2xl font-bold mb-4 text-center">
               {characterName}
             </h2>
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-4">
               <img
                 src={generatedImage}
                 alt={`Generated character ${characterName}`}
                 className="max-w-full h-auto rounded-lg shadow-md"
               />
+              <Button
+                onClick={handleDownload}
+                size="lg"
+                className="w-full sm:w-auto"
+              >
+                <Download className="mr-2 h-5 w-5" />
+                Download Image
+              </Button>
             </div>
           </div>
         )}
