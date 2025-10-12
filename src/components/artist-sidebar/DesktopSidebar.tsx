@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { User, Music, Newspaper, Share2, Mail, Disc } from "lucide-react";
+import { User, Music, Newspaper, Share2, Mail, Disc, Smartphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SidebarHeader } from "./components/SidebarHeader";
 import { SidebarSection } from "./components/SidebarSection";
@@ -22,6 +22,7 @@ const iconMap: { [key: string]: typeof User } = {
   Mail,
   Share2,
   Disk: Disc,
+  Smartphone,
 };
 
 export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarProps) => {
@@ -79,6 +80,15 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
           >
             Share with your friends
           </button>
+        );
+      case "Todita":
+        return (
+          <Link 
+            to="/todita" 
+            className="text-xs text-gray-500 hover:text-gray-700 text-left block"
+          >
+            Todita Universe Character Generator
+          </Link>
         );
       default:
         return (

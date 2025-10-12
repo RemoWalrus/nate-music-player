@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Menu, User, Music, Newspaper, Share2, Mail, Disc } from "lucide-react";
+import { Menu, User, Music, Newspaper, Share2, Mail, Disc, Smartphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +21,7 @@ const iconMap: { [key: string]: typeof User } = {
   Mail,
   Share2,
   Disk: Disc,
+  Smartphone,
 };
 
 export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) => {
@@ -100,6 +101,16 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
           >
             Share this page
           </button>
+        );
+      case "Todita":
+        return (
+          <Link 
+            to="/todita" 
+            className="text-xs text-gray-600 hover:text-gray-900 text-left block"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Todita Universe Character Generator
+          </Link>
         );
       default:
         return (
