@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { Download } from "lucide-react";
+import { Download, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 import toditaReference from "@/assets/todita-reference.jpeg";
 
 const Todita = () => {
@@ -130,6 +131,15 @@ const Todita = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 p-6">
       <div className="max-w-4xl mx-auto">
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span>Back to Home</span>
+          </Link>
+        </div>
         <h1 className="text-4xl font-bold text-center mb-8 text-foreground">
           Todita Universe Character Generator
         </h1>
