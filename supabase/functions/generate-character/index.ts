@@ -23,7 +23,7 @@ serve(async (req) => {
         content: [
           {
             type: "text",
-            text: "Generate an android character exactly like this reference image. The character is named Todita. Use the same cartoon style, color palette, and design aesthetic."
+            text: "Generate an android character exactly like this reference image. Use the same cartoon style, color palette, and design aesthetic. DO NOT include any text or name in the image - just the character illustration."
           },
           {
             type: "image_url",
@@ -44,7 +44,7 @@ serve(async (req) => {
         content: [
           {
             type: "text",
-            text: `Generate ${typeDescription} named "${characterName}" using the same cartoon art style as this reference image. Match the clean lines, bold colors, and animated aesthetic. Create a full body character design with a friendly pose.`
+            text: `Generate ${typeDescription} using the same cartoon art style as this reference image. Match the clean lines, bold colors, and animated aesthetic. Create a full body character design with a friendly pose. DO NOT include any text or name in the image - just the character illustration.`
           },
           {
             type: "image_url",
