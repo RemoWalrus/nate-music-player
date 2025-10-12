@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Menu, User, Music, Newspaper, Share2, Mail, Disc, Smartphone } from "lucide-react";
+import { Menu, User, Music, Newspaper, Share2, Mail, Disc, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MusicPlatformLinks } from "./MusicPlatformLinks";
 import { useToast } from "@/hooks/use-toast";
@@ -21,7 +21,7 @@ const iconMap: { [key: string]: typeof User } = {
   Mail,
   Share2,
   Disk: Disc,
-  Smartphone,
+  Bot,
 };
 
 export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) => {
