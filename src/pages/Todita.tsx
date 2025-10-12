@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { Download, ArrowLeft } from "lucide-react";
+import { Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import toditaReference from "@/assets/todita-reference.jpeg";
 
@@ -129,17 +129,20 @@ const Todita = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-6">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-foreground/70 hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            <span>Back to Home</span>
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      <div className="bg-background/80 backdrop-blur-sm shadow-md mb-6 py-4 px-6">
+        <div className="max-w-4xl mx-auto">
+          <Link to="/" className="hover:opacity-80 transition-opacity inline-block">
+            <img 
+              src="https://tfuojbdwzypasskvzicv.supabase.co/storage/v1/object/public/graphics/NathanIconai.svg" 
+              alt="Nathan Garcia Logo" 
+              className="h-8 w-auto"
+            />
           </Link>
         </div>
+      </div>
+      
+      <div className="max-w-4xl mx-auto px-6">
         <h1 className="text-4xl font-bold text-center mb-8 text-foreground">
           Todita Universe Character Generator
         </h1>
