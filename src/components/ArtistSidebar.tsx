@@ -49,11 +49,7 @@ export const ArtistSidebar = () => {
         if (sectionsError) {
           console.error('Error fetching sidebar sections:', sectionsError);
         } else if (sectionsData) {
-          // Filter out "Latest News" section
-          const filteredSections = sectionsData.filter(section => 
-            section.label.toLowerCase() !== 'latest news'
-          );
-          setSidebarSections(filteredSections);
+          setSidebarSections(sectionsData);
         }
       }
     };
