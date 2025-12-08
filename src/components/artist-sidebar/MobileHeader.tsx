@@ -109,7 +109,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
             className="text-xs text-gray-600 hover:text-gray-900 text-left block"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Todita Universe Character Generator
+            {section.content || 'Todita Universe Character Generator'}
           </Link>
         );
       default:

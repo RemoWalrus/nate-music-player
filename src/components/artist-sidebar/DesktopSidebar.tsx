@@ -87,7 +87,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
             to="/todita" 
             className="text-xs text-gray-500 hover:text-gray-700 text-left block"
           >
-            Todita Universe Character Generator
+            {section.content || 'Todita Universe Character Generator'}
           </Link>
         );
       default:
