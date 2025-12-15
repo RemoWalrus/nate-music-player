@@ -60,10 +60,10 @@ const TrackInfo = ({
 
   return (
     <div className="text-center space-y-2">
-      <h2 className="text-white text-2xl font-semibold tracking-wide">
+      <h2 className="text-2xl font-semibold tracking-wide" style={{ color: 'var(--player-text, #ffffff)' }}>
         {name}
       </h2>
-      <p className="text-white/80 text-lg">
+      <p className="text-lg" style={{ color: 'var(--player-text-muted, rgba(255, 255, 255, 0.8))' }}>
         {artist}
       </p>
       {platformLinks.length > 0 && (
@@ -74,7 +74,8 @@ const TrackInfo = ({
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/60 hover:text-white flex items-center gap-0.5"
+              className="flex items-center gap-0.5 transition-colors"
+              style={{ color: 'var(--player-text-subtle, rgba(255, 255, 255, 0.6))' }}
             >
               {link.label} <ExternalLink className="w-3 h-3" />
             </a>

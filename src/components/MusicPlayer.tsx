@@ -147,7 +147,10 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
 
   return (
     <div className="relative group">
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-3xl -z-10" />
+      <div 
+        className="absolute inset-0 backdrop-blur-xl rounded-3xl -z-10" 
+        style={{ backgroundColor: 'var(--player-bg-overlay, rgba(255, 255, 255, 0.1))' }}
+      />
       <div className="p-8 rounded-3xl flex flex-col items-center space-y-6">
         <AlbumArt 
           albumUrl={track.albumUrl} 

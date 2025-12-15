@@ -53,6 +53,16 @@ const Index = () => {
     );
   }
 
+  // Determine if background is light or dark
+  const isLightBackground = (() => {
+    const rgb = backgroundColor.match(/\d+/g);
+    if (rgb) {
+      const [r, g, b] = rgb.map(Number);
+      return getLuminance(r, g, b) > 0.5;
+    }
+    return false;
+  })();
+
   return (
     <div className="flex flex-col min-h-svh w-full overflow-hidden">
       <div className="flex flex-1 w-full">
@@ -63,8 +73,14 @@ const Index = () => {
           }`}
           style={{ 
             backgroundColor,
-            background: backgroundColor
-          }}
+            background: backgroundColor,
+            // Set CSS custom properties for dynamic theming
+            '--player-text': isLightBackground ? '#1a1a1a' : '#ffffff',
+            '--player-text-muted': isLightBackground ? 'rgba(26, 26, 26, 0.7)' : 'rgba(255, 255, 255, 0.7)',
+            '--player-text-subtle': isLightBackground ? 'rgba(26, 26, 26, 0.5)' : 'rgba(255, 255, 255, 0.5)',
+            '--player-bg-overlay': isLightBackground ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+            '--player-bg-overlay-hover': isLightBackground ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.2)',
+          } as React.CSSProperties}
         >
           {currentTrack && (
             <MusicPlayer 
