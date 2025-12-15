@@ -61,8 +61,11 @@ const Playlist = ({
 
   if (!tracks || tracks.length === 0) {
     return (
-      <div className={`mt-4 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
-        <p className="text-white text-center">Loading tracks...</p>
+      <div 
+        className={`mt-4 w-full max-w-2xl mx-auto backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}
+        style={{ backgroundColor: 'var(--player-bg-overlay, rgba(0, 0, 0, 0.2))' }}
+      >
+        <p className="text-center" style={{ color: 'var(--player-text, #ffffff)' }}>Loading tracks...</p>
       </div>
     );
   }
@@ -130,7 +133,10 @@ const Playlist = ({
   console.log('GTM status:', window.dataLayer ? 'Loaded' : 'Not loaded');
   
   return (
-    <div className={`mt-4 w-full max-w-2xl mx-auto bg-black/20 backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}>
+    <div 
+      className={`mt-4 w-full max-w-2xl mx-auto backdrop-blur-xl rounded-xl ${isAlbumPage ? 'p-6' : 'p-4'}`}
+      style={{ backgroundColor: 'var(--player-bg-overlay, rgba(0, 0, 0, 0.2))' }}
+    >
       <div className={`space-y-1 ${isAlbumPage ? 'max-h-96 overflow-y-auto' : ''}`}>
         {tracks.map((track) => {
           const platformLinks = getPlatformLinks(track);
@@ -140,16 +146,17 @@ const Playlist = ({
           return (
             <div
               key={track.id}
-              className={`flex items-center justify-between ${isAlbumPage ? 'py-1 px-2' : 'py-0.5 px-2'} rounded-lg transition-colors ${
-                currentTrackId === track.id
-                  ? "bg-white/20"
-                  : "hover:bg-white/10"
-              }`}
+              className={`flex items-center justify-between ${isAlbumPage ? 'py-1 px-2' : 'py-0.5 px-2'} rounded-lg transition-colors`}
+              style={{
+                backgroundColor: currentTrackId === track.id 
+                  ? 'var(--player-bg-overlay-hover, rgba(255, 255, 255, 0.2))' 
+                  : 'transparent'
+              }}
             >
               <div className="flex items-center gap-3 flex-1">
                 {showTrackNumbers && trackNumber && (
                   <div className="w-6 text-center">
-                    <span className="text-white/70 text-sm font-medium">
+                    <span className="text-sm font-medium" style={{ color: 'var(--player-text-muted, rgba(255, 255, 255, 0.7))' }}>
                       {trackNumber}
                     </span>
                   </div>
@@ -168,8 +175,8 @@ const Playlist = ({
                   </button>
                 </div>
                 <div className="text-left">
-                  <h3 className="text-white font-medium">{track.name}</h3>
-                  <p className="text-white/70 text-sm">
+                  <h3 className="font-medium" style={{ color: 'var(--player-text, #ffffff)' }}>{track.name}</h3>
+                  <p className="text-sm" style={{ color: 'var(--player-text-muted, rgba(255, 255, 255, 0.7))' }}>
                     {track.artists.map((artist) => artist.name).join(", ")}
                   </p>
                   {platformLinks.length > 0 && (
@@ -180,7 +187,8 @@ const Playlist = ({
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-white/60 hover:text-white text-xs flex items-center gap-1.5"
+                          className="text-xs flex items-center gap-1.5 transition-colors"
+                          style={{ color: 'var(--player-text-subtle, rgba(255, 255, 255, 0.6))' }}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleExternalLinkClick(link.platform, track.name, track.artists[0].name);

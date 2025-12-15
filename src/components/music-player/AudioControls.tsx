@@ -21,44 +21,45 @@ const AudioControls = ({
       <div className="flex items-center justify-center gap-4">
         <button
           onClick={onPrevTrack}
-          className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
+          className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200"
+          style={{ backgroundColor: 'var(--player-bg-overlay, rgba(255, 255, 255, 0.1))' }}
         >
-          <SkipBack className="w-6 h-6 text-white" />
+          <SkipBack className="w-6 h-6" style={{ color: 'var(--player-text, #ffffff)' }} />
         </button>
 
         <button
           onClick={onTogglePlayback}
           disabled={!hasAudio}
           className={`w-16 h-16 flex items-center justify-center rounded-full transition-colors duration-200 ${
-            hasAudio
-              ? 'bg-white/10 hover:bg-white/20' 
-              : 'bg-white/5 cursor-not-allowed'
+            !hasAudio ? 'opacity-50 cursor-not-allowed' : ''
           }`}
+          style={{ backgroundColor: 'var(--player-bg-overlay, rgba(255, 255, 255, 0.1))' }}
         >
           {isPlaying ? (
-            <Pause className="w-8 h-8 text-white" />
+            <Pause className="w-8 h-8" style={{ color: 'var(--player-text, #ffffff)' }} />
           ) : (
-            <Play className="w-8 h-8 text-white ml-1" />
+            <Play className="w-8 h-8 ml-1" style={{ color: 'var(--player-text, #ffffff)' }} />
           )}
         </button>
 
         <button
           onClick={onNextTrack}
-          className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200 bg-white/10 hover:bg-white/20"
+          className="w-12 h-12 flex items-center justify-center rounded-full transition-colors duration-200"
+          style={{ backgroundColor: 'var(--player-bg-overlay, rgba(255, 255, 255, 0.1))' }}
         >
-          <SkipForward className="w-6 h-6 text-white" />
+          <SkipForward className="w-6 h-6" style={{ color: 'var(--player-text, #ffffff)' }} />
         </button>
       </div>
 
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-2" style={{ color: 'var(--player-text-subtle, rgba(255, 255, 255, 0.6))' }}>
         {!hasAudio && (
-          <div className="flex items-center gap-2 text-white/60">
+          <div className="flex items-center gap-2">
             <VolumeX className="w-5 h-5" />
             <span className="text-sm">Audio unavailable</span>
           </div>
         )}
         {hasAudio && (
-          <div className="flex items-center gap-2 text-white/60">
+          <div className="flex items-center gap-2">
             <Volume2 className="w-5 h-5" />
             <span className="text-sm">Audio available</span>
           </div>

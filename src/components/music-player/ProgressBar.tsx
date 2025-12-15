@@ -16,7 +16,7 @@ const ProgressBar = ({ progress, duration, onProgressClick }: ProgressBarProps) 
 
   return (
     <div className="w-full flex items-center gap-2">
-      <span className="text-white/60 text-sm w-12 text-right">
+      <span className="text-sm w-12 text-right" style={{ color: 'var(--player-text-subtle, rgba(255, 255, 255, 0.6))' }}>
         {formatTime(progress)}
       </span>
       <div 
@@ -26,9 +26,12 @@ const ProgressBar = ({ progress, duration, onProgressClick }: ProgressBarProps) 
         <Progress 
           value={(progress / duration) * 100} 
           className="h-1.5"
+          style={{ 
+            backgroundColor: 'var(--player-bg-overlay, rgba(255, 255, 255, 0.1))',
+          }}
         />
       </div>
-      <span className="text-white/60 text-sm w-12">
+      <span className="text-sm w-12" style={{ color: 'var(--player-text-subtle, rgba(255, 255, 255, 0.6))' }}>
         {formatTime(duration)}
       </span>
     </div>
