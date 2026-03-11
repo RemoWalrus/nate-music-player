@@ -1,13 +1,18 @@
-
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useMetadata } from '@/hooks/use-metadata';
 
 export const MetadataHead = () => {
   const { metadata, isLoading, error } = useMetadata();
+  const location = useLocation();
 
   useEffect(() => {
     if (!metadata || isLoading) return;
     
+    // Only apply default metadata on the homepage
+    // Other pages manage their own titles
+    if (location.pathname !== '/') return;
+
     // Update document title
     document.title = metadata.title;
     
@@ -40,12 +45,11 @@ export const MetadataHead = () => {
     updateOpenGraphTag('og:image', metadata.og_image);
     
     console.log('Metadata updated:', metadata);
-  }, [metadata, isLoading]);
+  }, [metadata, isLoading, location.pathname]);
 
   if (error) {
     console.error('Error loading metadata:', error);
   }
 
-  // This component doesn't render anything visually
   return null;
 };

@@ -11,7 +11,6 @@ import toditaReference from "@/assets/todita-reference.jpeg";
 const Todita = () => {
   useEffect(() => {
     document.title = "Todita | Nathan Music";
-    return () => { document.title = ""; };
   }, []);
 
   const [characterType, setCharacterType] = useState<"human" | "android">("android");
