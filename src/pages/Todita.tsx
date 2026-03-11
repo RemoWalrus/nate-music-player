@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,11 @@ import { Link } from "react-router-dom";
 import toditaReference from "@/assets/todita-reference.jpeg";
 
 const Todita = () => {
+  useEffect(() => {
+    document.title = "Todita | Nathan Music";
+    return () => { document.title = ""; };
+  }, []);
+
   const [characterType, setCharacterType] = useState<"human" | "android">("android");
   const [characterName, setCharacterName] = useState("");
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
