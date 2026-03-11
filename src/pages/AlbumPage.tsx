@@ -53,17 +53,29 @@ const AlbumPage = () => {
     loadTracks();
   }, []);
 
-  // Update page title with album name
+  // Update page title and meta description with album data
   useEffect(() => {
     if (album && metadata) {
       document.title = `${album.name} | ${metadata.title}`;
-    }
-    
-    return () => {
-      if (metadata) {
-        document.title = metadata.title;
+      
+      if (album.description) {
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+          metaDesc = document.createElement('meta');
+          metaDesc.setAttribute('name', 'description');
+          document.head.appendChild(metaDesc);
+        }
+        metaDesc.setAttribute('content', album.description);
+
+        let ogDesc = document.querySelector('meta[property="og:description"]');
+        if (!ogDesc) {
+          ogDesc = document.createElement('meta');
+          ogDesc.setAttribute('property', 'og:description');
+          document.head.appendChild(ogDesc);
+        }
+        ogDesc.setAttribute('content', album.description);
       }
-    };
+    }
   }, [album, metadata]);
 
   // Handle album-specific navigation
