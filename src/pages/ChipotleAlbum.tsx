@@ -46,27 +46,28 @@ const ChipotleAlbum = () => {
     loadTracks();
   }, []);
 
-  // Update page title and meta description with album data
+  // Update page title, meta description, and OG image with album data
   useEffect(() => {
     if (album) {
       document.title = `${album.name} | Nathan Music`;
       
-      if (album.description) {
-        let metaDesc = document.querySelector('meta[name="description"]');
-        if (!metaDesc) {
-          metaDesc = document.createElement('meta');
-          metaDesc.setAttribute('name', 'description');
-          document.head.appendChild(metaDesc);
+      const updateMeta = (attr: string, key: string, content: string) => {
+        let tag = document.querySelector(`meta[${attr}="${key}"]`);
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute(attr, key);
+          document.head.appendChild(tag);
         }
-        metaDesc.setAttribute('content', album.description);
+        tag.setAttribute('content', content);
+      };
 
-        let ogDesc = document.querySelector('meta[property="og:description"]');
-        if (!ogDesc) {
-          ogDesc = document.createElement('meta');
-          ogDesc.setAttribute('property', 'og:description');
-          document.head.appendChild(ogDesc);
-        }
-        ogDesc.setAttribute('content', album.description);
+      if (album.description) {
+        updateMeta('name', 'description', album.description);
+        updateMeta('property', 'og:description', album.description);
+      }
+
+      if (album.album_cover) {
+        updateMeta('property', 'og:image', album.album_cover);
       }
     }
   }, [album]);
