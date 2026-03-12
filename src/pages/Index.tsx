@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
 import { ArtistSidebar } from "../components/ArtistSidebar";
+import AieoSection from "../components/AieoSection";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTracks } from "@/hooks/use-tracks";
 
@@ -95,6 +96,7 @@ const Index = () => {
             onTrackSelect={handleTrackSelect}
             currentTrackId={currentTrack?.id || ""}
           />
+          <AieoSection textColor={textColor} />
           <footer 
             className="w-full text-center py-4 text-sm font-light mt-auto"
             style={{ color: textColor }}

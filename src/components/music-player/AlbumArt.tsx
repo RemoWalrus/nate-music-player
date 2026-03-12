@@ -6,9 +6,11 @@ import { useLocation } from "react-router-dom";
 interface AlbumArtProps {
   albumUrl: string;
   setBackgroundColor: (color: string) => void;
+  trackName?: string;
+  artistName?: string;
 }
 
-const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
+const AlbumArt = ({ albumUrl, setBackgroundColor, trackName, artistName }: AlbumArtProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [imageSrc, setImageSrc] = useState(albumUrl);
   const [hasError, setHasError] = useState(false);
@@ -64,7 +66,7 @@ const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
       <img
         ref={imageRef}
         src={imageSrc}
-        alt="Album art"
+        alt={trackName ? `${artistName || 'Nathan Garcia'} ${trackName} song cover art` : 'Album art'}
         className="w-full h-full object-cover rounded-2xl shadow-2xl"
         onLoad={handleImageLoad}
         onError={handleImageError}

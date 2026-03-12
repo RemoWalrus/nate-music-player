@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound';
 import Todita from './pages/Todita';
 import { Toaster } from './components/ui/toaster';
 import { MetadataHead } from './components/MetadataHead';
+import JsonLdSchema from './components/JsonLdSchema';
 import { SidebarProvider } from './context/SidebarContext';
 import { CustomSidebarProvider } from './components/ui/custom-sidebar-provider';
 import './App.css';
@@ -17,6 +18,7 @@ function App() {
         <CustomSidebarProvider>
           <div className="w-full h-full">
             <MetadataHead />
+            <JsonLdSchema />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/albums/:albumName" element={<AlbumPage />} />

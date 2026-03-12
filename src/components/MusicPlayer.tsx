@@ -154,7 +154,9 @@ const MusicPlayer = ({ track, setBackgroundColor, onPrevTrack, onNextTrack }: Mu
       <div className="p-8 rounded-3xl flex flex-col items-center space-y-6">
         <AlbumArt 
           albumUrl={track.albumUrl} 
-          setBackgroundColor={setBackgroundColor} 
+          setBackgroundColor={setBackgroundColor}
+          trackName={track.name}
+          artistName={track.artist}
         />
         
         <TrackInfo
