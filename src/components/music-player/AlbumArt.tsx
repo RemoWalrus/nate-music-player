@@ -10,7 +10,7 @@ interface AlbumArtProps {
   artistName?: string;
 }
 
-const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
+const AlbumArt = ({ albumUrl, setBackgroundColor, trackName, artistName }: AlbumArtProps) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [imageSrc, setImageSrc] = useState(albumUrl);
   const [hasError, setHasError] = useState(false);
