@@ -18,6 +18,7 @@ function App() {
         <CustomSidebarProvider>
           <div className="w-full h-full">
             <MetadataHead />
+            <JsonLdSchema />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/albums/:albumName" element={<AlbumPage />} />

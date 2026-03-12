@@ -164,7 +164,7 @@ const Playlist = ({
                 <div className="relative group">
                   <img
                     src={track.album.images[0]?.url}
-                    alt={track.name}
+                    alt={`${track.artists[0]?.name || 'Nathan Garcia'} ${track.name} song cover art`}
                     className={`${isAlbumPage ? 'w-14 h-14' : 'w-12 h-12'} rounded-md object-cover flex-shrink-0`}
                   />
                   <button
