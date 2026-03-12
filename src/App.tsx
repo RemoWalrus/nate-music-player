@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound';
 import Todita from './pages/Todita';
 import { Toaster } from './components/ui/toaster';
 import { MetadataHead } from './components/MetadataHead';
+import JsonLdSchema from './components/JsonLdSchema';
 import { SidebarProvider } from './context/SidebarContext';
 import { CustomSidebarProvider } from './components/ui/custom-sidebar-provider';
 import './App.css';
