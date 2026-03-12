@@ -6,6 +6,8 @@ import { useLocation } from "react-router-dom";
 interface AlbumArtProps {
   albumUrl: string;
   setBackgroundColor: (color: string) => void;
+  trackName?: string;
+  artistName?: string;
 }
 
 const AlbumArt = ({ albumUrl, setBackgroundColor }: AlbumArtProps) => {
