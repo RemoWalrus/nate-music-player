@@ -66,7 +66,7 @@ const AlbumArt = ({ albumUrl, setBackgroundColor, trackName, artistName }: Album
       <img
         ref={imageRef}
         src={imageSrc}
-        alt="Album art"
+        alt={trackName ? `${artistName || 'Nathan Garcia'} ${trackName} song cover art` : 'Album art'}
         className="w-full h-full object-cover rounded-2xl shadow-2xl"
         onLoad={handleImageLoad}
         onError={handleImageError}
