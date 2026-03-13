@@ -10,6 +10,25 @@ serve(async (req) => {
 
   try {
     const { characterType, characterName, referenceImage } = await req.json();
+
+    // Input validation
+    if (!characterName || typeof characterName !== 'string' || characterName.trim().length === 0 || characterName.length > 50) {
+      return new Response(JSON.stringify({ error: "Invalid character name" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const allowedTypes = ["human", "android"];
+    if (!characterType || !allowedTypes.includes(characterType)) {
+      return new Response(JSON.stringify({ error: "Invalid character type" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!referenceImage || typeof referenceImage !== 'string') {
+      return new Response(JSON.stringify({ error: "Invalid reference image" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
