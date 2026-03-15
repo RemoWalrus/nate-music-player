@@ -23,7 +23,7 @@ const ToditaComic = () => {
 
       {/* Hero */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center gap-6">
-        <h1 className="text-5xl sm:text-7xl font-bold tracking-tight text-foreground">
+        <h1 className="text-[20vw] leading-[0.85] font-black tracking-tight text-foreground" style={{ fontFamily: 'laca, sans-serif', fontWeight: 900 }}>
           TODITA
         </h1>
         <p className="text-xl sm:text-2xl font-light text-muted-foreground tracking-widest uppercase">
