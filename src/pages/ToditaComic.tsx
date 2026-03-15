@@ -26,14 +26,6 @@ const ToditaComic = () => {
         <h1 className="text-[20vw] leading-[0.85] font-black text-foreground" style={{ fontFamily: 'laca, sans-serif', fontWeight: 900, letterSpacing: '-0.04em' }}>
           TODITA
         </h1>
-        <p className="text-xl sm:text-2xl font-light text-muted-foreground tracking-widest uppercase">
-          A Webcomic Experience
-        </p>
-        <div className="mt-8 px-6 py-3 rounded-full border border-border bg-muted/50">
-          <span className="text-sm text-muted-foreground tracking-wider uppercase">
-            Coming Soon
-          </span>
-        </div>
       </div>
 
       {/* Footer */}
