@@ -25,6 +25,7 @@ function App() {
               <Route path="/albums/:albumName" element={<AlbumPage />} />
               <Route path="/albums" element={<Navigate to="/albums/chipotle" replace />} />
               <Route path="/todita" element={<Todita />} />
+              <Route path="/todita-comic" element={<ToditaComic />} />
               <Route path="/404" element={<NotFound />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
