@@ -230,30 +230,43 @@ const ToditaComic = () => {
 
   const redBg = "hsl(0, 72%, 47%)";
   const darkRedBg = "hsl(0, 72%, 30%)";
+
+  // Determine solid background color based on completed phase
+  const getBgColor = () => {
+    if (["comingsoon"].includes(phase)) return darkRedBg;
+    if (["swipe4"].includes(phase)) return redBg; // swipe3 completed = red
+    if (["comic", "ready3"].includes(phase)) return redBg;
+    if (["swipe3"].includes(phase)) return darkRedBg; // swipe2 completed = dark red
+    if (["universe", "ready2"].includes(phase)) return darkRedBg;
+    if (["swipe2"].includes(phase)) return redBg; // swipe1 completed = red
+    if (["todita", "ready"].includes(phase)) return redBg;
+    return "transparent";
+  };
+
+  // Determine active swipe overlay
+  const getActiveSwipe = () => {
+    if (phase === "swipe") return { progress: swipe1, color: redBg };
+    if (phase === "swipe2") return { progress: swipe2, color: darkRedBg };
+    if (phase === "swipe3") return { progress: swipe3, color: redBg };
+    if (phase === "swipe4") return { progress: swipe4, color: darkRedBg };
+    return null;
+  };
+
+  const activeSwipe = getActiveSwipe();
+
   const shadow1 = "3px 3px 0px hsla(0, 72%, 25%, 0.35)";
   const shadow2 = "3px 3px 0px hsla(0, 72%, 15%, 0.35)";
 
-  // Determine which word to show
   const showTodita = phase === "todita" || phase === "ready";
   const showUniverse = phase === "universe" || phase === "ready2";
   const showComic = phase === "comic" || phase === "ready3";
   const showComingSoon = phase === "comingsoon";
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-background">
-      {/* Layer 0: swipe1 red */}
-      {phase !== "idle" && <div className="absolute inset-0 z-0"><PixelGrid progress={swipe1} color={redBg} /></div>}
-      {/* Layer 1: swipe2 dark red */}
-      {(["swipe2","universe","ready2","swipe3"].includes(phase) || ["swipe3","comic","ready3","swipe4"].includes(phase) || phase === "comingsoon") && (
-        <div className="absolute inset-0 z-[1]"><PixelGrid progress={swipe2} color={darkRedBg} /></div>
-      )}
-      {/* Layer 2: swipe3 red */}
-      {(["swipe3","comic","ready3","swipe4","comingsoon"].includes(phase)) && (
-        <div className="absolute inset-0 z-[2]"><PixelGrid progress={swipe3} color={redBg} /></div>
-      )}
-      {/* Layer 3: swipe4 dark red */}
-      {(phase === "swipe4" || phase === "comingsoon") && (
-        <div className="absolute inset-0 z-[3]"><PixelGrid progress={swipe4} color={darkRedBg} /></div>
+    <div className="min-h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: getBgColor() }}>
+      {/* Active pixel swipe overlay */}
+      {activeSwipe && (
+        <div className="absolute inset-0 z-[1]"><PixelGrid progress={activeSwipe.progress} color={activeSwipe.color} /></div>
       )}
 
       {/* Header */}
