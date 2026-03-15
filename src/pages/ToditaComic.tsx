@@ -4,20 +4,25 @@ import { motion } from "framer-motion";
 
 const TODITA_LETTERS = ["T", "O", "D", "I", "T", "A"];
 const UNIVERSE_LETTERS = ["U", "N", "I", "V", "E", "R", "S", "E"];
+const COMIC_LETTERS = ["C", "O", "M", "I", "C"];
 const PIXEL_COLS = 20;
 const PIXEL_ROWS = 12;
 
-type Phase = "idle" | "swipe" | "letters" | "ready" | "swipe2" | "universe";
+type Phase = "idle" | "swipe" | "letters" | "ready" | "swipe2" | "universe" | "ready2" | "swipe3" | "comic";
 
 const ToditaComic = () => {
   const [phase, setPhase] = useState<Phase>("idle");
   const [visibleLetters, setVisibleLetters] = useState(0);
   const [universeLetters, setUniverseLetters] = useState(0);
+  const [comicLetters, setComicLetters] = useState(0);
   const [swipe2Progress, setSwipe2Progress] = useState<boolean[]>(
     Array(PIXEL_ROWS * PIXEL_COLS).fill(false)
   );
+  const [swipe3Progress, setSwipe3Progress] = useState<boolean[]>(
+    Array(PIXEL_ROWS * PIXEL_COLS).fill(false)
+  );
   const scrollTriggered = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollTriggered2 = useRef(false);
 
   useEffect(() => {
     document.title = "Todita Comic | Nathan Music";
@@ -43,11 +48,14 @@ const ToditaComic = () => {
     }
   }, [phase, visibleLetters]);
 
-  // Scroll listener for second swipe
+  // Scroll listener
   const handleScroll = useCallback(() => {
     if (phase === "ready" && !scrollTriggered.current) {
       scrollTriggered.current = true;
       setPhase("swipe2");
+    } else if (phase === "ready2" && !scrollTriggered2.current) {
+      scrollTriggered2.current = true;
+      setPhase("swipe3");
     }
   }, [phase]);
 
@@ -73,21 +81,16 @@ const ToditaComic = () => {
     };
   }, [handleScroll]);
 
-  // Second pixelated swipe animation
+  // Second pixelated swipe (left to right)
   useEffect(() => {
     if (phase === "swipe2") {
-      const total = PIXEL_ROWS * PIXEL_COLS;
       let count = 0;
       const reveal = () => {
         setSwipe2Progress((prev) => {
           const next = [...prev];
-          // Reveal column by column with row jitter
-          const col = count % PIXEL_COLS;
-          const batchStart = Math.floor(count / PIXEL_COLS) * PIXEL_COLS;
           for (let row = 0; row < PIXEL_ROWS; row++) {
-            const idx = row * PIXEL_COLS + (count % PIXEL_COLS);
-            const jitteredCount = count + (row % 3);
-            if (jitteredCount >= 0 && idx < total) {
+            const idx = row * PIXEL_COLS + count;
+            if (idx < PIXEL_ROWS * PIXEL_COLS) {
               next[idx] = true;
             }
           }
@@ -110,15 +113,55 @@ const ToditaComic = () => {
       const t = setTimeout(() => setUniverseLetters((v) => v + 1), 200);
       return () => clearTimeout(t);
     }
+    if (phase === "universe" && universeLetters >= UNIVERSE_LETTERS.length) {
+      const t = setTimeout(() => setPhase("ready2"), 300);
+      return () => clearTimeout(t);
+    }
   }, [phase, universeLetters]);
 
+  // Third pixelated swipe (right to left - opposite direction)
+  useEffect(() => {
+    if (phase === "swipe3") {
+      let count = 0;
+      const reveal = () => {
+        setSwipe3Progress((prev) => {
+          const next = [...prev];
+          const col = PIXEL_COLS - 1 - count; // right to left
+          for (let row = 0; row < PIXEL_ROWS; row++) {
+            const idx = row * PIXEL_COLS + col;
+            if (col >= 0 && idx >= 0 && idx < PIXEL_ROWS * PIXEL_COLS) {
+              next[idx] = true;
+            }
+          }
+          return next;
+        });
+        count++;
+        if (count < PIXEL_COLS + 3) {
+          setTimeout(reveal, 40);
+        } else {
+          setTimeout(() => setPhase("comic"), 400);
+        }
+      };
+      reveal();
+    }
+  }, [phase]);
+
+  // Comic letters reveal
+  useEffect(() => {
+    if (phase === "comic" && comicLetters < COMIC_LETTERS.length) {
+      const t = setTimeout(() => setComicLetters((v) => v + 1), 200);
+      return () => clearTimeout(t);
+    }
+  }, [phase, comicLetters]);
+
   const showTodita = phase === "letters" || phase === "ready";
-  const showUniverse = phase === "universe";
+  const showUniverse = phase === "universe" || phase === "ready2" || phase === "swipe3";
+  const showComic = phase === "comic";
   const darkRedBg = "hsl(0, 72%, 30%)";
   const redBg = "hsl(0, 72%, 47%)";
 
   return (
-    <div ref={containerRef} className="min-h-screen flex flex-col relative overflow-hidden bg-background">
+    <div className="min-h-screen flex flex-col relative overflow-hidden bg-background">
       {/* First pixelated swipe - red */}
       {phase !== "idle" && (
         <div className="absolute inset-0 z-0 grid" style={{
@@ -143,8 +186,8 @@ const ToditaComic = () => {
         </div>
       )}
 
-      {/* Second pixelated swipe - darker red */}
-      {(phase === "swipe2" || phase === "universe") && (
+      {/* Second pixelated swipe - darker red (left to right) */}
+      {(phase === "swipe2" || phase === "universe" || phase === "ready2" || phase === "swipe3") && (
         <div className="absolute inset-0 z-[1] grid" style={{
           gridTemplateColumns: `repeat(${PIXEL_COLS}, 1fr)`,
           gridTemplateRows: `repeat(${PIXEL_ROWS}, 1fr)`,
@@ -155,6 +198,25 @@ const ToditaComic = () => {
               className="w-full h-full transition-all duration-150"
               style={{
                 backgroundColor: visible ? darkRedBg : "transparent",
+                transform: visible ? "scale(1)" : "scale(0)",
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Third pixelated swipe - back to red (right to left) */}
+      {(phase === "swipe3" || phase === "comic") && (
+        <div className="absolute inset-0 z-[2] grid" style={{
+          gridTemplateColumns: `repeat(${PIXEL_COLS}, 1fr)`,
+          gridTemplateRows: `repeat(${PIXEL_ROWS}, 1fr)`,
+        }}>
+          {swipe3Progress.map((visible, i) => (
+            <div
+              key={`bg3-${i}`}
+              className="w-full h-full transition-all duration-150"
+              style={{
+                backgroundColor: visible ? redBg : "transparent",
                 transform: visible ? "scale(1)" : "scale(0)",
               }}
             />
@@ -228,7 +290,7 @@ const ToditaComic = () => {
                 initial={{ opacity: 0, scale: 1.4, y: 30 }}
                 animate={
                   idx < universeLetters
-                    ? { opacity: 1, scale: 1, y: 0 }
+                    ? { opacity: phase === "swipe3" ? 0 : 1, scale: 1, y: 0 }
                     : { opacity: 0, scale: 1.4, y: 30 }
                 }
                 transition={{
@@ -246,15 +308,51 @@ const ToditaComic = () => {
             ))}
           </h1>
         )}
+
+        {/* COMIC */}
+        {showComic && (
+          <h1
+            className="text-[12.5vw] leading-[0.85]"
+            style={{
+              fontFamily: "laca, sans-serif",
+              fontWeight: 400,
+              letterSpacing: "-0.06em",
+            }}
+          >
+            {COMIC_LETTERS.map((letter, idx) => (
+              <motion.span
+                key={`c-${idx}`}
+                initial={{ opacity: 0, scale: 1.4, y: 30 }}
+                animate={
+                  idx < comicLetters
+                    ? { opacity: 1, scale: 1, y: 0 }
+                    : { opacity: 0, scale: 1.4, y: 30 }
+                }
+                transition={{
+                  duration: 0.35,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                style={{
+                  color: "white",
+                  textShadow: "3px 3px 0px hsla(0, 72%, 25%, 0.35)",
+                  display: "inline-block",
+                }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </h1>
+        )}
       </div>
 
       {/* Scroll hint */}
-      {phase === "ready" && (
+      {(phase === "ready" || phase === "ready2") && (
         <motion.div
           className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
+          key={phase}
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
