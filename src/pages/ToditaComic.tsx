@@ -100,9 +100,8 @@ const ToditaComic = () => {
                 ease: [0.22, 1, 0.36, 1],
               }}
               style={{
-                color: "hsl(0, 72%, 35%)",
-                WebkitTextStroke: "2px white",
-                paintOrder: "stroke fill",
+                color: "white",
+                textShadow: "3px 3px 0px hsla(0, 72%, 25%, 0.35)",
                 display: "inline-block",
               }}
             >
