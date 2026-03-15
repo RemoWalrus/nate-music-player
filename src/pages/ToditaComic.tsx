@@ -64,7 +64,7 @@ const ToditaComic = () => {
       )}
 
       {/* Header */}
-      <div className="relative z-10 bg-transparent py-4 px-6">
+      <div className="relative z-10 bg-background py-4 px-6 shadow-md">
         <div className="max-w-4xl mx-auto">
           <Link to="/" className="hover:opacity-80 transition-opacity inline-block">
             <img
