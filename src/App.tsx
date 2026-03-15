@@ -4,6 +4,7 @@ import Index from './pages/Index';
 import AlbumPage from './pages/AlbumPage';
 import NotFound from './pages/NotFound';
 import Todita from './pages/Todita';
+import ToditaComic from './pages/ToditaComic';
 import { Toaster } from './components/ui/toaster';
 import { MetadataHead } from './components/MetadataHead';
 import JsonLdSchema from './components/JsonLdSchema';
