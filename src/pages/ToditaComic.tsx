@@ -254,6 +254,21 @@ const ToditaComic = () => {
 
   const activeSwipe = getActiveSwipe();
 
+  const shadow1 = "3px 3px 0px hsla(0, 72%, 25%, 0.35)";
+  const shadow2 = "3px 3px 0px hsla(0, 72%, 15%, 0.35)";
+
+  const showTodita = phase === "todita" || phase === "ready";
+  const showUniverse = phase === "universe" || phase === "ready2";
+  const showComic = phase === "comic" || phase === "ready3";
+  const showComingSoon = phase === "comingsoon";
+
+  return (
+    <div className="min-h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: getBgColor() }}>
+      {/* Active pixel swipe overlay */}
+      {activeSwipe && (
+        <div className="absolute inset-0 z-[1]"><PixelGrid progress={activeSwipe.progress} color={activeSwipe.color} /></div>
+      )}
+
       {/* Header */}
       <div className="relative z-10 bg-background py-4 px-6 shadow-md">
         <div className="max-w-4xl mx-auto">
