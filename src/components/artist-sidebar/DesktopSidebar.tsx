@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { User, Music, Newspaper, Share2, Mail, Disc, Bot } from "lucide-react";
+import { User, Music, Newspaper, Share2, Mail, Disc, Bot, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SidebarHeader } from "./components/SidebarHeader";
 import { SidebarSection } from "./components/SidebarSection";
