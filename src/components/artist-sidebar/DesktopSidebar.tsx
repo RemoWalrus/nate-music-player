@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { User, Music, Newspaper, Share2, Mail, Disc, Bot, BookOpen } from "lucide-react";
+import { User, Music, Newspaper, Share2, Mail, Disc, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SidebarHeader } from "./components/SidebarHeader";
 import { SidebarSection } from "./components/SidebarSection";
@@ -92,9 +92,8 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
             </Link>
             <Link 
               to="/todita-comic" 
-              className="text-xs text-gray-500 hover:text-gray-700 text-left flex items-center gap-1"
+              className="text-xs text-gray-500 hover:text-gray-700 text-left block"
             >
-              <BookOpen size={12} />
               Todita Universe Comic
             </Link>
           </div>
