@@ -104,13 +104,23 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
         );
       case "Todita":
         return (
-          <Link 
-            to="/todita" 
-            className="text-xs text-gray-600 hover:text-gray-900 text-left block"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {section.content || 'Todita Universe Character Generator'}
-          </Link>
+          <div className="space-y-1.5">
+            <Link 
+              to="/todita" 
+              className="text-xs text-gray-600 hover:text-gray-900 text-left block"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {section.content || 'Todita Universe Character Generator'}
+            </Link>
+            <Link 
+              to="/todita-comic" 
+              className="text-xs text-gray-600 hover:text-gray-900 text-left flex items-center gap-1"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <BookOpen size={12} />
+              Todita Universe Comic
+            </Link>
+          </div>
         );
       default:
         return (

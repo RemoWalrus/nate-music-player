@@ -83,12 +83,21 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
         );
       case "Todita":
         return (
-          <Link 
-            to="/todita" 
-            className="text-xs text-gray-500 hover:text-gray-700 text-left block"
-          >
-            {section.content || 'Todita Universe Character Generator'}
-          </Link>
+          <div className="space-y-1.5">
+            <Link 
+              to="/todita" 
+              className="text-xs text-gray-500 hover:text-gray-700 text-left block"
+            >
+              {section.content || 'Todita Universe Character Generator'}
+            </Link>
+            <Link 
+              to="/todita-comic" 
+              className="text-xs text-gray-500 hover:text-gray-700 text-left flex items-center gap-1"
+            >
+              <BookOpen size={12} />
+              Todita Universe Comic
+            </Link>
+          </div>
         );
       default:
         return (
