@@ -114,10 +114,9 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
             </Link>
             <Link 
               to="/todita-comic" 
-              className="text-xs text-gray-600 hover:text-gray-900 text-left flex items-center gap-1"
+              className="text-xs text-gray-600 hover:text-gray-900 text-left block"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <BookOpen size={12} />
               Todita Universe Comic
             </Link>
           </div>
