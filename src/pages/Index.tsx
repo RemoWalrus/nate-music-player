@@ -35,7 +35,7 @@ const Index = () => {
     return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
   };
 
-  // Update text color based on background luminance
+  // Update text color and theme-color meta tag based on background luminance
   useEffect(() => {
     const rgb = backgroundColor.match(/\d+/g);
     if (rgb) {
@@ -43,6 +43,15 @@ const Index = () => {
       const luminance = getLuminance(r, g, b);
       setTextColor(luminance > 0.5 ? "#333333" : "rgba(255, 255, 255, 0.6)");
     }
+
+    // Update theme-color meta tag for mobile browser UI tinting
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null;
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.name = 'theme-color';
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.content = backgroundColor;
   }, [backgroundColor]);
 
   if (isLoading) {
