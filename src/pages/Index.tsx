@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import MusicPlayer from "../components/MusicPlayer";
 import Playlist from "../components/Playlist";
 import { ArtistSidebar } from "../components/ArtistSidebar";
-import AieoSection from "../components/AieoSection";
+
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTracks } from "@/hooks/use-tracks";
 
