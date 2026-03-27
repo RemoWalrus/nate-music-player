@@ -105,7 +105,7 @@ const Index = () => {
             onTrackSelect={handleTrackSelect}
             currentTrackId={currentTrack?.id || ""}
           />
-          <AieoSection textColor={textColor} />
+          
           <footer 
             className="w-full text-center py-4 text-sm font-light mt-auto"
             style={{ color: textColor }}
