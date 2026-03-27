@@ -228,6 +228,6 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
           </div>
         </div>
       )}
-    </div>
+    </aside>
   );
 };
