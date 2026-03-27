@@ -175,7 +175,7 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
   const iconProps = { color: "#ea384c" };
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 bg-white z-[9998] shadow-sm">
+    <aside aria-label="Artist information" className="md:hidden fixed top-0 left-0 right-0 bg-white z-[9998] shadow-sm">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
           <Link to="/" className="hover:opacity-80 transition-opacity">
@@ -228,6 +228,6 @@ export const MobileHeader = ({ artistBio, sidebarSections }: MobileHeaderProps) 
           </div>
         </div>
       )}
-    </div>
+    </aside>
   );
 };

@@ -149,12 +149,12 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
   }
 
   return (
-    <div className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
+    <aside aria-label="Artist information" className={`hidden md:block transition-all duration-300 ease-in-out backdrop-blur-md bg-white/70 border-r border-white/20 ${
       isCollapsed ? "w-20" : "w-96"
     }`}>
       <SidebarHeader isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-      <div className="space-y-0.5 overflow-hidden">
+      <nav className="space-y-0.5 overflow-hidden">
         {sectionsWithAlbums.map((section, index) => (
           <React.Fragment key={section.id}>
             {index > 0 && <div className="border-t border-gray-300/50 w-full my-0.5" />}
@@ -167,7 +167,7 @@ export const DesktopSidebar = ({ artistBio, sidebarSections }: DesktopSidebarPro
             </SidebarSection>
           </React.Fragment>
         ))}
-      </div>
-    </div>
+      </nav>
+    </aside>
   );
 };
