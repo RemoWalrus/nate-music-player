@@ -158,18 +158,30 @@ const Todita = () => {
               <RadioGroup
                 value={characterType}
                 onValueChange={(value) => setCharacterType(value as "human-male" | "human-female" | "android-male" | "android-female")}
-                className="flex gap-6"
+                className="grid grid-cols-2 gap-4"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="human" id="human" />
-                  <Label htmlFor="human" className="cursor-pointer">
-                    Human
+                  <RadioGroupItem value="human-male" id="human-male" />
+                  <Label htmlFor="human-male" className="cursor-pointer">
+                    Human Male
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="android" id="android" />
-                  <Label htmlFor="android" className="cursor-pointer">
-                    Android
+                  <RadioGroupItem value="human-female" id="human-female" />
+                  <Label htmlFor="human-female" className="cursor-pointer">
+                    Human Female
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="android-male" id="android-male" />
+                  <Label htmlFor="android-male" className="cursor-pointer">
+                    Android Male
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="android-female" id="android-female" />
+                  <Label htmlFor="android-female" className="cursor-pointer">
+                    Android Female
                   </Label>
                 </div>
               </RadioGroup>
