@@ -13,7 +13,7 @@ const Todita = () => {
     document.title = "Todita | Nathan Music";
   }, []);
 
-  const [characterType, setCharacterType] = useState<"human" | "android">("android");
+  const [characterType, setCharacterType] = useState<"human-male" | "human-female" | "android-male" | "android-female">("android-male");
   const [characterName, setCharacterName] = useState("");
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -157,19 +157,31 @@ const Todita = () => {
               <Label className="text-lg mb-3 block">Character Type</Label>
               <RadioGroup
                 value={characterType}
-                onValueChange={(value) => setCharacterType(value as "human" | "android")}
-                className="flex gap-6"
+                onValueChange={(value) => setCharacterType(value as "human-male" | "human-female" | "android-male" | "android-female")}
+                className="grid grid-cols-2 gap-4"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="human" id="human" />
-                  <Label htmlFor="human" className="cursor-pointer">
-                    Human
+                  <RadioGroupItem value="human-male" id="human-male" />
+                  <Label htmlFor="human-male" className="cursor-pointer">
+                    Human Male
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="android" id="android" />
-                  <Label htmlFor="android" className="cursor-pointer">
-                    Android
+                  <RadioGroupItem value="human-female" id="human-female" />
+                  <Label htmlFor="human-female" className="cursor-pointer">
+                    Human Female
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="android-male" id="android-male" />
+                  <Label htmlFor="android-male" className="cursor-pointer">
+                    Android Male
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="android-female" id="android-female" />
+                  <Label htmlFor="android-female" className="cursor-pointer">
+                    Android Female
                   </Label>
                 </div>
               </RadioGroup>
