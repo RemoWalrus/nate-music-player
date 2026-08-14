@@ -13,7 +13,7 @@ const Todita = () => {
     document.title = "Todita | Nathan Music";
   }, []);
 
-  const [characterType, setCharacterType] = useState<"human" | "android">("android");
+  const [characterType, setCharacterType] = useState<"human-male" | "human-female" | "android-male" | "android-female">("android-male");
   const [characterName, setCharacterName] = useState("");
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -157,7 +157,7 @@ const Todita = () => {
               <Label className="text-lg mb-3 block">Character Type</Label>
               <RadioGroup
                 value={characterType}
-                onValueChange={(value) => setCharacterType(value as "human" | "android")}
+                onValueChange={(value) => setCharacterType(value as "human-male" | "human-female" | "android-male" | "android-female")}
                 className="flex gap-6"
               >
                 <div className="flex items-center space-x-2">

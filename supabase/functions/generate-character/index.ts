@@ -17,7 +17,7 @@ serve(async (req) => {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const allowedTypes = ["human", "android"];
+    const allowedTypes = ["human-male", "human-female", "android-male", "android-female"];
     if (!characterType || !allowedTypes.includes(characterType)) {
       return new Response(JSON.stringify({ error: "Invalid character type" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -34,6 +34,14 @@ serve(async (req) => {
 
     let prompt = "";
     const messages: any[] = [];
+
+    // Map combined type to base species and gender
+    const typeDescriptions: Record<string, string> = {
+      "human-male": "a human male character",
+      "human-female": "a human female character",
+      "android-male": "an android/robot male character",
+      "android-female": "an android/robot female character",
+    };
 
     if (characterName.toLowerCase() === "todita") {
       // Always use the exact reference image for Todita, regardless of type selected
@@ -54,9 +62,7 @@ serve(async (req) => {
       });
     } else {
       // Use reference as style guide
-      const typeDescription = characterType === "android" 
-        ? "an android/robot character"
-        : "a human character";
+      const typeDescription = typeDescriptions[characterType] || "a character";
       
       messages.push({
         role: "user",
